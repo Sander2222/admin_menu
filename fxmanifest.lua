@@ -7,7 +7,8 @@ version '0.0.1'
 description 'performant adminmenu'
 
 server_script {
-	'server/server.lua'
+	'server/server.lua',
+	'svconfig.lua'
 }
 
 client_scripts {
