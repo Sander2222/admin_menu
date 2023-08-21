@@ -6,7 +6,7 @@ function  OpenVehMenu()
             {
                 title = 'Delete Vehicle',
                 description = 'Player Actions',
-                icon = 'star-of-life',
+                icon = 'car-burst',
                 onSelect = function()
                     DelNearVehicle()
                 end,
@@ -14,7 +14,7 @@ function  OpenVehMenu()
             {
                 title = 'Delete Vehicle Radius',
                 description = 'Player Actions',
-                icon = 'shield-halved',
+                icon = 'car-burst',
                 onSelect = function()
                     DelVehicleRadiusMenu()
                 end,
@@ -22,7 +22,7 @@ function  OpenVehMenu()
             {
                 title = 'Spawn Vehicle',
                 description = 'Player Actions',
-                icon = 'notes-medical',
+                icon = 'car-on',
                 onSelect = function()
                     OpenVehSpawnnMenu()
                     -- Config.ClientNotify('Du hast dir %s gespawmt')
@@ -31,7 +31,7 @@ function  OpenVehMenu()
             {
                 title = 'Give Player Vehicle',
                 description = 'Player Actions',
-                icon = 'skull',
+                icon = 'hand-holding-heart',
                 onSelect = function()
                     Config.ClientNotify('Du hast dem Spieler: &s folgendes Fahrzeug: %s gegeben')
                 end,
@@ -39,7 +39,7 @@ function  OpenVehMenu()
             {
                 title = 'Delete Player Vehicle',
                 description = 'Player Actions',
-                icon = 'skull',
+                icon = 'car-burst',
                 onSelect = function()
                     Config.ClientNotify('Du hast dem Spieler: &s folgendes Fahrzeug: %s entzogen')
                 end,
@@ -51,12 +51,13 @@ function  OpenVehMenu()
 end
 
 function DelNearVehicle()
-    local Vehicles = ESX.Game.GetClosestVehicle(xPlayer.getCoords(true))
-    -- ESX.OneSync.GetVehiclesInArea(xPlayer.getCoords(true) or 4)
-    for i=1, #Vehicles do 
-        local Vehicle = NetworkGetEntityFromNetworkId(Vehicles[i])
-        if DoesEntityExist(Vehicle) then
-            DeleteEntity(Vehicle)
+    local playerCoords = GetEntityCoords(PlayerPedId()) -- Hole die Koordinaten des Spielers
+    local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, 10.0) -- Erhalte Fahrzeuge im Umkreis von 10 Einheiten (du kannst den Radius anpassen)
+    
+    for i = 1, #vehicles do 
+        local vehicle = vehicles[i]
+        if DoesEntityExist(vehicle) then
+            DeleteEntity(vehicle)
         end
     end
     Config.ClientNotify('Du hast das Fahrzeug in deiner Nähe gelöscht')
@@ -67,12 +68,16 @@ function DelVehicleRadiusMenu()
 
     if not input then return end
 
-    if input[1] then
-        local Vehicles = ESX.OneSync.GetVehiclesInArea(input[1])
-        for i=1, #Vehicles do 
-            local Vehicle = NetworkGetEntityFromNetworkId(Vehicles[i])
-            if DoesEntityExist(Vehicle) then
-                DeleteEntity(Vehicle)
+    local radius = tonumber(input[1])
+
+    if radius then
+        local playerCoords = GetEntityCoords(PlayerPedId())
+        local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, radius)
+
+        for i = 1, #vehicles do 
+            local vehicle = vehicles[i]
+            if DoesEntityExist(vehicle) then
+                DeleteEntity(vehicle)
             end
         end
         Config.ClientNotify(('Du hast die Fahrzeuge im Umkreis von %s gelöscht'):format(input[1]))
@@ -81,15 +86,33 @@ end
 
 function OpenVehSpawnnMenu()
     local input = lib.inputDialog('Spawn Vehicle', {
-            {type = 'vehName', label = 'Vehicle Hash', description = 'Write here Vehicle Hash', required = true, min = 4, max = 16},
-            {type = 'numberplate', label = 'Vehicle Plate', description = 'Write here you Vehicle Plate', icon = 'hashtag'},
-            {type = 'checkbox', label = 'Save in DB'},
-            {type = 'color', label = 'Vehgicle Color', default = '#eb4034'},
-          })
+        {type = 'input', label = 'Vehicle Hash', description = 'Write here Vehicle Hash', required = true, min = 4, max = 16},
+        {type = 'input', label = 'Vehicle Plate', description = 'Write here you Vehicle Plate', icon = 'hashtag'},
+        -- {type = 'checkbox', label = 'Save in DB'},
+        {type = 'color', label = 'Vehicle Primarycolor', default = '#eb4034'},
+        {type = 'color', label = 'Vehicle Secondarycolor', default = '#eb4034'},
+    })
 
     if not input then return end
 
-    if not input[1] or input[2] or input[3] or input[4] then
+    local vehHash = GetHashKey(input[1])
 
+    local rgbprimary = lib.math.torgba(input[3])
+    local rgbsecondary = lib.math.torgba(input[4])
+
+    if not IsModelInCdimage(vehHash) or not IsModelAVehicle(vehHash) then
+        return Config.ClientNotify('Ungültiger Fahrzeughash')
     end
+
+    local spawnCoords = GetEntityCoords(PlayerPedId())
+    local vehicle = CreateVehicle(vehHash, spawnCoords.x, spawnCoords.y, spawnCoords.z, 0.0, true, false)
+
+    local numberPlate = input[2] or 'FREE SCRIPTS'
+    SetVehicleNumberPlateText(vehicle, numberPlate)
+
+    local primaryColor = rgbprimary
+    local secondaryColor = rgbsecondary
+    SetVehicleColours(vehicle, primaryColor, secondaryColor)
+
+    Config.ClientNotify('Fahrzeug erfolgreich gespawnt!')
 end
