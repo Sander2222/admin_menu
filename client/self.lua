@@ -12,6 +12,7 @@ function OpenSelfMenu()
                 onSelect = function()
                     TriggerEvent('esx_ambulancejob:revive')
                     Config.ClientNotify('Du hast dich selbst wiederbelebt')
+                    TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich selbst revived', 'self')
                 end,
             },
             {
@@ -103,12 +104,17 @@ function GiveGun(GunName, GunLabel)
     -- Check if gives Weapon with ESX or not
     if input[2] then
         --  Without ESX
-        GiveWeaponToPed(GetPlayerPed(), GunName, input[1], false, false)
+        GiveWeaponToPed(GetPlayerPed(), GunName, tonumber(input[1]), false, false)
     else
         -- With ESX
         -- To Server 
     end
 end
+
+
+
+
+
 
 -- Brauchst seine eigene Notify ESX NOCLIP TRIGGER xPlayer.triggerEvent('esx:noclip')
 function Noclip()
