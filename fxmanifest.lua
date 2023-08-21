@@ -1,7 +1,7 @@
 fx_version 'adamant'
 game 'gta5'
 
-author 'GMD_Scripts'
+author 'GMD_Scripts,'
 name 'free_adminBlips'
 version '0.0.1'
 description 'performant admin command to see al Players in sync'
@@ -15,7 +15,8 @@ client_scripts {
 }
 
 shared_scripts {
-	'config.lua'
+	'config.lua',
+	'@es_extended/imports.lua'
 }
 
 
