@@ -2,6 +2,9 @@ function  OpenVehMenu()
     lib.registerContext({
         id = 'VehMenu',
         title = 'Vehicle Menu',
+        onBack = function()
+            OpenMenu() -- Steht in Docs geht aber nicht
+        end,
         options = {
             {
                 title = 'Delete Vehicle',
