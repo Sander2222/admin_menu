@@ -1,25 +1,29 @@
 fx_version 'adamant'
 game 'gta5'
 
-author 'GMD_Scripts,'
-name 'free_adminBlips'
+author 'GMD_Scripts, SA_Scripts'
+name 'free_adminmenu'
 version '0.0.1'
-description 'performant admin command to see al Players in sync'
+description 'performant adminmenu'
 
 server_script {
 	'server/server.lua'
 }
 
 client_scripts {
-	'client/client.lua'
+	'client/*.lua'
 }
 
 shared_scripts {
 	'config.lua',
-	'@es_extended/imports.lua'
+	'@es_extended/imports.lua',
+	'@ox_lib/init.lua',
 }
 
 
 dependencies {
-	'es_extended'
+	'es_extended',
+	'ox_lib'
 }
+
+lua54 'yes'
