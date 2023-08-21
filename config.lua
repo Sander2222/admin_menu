@@ -23,3 +23,10 @@ Config.WeaponList = {
         label = 'Pistol'
     }
 }
+
+Config.PermaBanTime = {
+    day = 7,
+    hours = 24,
+    minutes = 60,
+    seconds = 60
+}
