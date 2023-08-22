@@ -1,12 +1,3 @@
-ESX.RegisterServerCallback('admin_menu:callback:CheckGroup', function(src, cb)
-
-    if CheckGroup(src, false) then
-        cb(true)
-    else 
-        cb(false)
-    end
-end)
-
 --- @usage This function checks if the player is able to use the adminmenu
 function CheckGroup(Player, DoAction)
     if Config.UseAceSystem then
@@ -32,15 +23,31 @@ function CheckGroup(Player, DoAction)
 end
 
 RegisterNetEvent('admin_menu:server:SendWebhook')
-AddEventHandler('admin_menu:server:SendWebhook',function(msg, type)
+AddEventHandler('admin_menu:server:SendWebhook',function(msg, type, Data)
+    AddWebhookMessage(source, type, Data)
+
+end)
+
+function AddWebhookMessage(source, msg, type, Data)
     if CheckGroup(source) then
         if type == 'self' then
-            local msg = msg .. '\n\n' .. GetPlayerFootprints(source)
+            local msg = msg
+
+            if #Data ~= 0 then
+
+                msg = msg .. '\n\n **Data:** \n'
+
+                for k, v in pairs(Data) do
+                    msg = msg .. v .. '\n'
+                end
+            end
+
+            msg = msg .. '\n\n **Player Info:** \n' .. GetPlayerFootprints(source)
 
             SendDiscord(msg)
         end
     end
-end)
+end
 
 RegisterNetEvent('admin_menu:server:GiveWeapon')
 AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
@@ -48,8 +55,24 @@ AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
         local xPlayer = ESX.GetPlayerFromId(source)
 
         xPlayer.addWeapon(Weapon, Ammo)
+        AddWebhookMessage(source, 'Ein Admin hat sich eine Waffe gegeben', 'self', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
     end
 end)
+
+RegisterNetEvent('admin_menu:server:GiveItem')
+AddEventHandler('admin_menu:server:GiveItem',function(ItemName, Count)
+    if CheckGroup(source, true) then
+        local xPlayer = ESX.GetPlayerFromId(source)
+
+        if xPlayer.canCarryItem(ItemName, Count) then
+            xPlayer.addInventoryItem(ItemName, Count)
+            AddWebhookMessage(source, 'Ein Admin hat sich ein Item gegeben', 'self', {'Item: ' .. ItemName, 'Count: ' .. Count})
+        else 
+            Config.ServerNotify(source, 'Du kannst das Item nicht tragen')
+        end
+    end
+end)
+
 
 function GetPlayerFootprints(Player)
     local Footer = ''
