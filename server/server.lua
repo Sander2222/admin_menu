@@ -1,13 +1,14 @@
 ESX.RegisterServerCallback('admin_menu:callback:CheckGroup', function(src, cb)
 
-    if CheckGroup(src) then
+    if CheckGroup(src, false) then
         cb(true)
     else 
         cb(false)
     end
 end)
 
-function CheckGroup(Player)
+--- @usage This function checks if the player is able to use the adminmenu
+function CheckGroup(Player, DoAction)
     if Config.UseAceSystem then
         if IsPlayerAceAllowed(Player, 'adminmenu') then
             return true
@@ -23,6 +24,10 @@ function CheckGroup(Player)
         end
     end
 
+    if DoAction then
+        print("Kick Player Modder")
+    end
+
     return false
 end
 
@@ -30,21 +35,28 @@ RegisterNetEvent('admin_menu:server:SendWebhook')
 AddEventHandler('admin_menu:server:SendWebhook',function(msg, type)
     if CheckGroup(source) then
         if type == 'self' then
-            local msg = msg .. '\n\n' .. GetPlayerFootprints(source) 
+            local msg = msg .. '\n\n' .. GetPlayerFootprints(source)
 
             SendDiscord(msg)
         end
-        
-    else
-        -- Kick Ban idk?
+    end
+end)
+
+RegisterNetEvent('admin_menu:server:GiveWeapon')
+AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
+    if CheckGroup(source, true) then
+        local xPlayer = ESX.GetPlayerFromId(source)
+
+        xPlayer.addWeapon(Weapon, Ammo)
     end
 end)
 
 function GetPlayerFootprints(Player)
     local Footer = ''
 
-  for k,v in pairs(GetPlayerIdentifiers(source))do
-    print(v)
+    Footer = Footer .. 'Steamname: ' ..GetPlayerName(Player) .. '\n'
+
+  for _, v in pairs(GetPlayerIdentifiers(Player))do
         
       if string.sub(v, 1, string.len("steam:")) == "steam:" then
         Footer = Footer .. 'Steam: ' ..v .. '\n'
