@@ -22,6 +22,7 @@ function OpenSelfMenu()
                 onSelect = function()
                     SetEntityHealth(PlayerPedId(), 200)
                     Config.ClientNotify('Du hast dich gehielt')
+                    TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich gehealt', 'self')
                 end,
             },
             {
@@ -31,6 +32,7 @@ function OpenSelfMenu()
                 onSelect = function()
                     SetPedArmour(PlayerPedId(), 100)
                     Config.ClientNotify('Du hast dir selbst armor gegeben')
+                    TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich armor gegeben', 'self')
                 end,
             },
             {
@@ -40,6 +42,7 @@ function OpenSelfMenu()
                 onSelect = function()
                     SetEntityHealth(PlayerPedId(), 0)
                     Config.ClientNotify('Du hast dich selbst getötet')
+                    TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich selbst getötet', 'self')
                 end,
             },
             {
@@ -101,13 +104,15 @@ function GiveGun(GunName, GunLabel)
 
     if not input then return end
 
+    local Ammo = tonumber(input[1])
+    local WithESX = input[2]
+
     -- Check if gives Weapon with ESX or not
-    if input[2] then
+    if WithESX then
         --  Without ESX
-        GiveWeaponToPed(GetPlayerPed(), GunName, tonumber(input[1]), false, false)
+        GiveWeaponToPed(PlayerPedId(), GunName, Ammo, false, false)
     else
-        -- With ESX
-        -- To Server 
+        TriggerServerEvent('admin_menu:server:GiveWeapon', GunName, Ammo)
     end
 end
 
