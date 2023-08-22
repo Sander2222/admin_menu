@@ -37,3 +37,5 @@ Config.PermaBanTime = {
     minutes = 60,
     seconds = 60
 }
+
+Config.BasicPlate = 'Test'
