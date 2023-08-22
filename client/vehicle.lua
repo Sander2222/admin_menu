@@ -110,7 +110,15 @@ function OpenVehSpawnnMenu()
     local SecR, SecG, SecB = ConvertHexToRGB(input[4])
 
     local spawnCoords = GetEntityCoords(PlayerPedId())
-    local numberPlate = input[2] or 'FREE SCRIPTS'
+
+    local numberPlate = input[2]
+    
+    print(numberPlate)
+    if numberPlate == '' or numberPlate == ' ' then
+        numberPlate = Config.BasicPlate
+    end
+
+    ESX.Streaming.RequestModel(vehHash)
 
     local vehicle = CreateVehicle(vehHash, spawnCoords.x, spawnCoords.y, spawnCoords.z, 0.0, true, false)
 
@@ -119,6 +127,7 @@ function OpenVehSpawnnMenu()
 
     SetVehicleCustomPrimaryColour(vehicle, PriR, PriG, PriB)
     SetVehicleCustomPrimaryColour(vehicle, SecR, SecG, SecB)
+    SetPedIntoVehicle(PlayerPedId(), vehicle, -1)
 
     Config.ClientNotify('Fahrzeug erfolgreich gespawnt!')
 end
