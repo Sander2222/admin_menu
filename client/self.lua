@@ -176,7 +176,17 @@ function OpenGunMenu()
 end
 
 function SearchForWeapon()
-    
+    local input = lib.inputDialog('Add Weapon', {
+        {type = 'input', label = 'Spawnname', description = 'Welche Waffe', required = true, min = 1, max = 600},
+        {type = 'number', label = 'Ammu', description = 'Wie viel Munition', icon = 'hashtag'},
+    })
+
+    if not input then return end
+
+    local WeaponName = input[1]
+    local Count = tonumber(input[2])
+
+    TriggerServerEvent('admin_menu:server:GiveWeapon', WeaponName, Count)
 end
 
 function GetAllGuns()
