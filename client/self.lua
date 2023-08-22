@@ -46,14 +46,6 @@ function OpenSelfMenu()
                 end,
             },
             {
-                title = 'Noclip',
-                description = 'Player Actions',
-                icon = 'skull',
-                onSelect = function()
-                    Noclip()
-                end,
-            },
-            {
                 title = 'Give Weapon',
                 description = 'Player Actions',
                 icon = 'gun',
@@ -61,10 +53,116 @@ function OpenSelfMenu()
                     OpenGunMenu()
                 end,
             },
+            {
+                title = 'Give Item',
+                description = 'Player Actions',
+                icon = 'gavel',
+                onSelect = function()
+                    OpenItemMenu()
+                end,
+            },
+            {
+                title = 'Noclip',
+                description = 'Player Actions',
+                icon = 'skull',
+                onSelect = function()
+                    Noclip()
+                end,
+            },
         }
     })
 
     lib.showContext('SelfMenu')
+end
+
+function OpenItemMenu()
+    local Items = GetAllItems()
+
+    -- Wait weil die Funktione GetAllItems ist Async
+    while #Items == 0 do
+        Wait(1)
+    end
+
+    lib.registerContext({
+        id = 'ItemListMenu',
+        title = 'Self Menu',
+        options = Items
+    })
+
+    lib.showContext('ItemListMenu')
+end
+
+function GetAllItems()
+    local ItemList = {}
+    
+    ESX.TriggerServerCallback('admin_menu:callback:GetAllitems', function(Items)
+
+        local SpeedMenu =  {
+            title = 'Schnellauswahl',
+            description = 'Schnell Item geben',
+            icon = 'gun',
+            onSelect = function()
+                SearchForItem()
+            end,
+        }
+
+        local Placeholder =  {
+            title = ' ',
+            description = ' ',
+            icon = ' ',
+        }
+
+        table.insert(ItemList, SpeedMenu)
+        table.insert(ItemList, Placeholder)
+
+        for itemName, itemData in pairs(Items) do
+
+            local TmpTable =
+            {
+                title = itemData.label,
+                description = 'Spawnname: ' .. itemName,
+                icon = 'bread-slice',
+                onSelect = function()
+                    GiveItem(itemName)
+                end,
+                metadata = {
+                    {label = 'Weight', value = itemData.weight},
+                    {label = 'Can Remove', value = itemData.canRemove}
+                },
+            }
+
+
+            table.insert(ItemList, TmpTable)
+        end
+    end)
+
+    return ItemList
+end
+
+function SearchForItem()
+    local input = lib.inputDialog('Add Item', {
+        {type = 'input', label = 'Spawnname', description = 'Welches item', required = true, min = 1, max = 600},
+        {type = 'number', label = 'Counter', description = 'Wie viele Items', icon = 'hashtag'},
+    })
+
+    if not input then return end
+
+    local ItemName = input[1]
+    local Count = tonumber(input[2])
+
+    TriggerServerEvent('admin_menu:server:GiveItem', ItemName, Count)
+end
+
+function GiveItem(ItemName)
+    local input = lib.inputDialog('Add Count: ' .. ItemName, {
+        {type = 'input', label = 'Count', description = 'Wie Viele', default= 1, required = true, min = 1, max = 600}
+    })
+
+    if not input then return end
+
+    local Count = tonumber(input[1])
+
+    TriggerServerEvent('admin_menu:server:GiveItem', ItemName, Count)
 end
 
 function OpenGunMenu()
@@ -77,8 +175,30 @@ function OpenGunMenu()
     lib.showContext('WeaponListMenu')
 end
 
+function SearchForWeapon()
+    
+end
+
 function GetAllGuns()
     local Guns = {}
+
+    local SpeedMenu =  {
+        title = 'Schnellauswahl',
+        description = 'Schnell Waffe geben',
+        icon = 'gun',
+        onSelect = function()
+            SearchForWeapon()
+        end,
+    }
+
+    local Placeholder =  {
+        title = ' ',
+        description = ' ',
+        icon = ' ',
+    }
+
+    table.insert(Guns, SpeedMenu)
+    table.insert(Guns, Placeholder)
 
     for k, WeaponData in ipairs(Config.WeaponList) do
         local TmpTable =

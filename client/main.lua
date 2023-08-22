@@ -20,7 +20,7 @@ function OpenMenu()
             {
                 title = 'Self',
                 description = 'Self Actions',
-                icon = 'image-user',
+                icon = 'user',
                 onSelect = function()
                     OpenSelfMenu()
                 end,

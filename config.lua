@@ -17,6 +17,13 @@ Config.ClientNotify = function(msg)
     })
 end
 
+Config.ServerNotify = function(src, msg)
+    TriggerClientEvent('ox_lib:notify', src, {
+        title = 'Admin Tool',
+        description  = msg
+    })
+end
+
 Config.WeaponList = {
     {
         name = 'WEAPON_PISTOL',
