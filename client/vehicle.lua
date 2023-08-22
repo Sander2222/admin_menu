@@ -91,31 +91,39 @@ function OpenVehSpawnnMenu()
     local input = lib.inputDialog('Spawn Vehicle', {
         {type = 'input', label = 'Vehicle Hash', description = 'Write here Vehicle Hash', required = true, min = 4, max = 16},
         {type = 'input', label = 'Vehicle Plate', description = 'Write here you Vehicle Plate', icon = 'hashtag'},
-        -- {type = 'checkbox', label = 'Save in DB'},
         {type = 'color', label = 'Vehicle Primarycolor', default = '#eb4034'},
         {type = 'color', label = 'Vehicle Secondarycolor', default = '#eb4034'},
+        --  {type = 'checkbox', label = 'Save in DB'},
     })
 
     if not input then return end
 
     local vehHash = GetHashKey(input[1])
 
-    local rgbprimary = lib.math.torgba(input[3])
-    local rgbsecondary = lib.math.torgba(input[4])
-
     if not IsModelInCdimage(vehHash) or not IsModelAVehicle(vehHash) then
-        return Config.ClientNotify('Ungültiger Fahrzeughash')
+
+        Config.ClientNotify('Ungültiger Fahrzeughash')
+        return 
     end
 
+    local PriR, PriG, PriB = ConvertHexToRGB(input[3])
+    local SecR, SecG, SecB = ConvertHexToRGB(input[4])
+
     local spawnCoords = GetEntityCoords(PlayerPedId())
+    local numberPlate = input[2] or 'FREE SCRIPTS'
+
     local vehicle = CreateVehicle(vehHash, spawnCoords.x, spawnCoords.y, spawnCoords.z, 0.0, true, false)
 
-    local numberPlate = input[2] or 'FREE SCRIPTS'
+
     SetVehicleNumberPlateText(vehicle, numberPlate)
 
-    local primaryColor = rgbprimary
-    local secondaryColor = rgbsecondary
-    SetVehicleColours(vehicle, primaryColor, secondaryColor)
+    SetVehicleCustomPrimaryColour(vehicle, PriR, PriG, PriB)
+    SetVehicleCustomPrimaryColour(vehicle, SecR, SecG, SecB)
 
     Config.ClientNotify('Fahrzeug erfolgreich gespawnt!')
+end
+
+function ConvertHexToRGB(hex)
+    hex = hex:gsub("#","")
+    return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
 end
