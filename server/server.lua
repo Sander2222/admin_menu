@@ -25,11 +25,10 @@ end
 RegisterNetEvent('admin_menu:server:SendWebhook')
 AddEventHandler('admin_menu:server:SendWebhook',function(msg, type, Data)
     AddWebhookMessage(source, type, Data)
-
 end)
 
 function AddWebhookMessage(source, msg, type, Data)
-    if CheckGroup(source) then
+    if CheckGroup(source, false) then
         if type == 'self' then
             local msg = msg
 
@@ -72,7 +71,6 @@ AddEventHandler('admin_menu:server:GiveItem',function(ItemName, Count)
         end
     end
 end)
-
 
 function GetPlayerFootprints(Player)
     local Footer = ''
