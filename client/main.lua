@@ -9,7 +9,7 @@ RegisterCommand('adminmenu', function(source, args)
         else
             Config.ClientNotify('Server: Dieser Befehl ist nur für Admins verfügbar.')
         end
-    end, args)
+    end)
 end)
 
 function OpenMenu()
@@ -42,7 +42,7 @@ function OpenMenu()
                 end,
             },
             {
-                title = 'Ban/Kick',
+                title = 'Server',
                 description = 'Player Actions',
                 icon = 'circle',
                 onSelect = function()
