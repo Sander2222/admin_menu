@@ -21,6 +21,7 @@ function OpenMenu()
                 title = 'Self',
                 description = 'Self Actions',
                 icon = 'user',
+                arrow = true,
                 onSelect = function()
                     OpenSelfMenu()
                 end,
@@ -29,14 +30,16 @@ function OpenMenu()
                 title = 'Player',
                 description = 'Player Actions',
                 icon = 'circle',
+                arrow = true,
                 onSelect = function()
-
+                    ShowPlayerMenu()
                 end,
             },
             {
                 title = 'Vehicle',
                 description = 'Player Actions',
                 icon = 'circle',
+                arrow = true,
                 onSelect = function()
                     OpenVehMenu()
                 end,
@@ -45,6 +48,7 @@ function OpenMenu()
                 title = 'Server',
                 description = 'Player Actions',
                 icon = 'circle',
+                arrow = true,
                 onSelect = function()
                     print("Pressed the button!")
                 end,
@@ -53,6 +57,7 @@ function OpenMenu()
                 title = 'Server',
                 description = 'Player Actions',
                 icon = 'circle',
+                arrow = true,
                 onSelect = function()
                     print("Pressed the button!")
                 end,
