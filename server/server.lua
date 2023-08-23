@@ -58,6 +58,22 @@ AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
     end
 end)
 
+RegisterNetEvent('admin_menu:server:GiveMoney')
+AddEventHandler('admin_menu:server:GiveMoney',function(Money, Type)
+    if CheckGroup(source, true) then
+        local xPlayer = ESX.GetPlayerFromId(source)
+
+        if Type == 'Hand' then
+            xPlayer.addMoney(Money)
+            Config.ServerNotify(source, 'Du hast dir ' .. tostring(Money).. '$ gegeben')
+        elseif Type == 'Bank' then
+            xPlayer.addAccountMoney('bank', Money)
+            Config.ServerNotify(source, 'Du hast dir ' .. tostring(Money).. '$ gegeben')
+        end
+        AddWebhookMessage(source, 'Ein Admin hat sich Bargeld gegeben', 'self', {'Count: ' .. Money})
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:GiveItem')
 AddEventHandler('admin_menu:server:GiveItem',function(ItemName, Count)
     if CheckGroup(source, true) then
