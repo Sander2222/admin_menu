@@ -13,3 +13,10 @@ ESX.RegisterServerCallback('admin_menu:callback:GetAllitems', function(src, cb)
         cb(ESX.Items)
     end
 end)
+
+ESX.RegisterServerCallback('admin_menu:callback:GetAllPlayer', function(src, cb)
+
+    if CheckGroup(src, true) then
+        cb(ESX.GetExtendedPlayers())
+    end
+end)
