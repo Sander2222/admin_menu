@@ -62,6 +62,14 @@ function OpenSelfMenu()
                 end,
             },
             {
+                title = 'Give Money',
+                description = 'Player Actions',
+                icon = 'money',
+                onSelect = function()
+                    OpenMoneyMenu()
+                end,
+            },
+            {
                 title = 'Noclip',
                 description = 'Player Actions',
                 icon = 'skull',
@@ -73,6 +81,45 @@ function OpenSelfMenu()
     })
 
     lib.showContext('SelfMenu')
+end
+
+function OpenMoneyMenu()
+    lib.registerContext({
+        id = 'MoneyMenu',
+        title = 'Money Menu',
+        options = {
+            {
+                title = 'Give Money',
+                description = 'Player Actions',
+                icon = 'Hand',
+                onSelect = function()
+                    GiveMoney('Hand')
+                end,
+            },
+            {
+                title = 'Give Bank Money',
+                description = 'Player Actions',
+                icon = 'Hand',
+                onSelect = function()
+                    GiveMoney('Bank')
+                end,
+            },
+        }
+    })
+
+    lib.showContext('MoneyMenu')
+end
+
+function GiveMoney(Type)
+    local input = lib.inputDialog('Add Money', {
+        {type = 'number', label = 'Money', description = 'Wie viel Geld', icon = 'hashtag'},
+    })
+
+    if not input then return end
+
+    local Money = tonumber(input[1])
+
+    TriggerServerEvent('admin_menu:server:GiveMoney', Money, Type)
 end
 
 function OpenItemMenu()
