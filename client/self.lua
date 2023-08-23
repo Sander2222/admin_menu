@@ -49,6 +49,7 @@ function OpenSelfMenu()
                 title = 'Give Weapon',
                 description = 'Player Actions',
                 icon = 'gun',
+                arrow = true,
                 onSelect = function()
                     OpenGunMenu()
                 end,
@@ -57,6 +58,7 @@ function OpenSelfMenu()
                 title = 'Give Item',
                 description = 'Player Actions',
                 icon = 'gavel',
+                arrow = true,
                 onSelect = function()
                     OpenItemMenu()
                 end,
@@ -64,7 +66,8 @@ function OpenSelfMenu()
             {
                 title = 'Give Money',
                 description = 'Player Actions',
-                icon = 'money',
+                icon = 'money-bill-wave',
+                arrow = true,
                 onSelect = function()
                     OpenMoneyMenu()
                 end,
@@ -91,7 +94,7 @@ function OpenMoneyMenu()
             {
                 title = 'Give Money',
                 description = 'Player Actions',
-                icon = 'Hand',
+                icon = 'money-bill',
                 onSelect = function()
                     GiveMoney('Hand')
                 end,
@@ -99,7 +102,7 @@ function OpenMoneyMenu()
             {
                 title = 'Give Bank Money',
                 description = 'Player Actions',
-                icon = 'Hand',
+                icon = 'money-check',
                 onSelect = function()
                     GiveMoney('Bank')
                 end,
