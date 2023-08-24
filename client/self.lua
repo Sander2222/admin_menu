@@ -195,7 +195,7 @@ function SearchForItem()
     local ItemName = input[1]
     local Count = tonumber(input[2])
 
-    TriggerServerEvent('admin_menu:server:GiveItem', ItemName, Count)
+    TriggerServerEvent('admin_menu:server:GiveItem', string.lower(ItemName), Count)
 end
 
 function GiveItem(ItemName)
@@ -207,7 +207,7 @@ function GiveItem(ItemName)
 
     local Count = tonumber(input[1])
 
-    TriggerServerEvent('admin_menu:server:GiveItem', ItemName, Count)
+    TriggerServerEvent('admin_menu:server:GiveItem', string.lower(ItemName), Count)
 end
 
 function OpenGunMenu()
