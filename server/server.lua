@@ -112,19 +112,23 @@ AddEventHandler('admin_menu:server:GiveItem',function(ItemName, Count, Target)
                 xTarget.addInventoryItem(ItemName, Count)
                 AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler ein Item gegeben', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
             else 
-                Config.ServerNotify(Target, 'Du kannst das Item nicht tragen')
+                Config.ServerNotify(source, 'Er kannst das Item nicht tragen')
             end
         end
     end
 end)
 
 RegisterNetEvent('admin_menu:server:RemoveItem')
-AddEventHandler('admin_menu:server:RemoveItem',function(ItemName, Count, Target)
+AddEventHandler('admin_menu:server:RemoveItem',function(ItemName, Count, Target, All)
     if CheckGroup(source, true) then
         local xTarget = ESX.GetPlayerFromId(Target)
 
         xTarget.removeInventoryItem(ItemName, Count)
-        AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler von einem Item alle entfernt', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
+        if All then
+            AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler von einem Item alle entfernt', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
+        else
+            AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler eine Anzahl von Items entfernt', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
+        end
     end
 end)
 
