@@ -157,14 +157,8 @@ function GetAllItems()
             end,
         }
 
-        local Placeholder =  {
-            title = ' ',
-            description = ' ',
-            icon = ' ',
-        }
-
         table.insert(ItemList, SpeedMenu)
-        table.insert(ItemList, Placeholder)
+        table.insert(ItemList, AddPlaceHolder())
 
         for itemName, itemData in pairs(Items) do
 
@@ -252,14 +246,8 @@ function GetAllGuns()
         end,
     }
 
-    local Placeholder =  {
-        title = ' ',
-        description = ' ',
-        icon = ' ',
-    }
-
     table.insert(Guns, SpeedMenu)
-    table.insert(Guns, Placeholder)
+    table.insert(Guns, AddPlaceHolder())
 
     for k, WeaponData in ipairs(Config.WeaponList) do
         local TmpTable =
