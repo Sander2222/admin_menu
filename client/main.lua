@@ -50,16 +50,7 @@ function OpenMenu()
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
-                    print("Pressed the button!")
-                end,
-            },
-            {
-                title = 'Server',
-                description = 'Player Actions',
-                icon = 'circle',
-                arrow = true,
-                onSelect = function()
-                    print("Pressed the button!")
+                    OpenServerMenu()
                 end,
             },
             --   {
