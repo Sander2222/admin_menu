@@ -1,4 +1,5 @@
 local noclip = false
+local ped = cache.ped
 
 function OpenSelfMenu()
     lib.registerContext({
@@ -20,7 +21,7 @@ function OpenSelfMenu()
                 description = 'Player Actions',
                 icon = 'star-of-life',
                 onSelect = function()
-                    SetEntityHealth(PlayerPedId(), 200)
+                    SetEntityHealth(ped, 200)
                     Config.ClientNotify('Du hast dich gehielt')
                     TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich gehealt', 'self')
                 end,
@@ -30,7 +31,7 @@ function OpenSelfMenu()
                 description = 'Player Actions',
                 icon = 'shield-halved',
                 onSelect = function()
-                    SetPedArmour(PlayerPedId(), 100)
+                    SetPedArmour(ped, 100)
                     Config.ClientNotify('Du hast dir selbst armor gegeben')
                     TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich armor gegeben', 'self')
                 end,
@@ -40,7 +41,7 @@ function OpenSelfMenu()
                 description = 'Player Actions',
                 icon = 'skull',
                 onSelect = function()
-                    SetEntityHealth(PlayerPedId(), 0)
+                    SetEntityHealth(ped, 0)
                     Config.ClientNotify('Du hast dich selbst getötet')
                     TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich selbst getötet', 'self')
                 end,
@@ -290,7 +291,7 @@ function GiveGun(GunName, GunLabel)
     -- Check if gives Weapon with ESX or not
     if WithESX then
         --  Without ESX
-        GiveWeaponToPed(PlayerPedId(), GunName, Ammo, false, false)
+        GiveWeaponToPed(ped, GunName, Ammo, false, false)
     else
         TriggerServerEvent('admin_menu:server:GiveWeapon', GunName, Ammo)
     end

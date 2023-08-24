@@ -1,3 +1,5 @@
+local ped = cache.ped
+
 function  OpenVehMenu()
     lib.registerContext({
         id = 'VehMenu',
@@ -54,7 +56,7 @@ function  OpenVehMenu()
 end
 
 function DelNearVehicle()
-    local playerCoords = GetEntityCoords(PlayerPedId()) -- Hole die Koordinaten des Spielers
+    local playerCoords = GetEntityCoords(ped) -- Hole die Koordinaten des Spielers
     local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, 10.0) -- Erhalte Fahrzeuge im Umkreis von 10 Einheiten (du kannst den Radius anpassen)
     
     for i = 1, #vehicles do 
@@ -74,7 +76,7 @@ function DelVehicleRadiusMenu()
     local radius = tonumber(input[1])
 
     if radius then
-        local playerCoords = GetEntityCoords(PlayerPedId())
+        local playerCoords = GetEntityCoords(ped)
         local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, radius)
 
         for i = 1, #vehicles do 
@@ -109,7 +111,7 @@ function OpenVehSpawnnMenu()
     local PriR, PriG, PriB = ConvertHexToRGB(input[3])
     local SecR, SecG, SecB = ConvertHexToRGB(input[4])
 
-    local spawnCoords = GetEntityCoords(PlayerPedId())
+    local spawnCoords = GetEntityCoords(ped)
 
     local numberPlate = input[2]
     
@@ -127,7 +129,7 @@ function OpenVehSpawnnMenu()
 
     SetVehicleCustomPrimaryColour(vehicle, PriR, PriG, PriB)
     SetVehicleCustomPrimaryColour(vehicle, SecR, SecG, SecB)
-    SetPedIntoVehicle(PlayerPedId(), vehicle, -1)
+    SetPedIntoVehicle(ped, vehicle, -1)
 
     Config.ClientNotify('Fahrzeug erfolgreich gespawnt!')
 end
