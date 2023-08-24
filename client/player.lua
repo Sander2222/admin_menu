@@ -37,15 +37,9 @@ function GetAllPlayers()
             end,
         }
     
-        local Placeholder =  {
-            title = ' ',
-            description = ' ',
-            icon = ' ',
-        }
-    
         table.insert(PlayerList, Search)
         table.insert(PlayerList, Refresh)
-        table.insert(PlayerList, Placeholder)
+        table.insert(PlayerList, AddPlaceHolder())
 
 
 
@@ -105,11 +99,6 @@ function OpenSinglePlayerMenu(PlayerID)
     lib.showContext('SinglePlayerMenu')
 end
 
-
-
-
-
-
 function OpenPlayerInventory(PlayerID)
 
 
@@ -135,14 +124,28 @@ function GetInventoryItem(PlayerID)
         end,
     }
 
-    local Placeholder =  {
-        title = ' ',
-        description = ' ',
-        icon = ' ',
+    local Add = {
+        title = 'Item hinzufügen',
+        description = 'Einem Spieler ein Item hinzufügen',
+        icon = 'magnifying-glass',
+        onSelect = function()
+
+        end,
+    }
+
+    local DelAll = {
+        title = 'Alle Items löshen',
+        description = 'Einem Spieler alle Items löschen',
+        icon = 'magnifying-glass',
+        onSelect = function()
+            DeleteAllInventoryItems(PlayerID)
+        end,
     }
 
     table.insert(Invs, Search)
-    table.insert(Invs, Placeholder)
+    table.insert(Invs, Add)
+    table.insert(Invs, DelAll)
+    table.insert(Invs, AddPlaceHolder())
 
     for k, v in ipairs(InventoryData) do
         if v.count ~= 0 then
@@ -153,7 +156,7 @@ function GetInventoryItem(PlayerID)
                 icon = 'user',
                 arrow = true,
                 onSelect = function()
-                    RemovePlayerItem(PlayerID, v.name)
+                    OpenItemPlayerMenu(PlayerID, v.name, v.label, v.count)
                 end,
                 metadata = {
                     {label = 'Count', value = v.count},
@@ -169,6 +172,70 @@ function GetInventoryItem(PlayerID)
     return Invs
 end
 
-function RemovePlayerItem(PlayerID, ItemName)
-    print(ItemName)
+function OpenItemPlayerMenu(PlayerID, ItemName, ItemLabel, ItemCount)
+    lib.registerContext({
+        id = 'PlayerItemActionsMenu',
+        title = 'Item: ' .. ItemName,
+        options = {
+            {
+                title = 'Item hinzufügen',
+                description = 'Diesen Item hinzufügen (' ..  ItemLabel.. ')',
+                icon = 'plus',
+                arrow = true,
+                onSelect = function()
+                    AddItemToPlayer(PlayerID, ItemName, ItemLabel)
+                end,
+            },
+            {
+                title = 'Alle Items entfernen',
+                description = 'Dieses item komplett entfernen (' ..  ItemLabel.. ')',
+                icon = 'magnifying-glass',
+                onSelect = function()
+                    TriggerServerEvent('admin_menu:server:RemoveItem', ItemName, ItemCount, PlayerID, true)
+                end,
+            },
+            {
+                title = 'Item einzelne Items entfernen',
+                description = 'Nur einzelne Items entfernen (' ..  ItemLabel.. ')',
+                icon = 'magnifying-glass',
+                arrow = true,
+                onSelect = function()
+                    RemovePlayerItems(PlayerID, ItemName, ItemLabel)
+                end,
+            },
+        } 
+    })
+
+    lib.showContext('PlayerItemActionsMenu')
+end
+
+function DeleteAllInventoryItems(PlayerID)
+    -- Sander
+end
+
+function RemovePlayerItems(PlayerID, ItemName, ItemLabel)
+    local input = lib.inputDialog('Remove Item: ' .. ItemLabel, {
+        {type = 'input', label = 'Item name', description = 'Ausgewähltes Item', disabled = true, default = ItemName, required = true, min = 1, max = 600},
+        {type = 'number', label = 'Counter', description = 'Wie viele Items', default = 1, icon = 'hashtag'},
+    })
+
+    if not input then return end      
+    
+    local Count = input[2]
+
+    TriggerServerEvent('admin_menu:server:RemoveItem', ItemName, Count, PlayerID, false)
+end
+
+function AddItemToPlayer(PlayerID, ItemName, ItemLabel)
+    local input = lib.inputDialog('Add Item: ' .. ItemLabel, {
+        {type = 'input', label = 'Item name', description = 'Welches item', disabled = true, default = ItemName, required = true, min = 1, max = 600},
+        {type = 'number', label = 'Counter', description = 'Wie viele Items', default = 1, icon = 'hashtag'},
+    })
+
+    if not input then return end
+
+    local ItemName = input[1]
+    local Count = tonumber(input[2])
+
+    TriggerServerEvent('admin_menu:server:GiveItem', ItemName, Count, PlayerID)
 end
