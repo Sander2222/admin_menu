@@ -83,3 +83,13 @@ function OpenMenu()
 
     lib.showContext('some_menu')
 end
+
+function AddPlaceHolder()
+    local Placeholder =  {
+        title = ' ',
+        description = ' ',
+        icon = ' ',
+    }
+
+    return Placeholder
+end
