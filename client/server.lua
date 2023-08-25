@@ -17,7 +17,7 @@ function OpenServerMenu()
                 description = 'Player Actions',
                 icon = 'laptop-medical',
                 onSelect = function()
-                    ReviveAllPlayer()
+                    TriggerServerEvent('ReviveAllPlayer')
                 end,
             },
             {
@@ -71,10 +71,6 @@ RegisterNetEvent('DisplaySyncAnnounce')
 AddEventHandler('DisplaySyncAnnounce', function(message)
     ESX.ShowNotification(message, true, true, 3000)
 end)
-
-function ReviveAllPlayer()
-    TriggerServerEvent('ReviveAllPlayer')
-end
 
 function BlackOut()
     TriggerServerEvent('BlackOut')
