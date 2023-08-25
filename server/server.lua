@@ -76,6 +76,29 @@ AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
     end
 end)
 
+RegisterNetEvent('admin_menu:server:RemoveAllPlayerItems')
+AddEventHandler('admin_menu:server:RemoveAllPlayerItems',function(Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
+        local TargetInventory = xTarget.getInventory(true)
+        local msg = ''
+
+        if #TargetInventory == 0 then
+            Config.ServerNotify(source, 'Der Spieler hat keine Items im Inventar')
+            
+            return
+        end
+
+        for k, v in pairs(TargetInventory) do
+            xTarget.removeInventoryItem(k, v)
+
+            msg = msg .. k .. '(Count: ' .. v ..'), '
+        end
+
+        AddWebhookMessage(source, Target, 'Ein Admin hat einem das ganze Inventar entfernt', 'player', {'Items: ' .. msg})
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:GiveMoney')
 AddEventHandler('admin_menu:server:GiveMoney',function(Money, Type)
     if CheckGroup(source, true) then
