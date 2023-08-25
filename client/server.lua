@@ -9,7 +9,7 @@ function OpenServerMenu()
                 icon = 'bullhorn',
                 arrow = true,
                 onSelect = function()
-        
+                    OpenAnnounceMenu()
                 end,
             },
             {
@@ -17,7 +17,7 @@ function OpenServerMenu()
                 description = 'Player Actions',
                 icon = 'laptop-medical',
                 onSelect = function()
-                    
+                    ReviveAllPlayer()
                 end,
             },
             {
@@ -26,7 +26,7 @@ function OpenServerMenu()
                 icon = 'bolt',
                 arrow = true,
                 onSelect = function()
-                OpenBlackMenu()
+                    BlackOut()
                 end,
             },
             {
@@ -35,7 +35,11 @@ function OpenServerMenu()
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
-                   
+                    local vehicles = GetGamePool("CVehicle")
+                    for _, vehicle in pairs(vehicles) do
+                        DeleteEntity(vehicle)
+                    end
+                    print("All vehicles deleted.")
                 end,
             },
             {
@@ -44,7 +48,11 @@ function OpenServerMenu()
                 icon = 'list-check',
                 arrow = true,
                 onSelect = function()
+                    local resources = GetResourceList()
 
+                    for _, resource in ipairs(resources) do
+                        print(resource)
+                    end
                 end,
             },
         }
@@ -52,3 +60,33 @@ function OpenServerMenu()
 
     lib.showContext('ServMenu')
 end
+
+function OpenAnnounceMenu()
+    local msg = lib.inputDialog('Announce', {'msg'})
+    if not msg then return end
+    TriggerServerEvent('SyncAnnounceToClients', msg)
+end
+
+RegisterNetEvent('DisplaySyncAnnounce')
+AddEventHandler('DisplaySyncAnnounce', function(message)
+    ESX.ShowNotification(message, true, true, 3000)
+end)
+
+function ReviveAllPlayer()
+    TriggerServerEvent('ReviveAllPlayer')
+end
+
+function BlackOut()
+    TriggerServerEvent('BlackOut')
+end
+
+RegisterNetEvent('toggleBlackout')
+AddEventHandler('toggleBlackout', function(state)
+    if state then
+        SetArtificialLightsState(true)
+        SetStreetlights(false)
+    else
+        SetArtificialLightsState(false)
+        SetStreetlights(true)
+    end
+end)
