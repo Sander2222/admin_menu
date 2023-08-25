@@ -59,7 +59,7 @@ function OpenMenu()
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
-                    OpenWeatherMenu()
+                    -- lib.showMenu('menu_world_related_options')
                 end,
             },
             --   {
