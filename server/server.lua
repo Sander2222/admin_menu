@@ -194,3 +194,28 @@ function SendDiscord(message)
       }
     PerformHttpRequest(SVConfig.Webhooks, function(err, text, headers) end, 'POST', json.encode({username = name, embeds = embed}), { ['Content-Type'] = 'application/json' })
 end
+
+
+RegisterServerEvent('SyncAnnounceToClients')
+AddEventHandler('SyncAnnounceToClients', function(message)
+    TriggerClientEvent('DisplaySyncAnnounce', -1, message)
+end)
+
+RegisterServerEvent('ReviveAllPlayer')
+AddEventHandler('ReviveAllPlayer', function()
+    TriggerClientEvent('esx_ambulancejob:revive', -1)
+end)
+
+local blackoutActive = false
+
+RegisterServerEvent('BlackOut')
+AddEventHandler('BlackOut', function()
+    blackoutActive = not blackoutActive
+    if blackoutActive then
+        TriggerClientEvent('toggleBlackout', -1, true)
+        print("Blackout activated")
+    else
+        TriggerClientEvent('toggleBlackout', -1, false)
+        print("Blackout deactivated")
+    end
+end)
