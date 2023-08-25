@@ -10,11 +10,7 @@ Config.ESXGroups = {
 }
 
 Config.ClientNotify = function(msg)
-    TriggerEvent('chat:addMessage', {
-        color = { 255, 0, 0 },
-        multiline = true,
-        args = { "Server", msg }
-    })
+    ESX.ShowNotification(msg)
 end
 
 Config.ServerNotify = function(src, msg)
