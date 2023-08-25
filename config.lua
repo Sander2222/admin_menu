@@ -39,3 +39,5 @@ Config.PermaBanTime = {
 }
 
 Config.BasicPlate = 'Test'
+Config.UnemployedJob = 'unemployed'
+Config.UnemployedJobGrade = 0
