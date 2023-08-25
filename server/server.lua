@@ -66,6 +66,36 @@ function AddWebhookMessage(AdminID, Target, msg, type, Data)
     end
 end
 
+RegisterNetEvent('admin_menu:server:KillPlayer')
+AddEventHandler('admin_menu:server:KillPlayer',function(Target)
+    if CheckGroup(source, true) then
+        print(Target)
+        TriggerClientEvent('esx:killPlayer', Target)
+    end
+end)
+
+RegisterNetEvent('admin_menu:server:GiveArmorToPlayer')
+AddEventHandler('admin_menu:server:GiveArmorToPlayer',function(Target)
+    if CheckGroup(source, true) then
+        local Ped = GetPlayerPed(Target)
+
+        SetPedArmour(Ped, 100)
+    end
+end)
+
+RegisterNetEvent('admin_menu:server:KickPlayer')
+AddEventHandler('admin_menu:server:KickPlayer',function(msg, Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
+
+        if xTarget ~= nil then
+            xTarget.kick('Server Kick: ' ..msg)
+        else 
+            Config.ServerNotify(source, 'Dieser Spieler ist nicht online')
+        end
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:GiveWeapon')
 AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
     if CheckGroup(source, true) then
@@ -76,14 +106,28 @@ AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
     end
 end)
 
+RegisterNetEvent('admin_menu:server:SendPrivateMessage')
+AddEventHandler('admin_menu:server:SendPrivateMessage',function(MSG, Target)
+    if CheckGroup(source, true) then
+
+        Config.ServerNotify(Target, MSG)
+        Config.ServerNotify(source, 'Nachricht wurde geschickt')
+        AddWebhookMessage(source, Target, 'Ein Admin hat einem anderen Spieler eine Nachricht geschickt', 'player', {'Message: ' .. MSG})
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:UpdatePlayerJob')
 AddEventHandler('admin_menu:server:UpdatePlayerJob',function(JobName, Grade, Target)
     if CheckGroup(source, true) then
         local xTarget = ESX.GetPlayerFromId(Target)
 
-        xTarget.setJob(JobName, Grade)
-        Config.ServerNotify(Target, 'Dein Job wurde zurückgesetzt')
-        AddWebhookMessage(source, nil, 'Ein Admin hat sich eine Waffe gegeben', 'self', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
+        if ESX.DoesJobExist(string.lower(JobName), Grade)  then
+            xTarget.setJob(JobName, tonumber(Grade))
+            Config.ServerNotify(Target, 'Dein Job wurde zurückgesetzt')
+            AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler den Job geändert', 'player', {'Neuer Job: ' .. JobName, 'Neuer Jobgrade: ' .. Grade})
+        else
+            Config.ServerNotify(source, 'Dein angegebener Job existiert nicht')
+        end
     end
 end)
 
