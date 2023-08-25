@@ -123,6 +123,12 @@ function GiveMoney(Type)
 
     local Money = tonumber(input[1])
 
+    if Money == nil then
+        Config.ClientNotify('Du musst eine Zahl angeben')
+
+        return
+    end
+
     TriggerServerEvent('admin_menu:server:GiveMoney', Money, Type)
 end
 
@@ -195,6 +201,12 @@ function SearchForItem()
     local ItemName = input[1]
     local Count = tonumber(input[2])
 
+    if Count == nil then
+        Config.ClientNotify('Du musst eine Zahl angeben')
+
+        return
+    end
+
     TriggerServerEvent('admin_menu:server:GiveItem', string.lower(ItemName), Count)
 end
 
@@ -206,6 +218,12 @@ function GiveItem(ItemName)
     if not input then return end
 
     local Count = tonumber(input[1])
+
+    if Count == nil then
+        Config.ClientNotify('Du musst eine Zahl angeben')
+
+        return
+    end
 
     TriggerServerEvent('admin_menu:server:GiveItem', string.lower(ItemName), Count)
 end
@@ -230,6 +248,12 @@ function SearchForWeapon()
 
     local WeaponName = input[1]
     local Count = tonumber(input[2])
+
+    if Count == nil then
+        Config.ClientNotify('Du musst eine Zahl angeben')
+
+        return
+    end
 
     TriggerServerEvent('admin_menu:server:GiveWeapon', WeaponName, Count)
 end
@@ -275,6 +299,12 @@ function GiveGun(GunName, GunLabel)
 
     local Ammo = tonumber(input[1])
     local WithESX = input[2]
+
+    if Ammo == nil then
+        Config.ClientNotify('Du musst eine Zahl angeben')
+
+        return
+    end
 
     -- Check if gives Weapon with ESX or not
     if WithESX then
