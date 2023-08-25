@@ -210,7 +210,17 @@ function OpenItemPlayerMenu(PlayerID, ItemName, ItemLabel, ItemCount)
 end
 
 function DeleteAllInventoryItems(PlayerID)
-    -- Sander
+    local alert = lib.alertDialog({
+        header = 'Alle Items entfernen',
+        content = 'Sicher das du dem Spieler alle Items entfernen möchtest? \nID: ' .. PlayerID,
+        centered = true,
+        cancel = true
+    })
+     
+    if alert == 'confirm' then
+        -- removen
+        print("Remove")
+    end
 end
 
 function RemovePlayerItems(PlayerID, ItemName, ItemLabel)
