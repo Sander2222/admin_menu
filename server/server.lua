@@ -24,11 +24,11 @@ end
 
 RegisterNetEvent('admin_menu:server:SendWebhook')
 AddEventHandler('admin_menu:server:SendWebhook',function(msg, type, Data)
-    AddWebhookMessage(source, type, Data)
+    AddWebhookMessage(source, nil, type, Data)
 end)
 
-function AddWebhookMessage(source, msg, type, Data)
-    if CheckGroup(source, false) then
+function AddWebhookMessage(AdminID, Target, msg, type, Data)
+    if CheckGroup(AdminID, false) then
         if type == 'self' then
             local msg = msg
 
@@ -41,7 +41,25 @@ function AddWebhookMessage(source, msg, type, Data)
                 end
             end
 
-            msg = msg .. '\n\n **Player Info:** \n' .. GetPlayerFootprints(source)
+            msg = msg .. '\n\n **Player Info:** \n' .. GetPlayerFootprints(AdminID)
+
+            SendDiscord(msg)
+        elseif type == 'player' then
+            local msg = msg
+
+            if #Data ~= 0 then
+
+                msg = msg .. '\n\n **Data:** \n'
+
+                for k, v in pairs(Data) do
+                    msg = msg .. v .. '\n'
+                end
+            end
+
+            msg = msg .. '\n\n **Admin Info:** \n' .. GetPlayerFootprints(AdminID)
+
+
+            msg = msg .. '\n\n **Player Info:** \n' .. GetPlayerFootprints(Target)
 
             SendDiscord(msg)
         end
@@ -54,7 +72,7 @@ AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
         local xPlayer = ESX.GetPlayerFromId(source)
 
         xPlayer.addWeapon(Weapon, Ammo)
-        AddWebhookMessage(source, 'Ein Admin hat sich eine Waffe gegeben', 'self', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
+        AddWebhookMessage(source, nil, 'Ein Admin hat sich eine Waffe gegeben', 'self', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
     end
 end)
 
@@ -70,20 +88,46 @@ AddEventHandler('admin_menu:server:GiveMoney',function(Money, Type)
             xPlayer.addAccountMoney('bank', Money)
             Config.ServerNotify(source, 'Du hast dir ' .. tostring(Money).. '$ gegeben')
         end
-        AddWebhookMessage(source, 'Ein Admin hat sich Bargeld gegeben', 'self', {'Count: ' .. Money})
+        AddWebhookMessage(source, nil, 'Ein Admin hat sich Bargeld gegeben', 'self', {'Count: ' .. Money})
     end
 end)
 
 RegisterNetEvent('admin_menu:server:GiveItem')
-AddEventHandler('admin_menu:server:GiveItem',function(ItemName, Count)
+AddEventHandler('admin_menu:server:GiveItem',function(ItemName, Count, Target)
     if CheckGroup(source, true) then
-        local xPlayer = ESX.GetPlayerFromId(source)
 
-        if xPlayer.canCarryItem(ItemName, Count) then
-            xPlayer.addInventoryItem(ItemName, Count)
-            AddWebhookMessage(source, 'Ein Admin hat sich ein Item gegeben', 'self', {'Item: ' .. ItemName, 'Count: ' .. Count})
-        else 
-            Config.ServerNotify(source, 'Du kannst das Item nicht tragen')
+        if Target == nil then
+            local xPlayer = ESX.GetPlayerFromId(source)
+
+            if xPlayer.canCarryItem(ItemName, Count) then
+                xPlayer.addInventoryItem(ItemName, Count)
+                AddWebhookMessage(source, nil, 'Ein Admin hat sich ein Item gegeben', 'self', {'Item: ' .. ItemName, 'Count: ' .. Count})
+            else 
+                Config.ServerNotify(source, 'Du kannst das Item nicht tragen')
+            end
+        else
+            local xTarget = ESX.GetPlayerFromId(Target)
+
+            if xTarget.canCarryItem(ItemName, Count) then
+                xTarget.addInventoryItem(ItemName, Count)
+                AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler ein Item gegeben', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
+            else 
+                Config.ServerNotify(source, 'Er kannst das Item nicht tragen')
+            end
+        end
+    end
+end)
+
+RegisterNetEvent('admin_menu:server:RemoveItem')
+AddEventHandler('admin_menu:server:RemoveItem',function(ItemName, Count, Target, All)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
+
+        xTarget.removeInventoryItem(ItemName, Count)
+        if All then
+            AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler von einem Item alle entfernt', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
+        else
+            AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler eine Anzahl von Items entfernt', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
         end
     end
 end)

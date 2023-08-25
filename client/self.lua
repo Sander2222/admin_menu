@@ -157,14 +157,8 @@ function GetAllItems()
             end,
         }
 
-        local Placeholder =  {
-            title = ' ',
-            description = ' ',
-            icon = ' ',
-        }
-
         table.insert(ItemList, SpeedMenu)
-        table.insert(ItemList, Placeholder)
+        table.insert(ItemList, AddPlaceHolder())
 
         for itemName, itemData in pairs(Items) do
 
@@ -201,7 +195,7 @@ function SearchForItem()
     local ItemName = input[1]
     local Count = tonumber(input[2])
 
-    TriggerServerEvent('admin_menu:server:GiveItem', ItemName, Count)
+    TriggerServerEvent('admin_menu:server:GiveItem', string.lower(ItemName), Count)
 end
 
 function GiveItem(ItemName)
@@ -213,7 +207,7 @@ function GiveItem(ItemName)
 
     local Count = tonumber(input[1])
 
-    TriggerServerEvent('admin_menu:server:GiveItem', ItemName, Count)
+    TriggerServerEvent('admin_menu:server:GiveItem', string.lower(ItemName), Count)
 end
 
 function OpenGunMenu()
@@ -252,14 +246,8 @@ function GetAllGuns()
         end,
     }
 
-    local Placeholder =  {
-        title = ' ',
-        description = ' ',
-        icon = ' ',
-    }
-
     table.insert(Guns, SpeedMenu)
-    table.insert(Guns, Placeholder)
+    table.insert(Guns, AddPlaceHolder())
 
     for k, WeaponData in ipairs(Config.WeaponList) do
         local TmpTable =

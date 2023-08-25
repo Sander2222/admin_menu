@@ -50,7 +50,7 @@ function OpenMenu()
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
-                    print("Pressed the button!")
+                    OpenServerMenu()
                 end,
             },
             {
@@ -59,7 +59,7 @@ function OpenMenu()
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
-                    print("Pressed the button!")
+                    OpenWeatherMenu()
                 end,
             },
             --   {
