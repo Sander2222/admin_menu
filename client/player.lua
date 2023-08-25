@@ -100,11 +100,80 @@ function OpenSinglePlayerMenu(PlayerID)
                 onSelect = function()
                     OpenPlayerJobMenu(PlayerID)
                 end,
-            }
+            },
+            {
+                title = 'Send Message',
+                description = 'Spieler eine Nachricht schicken',
+                icon = 'message',
+                onSelect = function()
+                    OpenSendMSGPlayerDialog(PlayerID)
+                end,
+            },
+            {
+                title = 'Kick Player',
+                description = 'Ein Spieler von dem Server kicken',
+                icon = 'message',
+                onSelect = function()
+                    KickPlayerDialog(PlayerID)
+                end,
+            },
+            {
+                title = 'Kill Player',
+                description = 'einen Spieler töten',
+                icon = 'message',
+                onSelect = function()
+                    TriggerServerEvent('admin_menu:server:KillPlayer', PlayerID)
+                end,
+            },
+            {
+                title = 'Give Armor Player',
+                description = 'einem Spieler Armor geben',
+                icon = 'message',
+                onSelect = function()
+                    TriggerServerEvent('admin_menu:server:GiveArmorToPlayer', PlayerID)
+                end,
+            },
         }
     })
 
     lib.showContext('SinglePlayerMenu')
+end
+
+function KickPlayerDialog(PlayerID)
+    local input = lib.inputDialog('Spieler Kicken', {
+        {type = 'input', label = 'Message', description = 'Nachricht die beim Kick angezeigt wird', required = true, min = 1, max = 1000}
+    })
+
+    if not input then return end      
+    
+    local MSG = input[1]
+    
+    if MSG == '' or MSG == ' ' then 
+        Config.ClientNotify('Deine Nachricht ist leer')
+
+        return
+    end
+
+    TriggerServerEvent('admin_menu:server:KickPlayer', MSG, PlayerID)
+end
+
+function OpenSendMSGPlayerDialog(PlayerID)
+
+    local input = lib.inputDialog('Send Message', {
+        {type = 'input', label = 'Message', description = 'Privatnachricht', required = true, min = 1, max = 1000}    
+    })
+
+    if not input then return end      
+    
+    local MSG = input[1]
+    
+    if MSG == '' or MSG == ' ' then 
+        Config.ClientNotify('Deine Nachricht ist leer')
+
+        return
+    end
+
+    TriggerServerEvent('admin_menu:server:SendPrivateMessage', MSG, PlayerID)
 end
 
 function OpenPlayerJobMenu(PlayerID)
@@ -120,7 +189,7 @@ function OpenPlayerJobMenu(PlayerID)
                 icon = 'user-doctor',
                 arrow = true,
                 onSelect = function()
-                    OpenPlayerJobMenu(PlayerID)
+                    OpenUpdateJobDialog(PlayerID)
                 end,
             },
             {
@@ -136,6 +205,22 @@ function OpenPlayerJobMenu(PlayerID)
     })
 
     lib.showContext('JobMenu')
+end
+
+function OpenUpdateJobDialog(PlayerID)
+    local JobData = GetSinglePlayerData(PlayerID).job
+
+    local input = lib.inputDialog('Change Job Data', {
+        {type = 'input', label = 'Jobname', description = JobData.name, default = JobData.name, required = true, min = 1, max = 600},
+        {type = 'number', label = 'Grade', description = '', default = JobData.grade, icon = 'hashtag'},
+    })
+
+    if not input then return end      
+    
+    local JobName = string.lower(input[1])
+    local JobGrade = tonumber(input[2])
+
+    TriggerServerEvent('admin_menu:server:UpdatePlayerJob', JobName, JobGrade, PlayerID)
 end
 
 function OpenPlayerInventory(PlayerID)
