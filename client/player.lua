@@ -92,11 +92,23 @@ function OpenSinglePlayerMenu(PlayerID)
                 onSelect = function()
                     OpenPlayerInventory(PlayerID)
                 end,
+            },
+            {
+                title = 'Job Menu',
+                description = 'Job Menu',
+                icon = 'user-doctor',
+                onSelect = function()
+                    OpenPlayerJobMenu(PlayerID)
+                end,
             }
         }
     })
 
     lib.showContext('SinglePlayerMenu')
+end
+
+function OpenPlayerJobMenu(PlayerID)
+    
 end
 
 function OpenPlayerInventory(PlayerID)
@@ -111,25 +123,31 @@ function OpenPlayerInventory(PlayerID)
     lib.showContext('SinglePlayerInventarMenu')
 end
 
+function AddNewItemToPlayer(PlayerID)
+    local input = lib.inputDialog('Add Item', {
+        {type = 'input', label = 'Item name', description = 'Item', required = true, min = 1, max = 600},
+        {type = 'number', label = 'Counter', description = 'Wie viele Items', default = 1, icon = 'hashtag'},
+    })
+
+    if not input then return end      
+    
+    local ItemName = string.lower(input[1])
+    local Count = tonumber(input[2])
+
+    TriggerServerEvent('admin_menu:server:GiveItem', ItemName, Count, PlayerID)
+end
+
 function GetInventoryItem(PlayerID)
     local InventoryData = GetSinglePlayerData(PlayerID).inventory
     local Invs = {}
 
-    local Search = {
-        title = 'Suchen',
-        description = 'Spieler suchen',
-        icon = 'magnifying-glass',
-        onSelect = function()
-
-        end,
-    }
 
     local Add = {
         title = 'Item hinzufügen',
         description = 'Einem Spieler ein Item hinzufügen',
         icon = 'magnifying-glass',
         onSelect = function()
-
+            AddNewItemToPlayer(PlayerID)
         end,
     }
 
@@ -142,7 +160,6 @@ function GetInventoryItem(PlayerID)
         end,
     }
 
-    table.insert(Invs, Search)
     table.insert(Invs, Add)
     table.insert(Invs, DelAll)
     table.insert(Invs, AddPlaceHolder())
@@ -218,7 +235,7 @@ function DeleteAllInventoryItems(PlayerID)
     })
      
     if alert == 'confirm' then
-        -- removen
+        TriggerServerEvent('admin_menu:server:RemoveAllPlayerItems', PlayerID)
         print("Remove")
     end
 end
