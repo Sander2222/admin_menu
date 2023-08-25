@@ -108,12 +108,37 @@ function OpenSinglePlayerMenu(PlayerID)
 end
 
 function OpenPlayerJobMenu(PlayerID)
-    
+    local JobData = GetSinglePlayerData(PlayerID).job
+
+    lib.registerContext({
+        id = 'JobMenu',
+        title = 'Job: ' .. JobData.name ..  ' Grade: ' .. JobData.grade,
+        options = {
+            {
+                title = 'Job ändern',
+                description = 'Job Daten ändern',
+                icon = 'user-doctor',
+                arrow = true,
+                onSelect = function()
+                    OpenPlayerJobMenu(PlayerID)
+                end,
+            },
+            {
+                title = 'Job zurücksetzen',
+                description = 'Job auf Arbietslos setzten',
+                icon = 'user-doctor',
+                arrow = true,
+                onSelect = function()
+                    TriggerServerEvent('admin_menu:server:UpdatePlayerJob', Config.UnemployedJob, Config.UnemployedJobGrade, PlayerID)
+                end,
+            },
+        }
+    })
+
+    lib.showContext('JobMenu')
 end
 
 function OpenPlayerInventory(PlayerID)
-
-
     lib.registerContext({
         id = 'SinglePlayerInventarMenu',
         title = 'Adminmenu',
