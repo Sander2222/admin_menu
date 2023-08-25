@@ -54,8 +54,8 @@ function OpenMenu()
                 end,
             },
             {
-                title = 'Server',
-                description = 'Player Actions',
+                title = 'Weather',
+                description = 'Waether Actions',
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
