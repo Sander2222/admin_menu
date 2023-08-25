@@ -76,6 +76,17 @@ AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
     end
 end)
 
+RegisterNetEvent('admin_menu:server:UpdatePlayerJob')
+AddEventHandler('admin_menu:server:UpdatePlayerJob',function(JobName, Grade, Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
+
+        xTarget.setJob(JobName, Grade)
+        Config.ServerNotify(Target, 'Dein Job wurde zurückgesetzt')
+        AddWebhookMessage(source, nil, 'Ein Admin hat sich eine Waffe gegeben', 'self', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:RemoveAllPlayerItems')
 AddEventHandler('admin_menu:server:RemoveAllPlayerItems',function(Target)
     if CheckGroup(source, true) then
