@@ -90,6 +90,8 @@ AddEventHandler('admin_menu:server:KickPlayer',function(msg, Target)
 
         if xTarget ~= nil then
             xTarget.kick('Server Kick: ' ..msg)
+            AddWebhookMessage(source, Target, 'Ein Admin hat einen Spieler gekickt', 'player', {'Message: ' .. msg})
+
         else 
             Config.ServerNotify(source, 'Dieser Spieler ist nicht online')
         end
