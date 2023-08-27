@@ -39,7 +39,6 @@ function OpenServerMenu()
                     for _, vehicle in pairs(vehicles) do
                         DeleteEntity(vehicle)
                     end
-                    print("All vehicles deleted.")
                 end,
             },
             {
