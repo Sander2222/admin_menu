@@ -69,7 +69,6 @@ end
 RegisterNetEvent('admin_menu:server:KillPlayer')
 AddEventHandler('admin_menu:server:KillPlayer',function(Target)
     if CheckGroup(source, true) then
-        print(Target)
         TriggerClientEvent('esx:killPlayer', Target)
     end
 end)
@@ -80,6 +79,21 @@ AddEventHandler('admin_menu:server:GiveArmorToPlayer',function(Target)
         local Ped = GetPlayerPed(Target)
 
         SetPedArmour(Ped, 100)
+    end
+end)
+
+RegisterNetEvent('admin_menu:server:RemoveWeaponComponent')
+AddEventHandler('admin_menu:server:RemoveWeaponComponent',function(Target, WeaponName, Component)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
+
+        if xTarget.hasWeaponComponent(string.upper(WeaponName), Component) then
+            xTarget.removeWeaponComponent(string.upper(WeaponName), Component)
+            AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler eine Waffen Componente entfernt', 'player', {'Weapon: ' .. WeaponName, 'Component: ' .. Component})
+            Config.ServerNotify(Target, 'Ein Admin hat die eine Waffen Componente entfernt: ' .. Component)
+        else
+            Config.ServerNotify(source, 'Der Spieler hat diese Componente nicht')
+        end
     end
 end)
 
