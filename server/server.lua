@@ -108,6 +108,30 @@ AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
     end
 end)
 
+RegisterNetEvent('admin_menu:server:UpdatePlayerAmmo')
+AddEventHandler('admin_menu:server:UpdatePlayerAmmo',function(Weapon, Ammo, BasicAmmo, Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(source)
+
+        xTarget.removeWeaponAmmo(string.upper(Weapon), BasicAmmo)
+        xTarget.addWeaponAmmo(string.upper(Weapon), Ammo)
+        
+        AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler seiner Waffe die Munition geupdated', 'player', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
+    end
+end)
+
+RegisterNetEvent('admin_menu:server:RemovePlayerWeapon')
+AddEventHandler('admin_menu:server:RemovePlayerWeapon',function(Weapon, Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(source)
+
+        
+        xTarget.removeWeapon(string.upper(Weapon))
+        Config.ServerNotify(Target, 'Ein Admin hat dir eine Waffe entzogen: ' .. ESX.GetWeaponLabel(Weapon))
+        AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler eine Waffe entfernt', 'player', {'Weapon: ' .. Weapon})
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:SendPrivateMessage')
 AddEventHandler('admin_menu:server:SendPrivateMessage',function(MSG, Target)
     if CheckGroup(source, true) then

@@ -94,6 +94,14 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
+                title = 'Weapon',
+                description = 'Spieler Inventory',
+                icon = 'weapon',
+                onSelect = function()
+                    OpenPlayerWeaponMenu(PlayerID)
+                end,
+            },
+            {
                 title = 'Job Menu',
                 description = 'Job Menu',
                 icon = 'user-doctor',
@@ -137,6 +145,133 @@ function OpenSinglePlayerMenu(PlayerID)
     })
 
     lib.showContext('SinglePlayerMenu')
+end
+
+function OpenPlayerWeaponMenu(PlayerID)
+    lib.registerContext({
+        id = 'SinglePlayerWeaponMenu',
+        title = 'Adminmenu',
+        options =  GetPlayerWeapon(PlayerID)
+    })
+
+    lib.showContext('SinglePlayerWeaponMenu')
+end
+
+function GetPlayerWeapon(PlayerID)
+    local WeaponData = GetSinglePlayerData(PlayerID).loadout
+    local Weapons = {}
+
+    print(ESX.DumpTable(WeaponData))
+
+    local Add = {
+        title = 'Item hinzufügen',
+        description = 'Einem Spieler ein Item hinzufügen',
+        icon = 'magnifying-glass',
+        onSelect = function()
+            AddNewItemToPlayer(PlayerID)
+        end,
+    }
+
+    local DelAll = {
+        title = 'Alle Items löshen',
+        description = 'Einem Spieler alle Items löschen',
+        icon = 'magnifying-glass',
+        onSelect = function()
+            DeleteAllInventoryItems(PlayerID)
+        end,
+    }
+
+    table.insert(Weapons, Add)
+    table.insert(Weapons, DelAll)
+    table.insert(Weapons, AddPlaceHolder())
+
+    for k, v in ipairs(WeaponData) do
+        if v.count ~= 0 then
+
+            local TmpTable = {
+                title = v.label,
+                description = v.name,
+                icon = 'gun',
+                arrow = true,
+                onSelect = function()
+                    OpenWeaponPlayerMenu(PlayerID, v.name, v.label, v.ammo, v.components)
+                end,
+                metadata = {
+                    {label = 'Ammo', value = v.ammo},
+                    {label = 'Tint Index', value = v.tintIndex}
+                },
+            }
+
+            table.insert(Weapons, TmpTable)
+        end
+    end
+
+    return Weapons
+end
+
+function OpenWeaponPlayerMenu(PlayerID, WeaponName, WeaponLabel, Ammo, Components)
+    print(PlayerID, WeaponName, WeaponLabel, Ammo, Components)
+
+    lib.registerContext({
+        id = 'PlayerWeaponActionsMenu',
+        title = 'Item: ' .. WeaponLabel,
+        options = {
+            {
+                title = 'Munition anpassen',
+                description = 'Munition: ' .. Ammo,
+                icon = 'plus',
+                arrow = true,
+                onSelect = function()
+                    OpenUpdateAmmonationDialog(PlayerID, WeaponName, Ammo)
+                end,
+            },
+            {
+                title = 'Waffe entfernen',
+                description = 'Diese Waffe entfernen (' ..  WeaponLabel.. ')',
+                icon = 'magnifying-glass',
+                onSelect = function()
+                    TriggerServerEvent('admin_menu:server:RemovePlayerWeapon', WeaponName, PlayerID)
+                end,
+            },
+            {
+                title = 'Componenten anpassen',
+                description = 'Spieler hat so viele Componenten: ' .. #Components,
+                icon = 'magnifying-glass',
+                arrow = true,
+                onSelect = function()
+                    if #Components ~= 0 then
+                        OpenWeaponComponentMenu(PlayerID, WeaponName, Components)
+                    else 
+                        ESX.ShowNotification('Der Spieler hat keine Componenten')
+                    end
+                end,
+            },
+        } 
+    })
+
+    lib.showContext('PlayerWeaponActionsMenu')
+end
+
+function OpenWeaponComponentMenu(PlayerID, WeaponName, Components)
+    
+end
+
+function OpenUpdateAmmonationDialog(PlayerID, WeaponName, Ammo)
+    local input = lib.inputDialog('Weapon: ' ..  ESX.GetWeaponLabel(WeaponName), {
+        {type = 'input', label = 'Ammo', description = 'Waffen Munition', default = Ammo, required = true, min = 1, max = 1000}
+    })
+
+    if not input then return end      
+    
+    local Count = tonumber(input[1])
+    
+    if Count == tonumber(Ammo) then 
+        Config.ClientNotify('Es ist der gleich Betrag')
+
+        return
+    end
+
+    TriggerServerEvent('admin_menu:server:UpdatePlayerAmmo', WeaponName, Count, Ammo, PlayerID)
 end
 
 function KickPlayerDialog(PlayerID)
