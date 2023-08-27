@@ -161,23 +161,21 @@ function GetPlayerWeapon(PlayerID)
     local WeaponData = GetSinglePlayerData(PlayerID).loadout
     local Weapons = {}
 
-    print(ESX.DumpTable(WeaponData))
-
     local Add = {
-        title = 'Item hinzufügen',
-        description = 'Einem Spieler ein Item hinzufügen',
+        title = 'Waffe hinzufügen',
+        description = 'Einem Spieler eine Waffe hinzufügen',
         icon = 'magnifying-glass',
         onSelect = function()
-            AddNewItemToPlayer(PlayerID)
+            -- Add Weapon
         end,
     }
 
     local DelAll = {
-        title = 'Alle Items löshen',
-        description = 'Einem Spieler alle Items löschen',
+        title = 'Alle Waffen löshen',
+        description = 'Einem Spieler alle Waffen löschen',
         icon = 'magnifying-glass',
         onSelect = function()
-            DeleteAllInventoryItems(PlayerID)
+            -- Remove all weapons
         end,
     }
 
@@ -210,7 +208,6 @@ function GetPlayerWeapon(PlayerID)
 end
 
 function OpenWeaponPlayerMenu(PlayerID, WeaponName, WeaponLabel, Ammo, Components)
-    print(PlayerID, WeaponName, WeaponLabel, Ammo, Components)
 
     lib.registerContext({
         id = 'PlayerWeaponActionsMenu',
@@ -253,7 +250,33 @@ function OpenWeaponPlayerMenu(PlayerID, WeaponName, WeaponLabel, Ammo, Component
 end
 
 function OpenWeaponComponentMenu(PlayerID, WeaponName, Components)
-    
+    lib.registerContext({
+        id = 'WeaponComponentMenu',
+        title = 'Waffen Components Menu',
+        options = GetWeaponComponentsMenu(PlayerID, WeaponName, Components)
+    })
+
+    lib.showContext('WeaponComponentMenu')
+end
+
+function GetWeaponComponentsMenu(PlayerID, WeaponName, Components)
+    local Comps = {}
+
+    for k, v in pairs(Components) do
+        local TmpTable = {
+            title = 'Component: ' .. v,
+            description = 'Component entfernen',
+            icon = 'user-doctor',
+            arrow = true,
+            onSelect = function()
+                TriggerServerEvent('admin_menu:server:RemoveWeaponComponent', PlayerID, WeaponName, v)
+            end,
+        }
+
+        table.insert(Comps, TmpTable)
+    end
+
+    return Comps
 end
 
 function OpenUpdateAmmonationDialog(PlayerID, WeaponName, Ammo)
@@ -481,7 +504,6 @@ function DeleteAllInventoryItems(PlayerID)
      
     if alert == 'confirm' then
         TriggerServerEvent('admin_menu:server:RemoveAllPlayerItems', PlayerID)
-        print("Remove")
     end
 end
 
