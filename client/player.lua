@@ -41,9 +41,7 @@ function GetAllPlayers()
         table.insert(PlayerList, Refresh)
         table.insert(PlayerList, AddPlaceHolder())
 
-
-
-        for i, xPlayer in ipairs(Players) do
+        for i, xPlayer in pairs(Players) do
 
             local TmpTable = {
                 title = xPlayer.name,
