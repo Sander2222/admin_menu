@@ -164,7 +164,7 @@ function GetPlayerWeapon(PlayerID)
         description = 'Einem Spieler eine Waffe hinzufügen',
         icon = 'magnifying-glass',
         onSelect = function()
-            -- Add Weapon
+            OpenAddWeaponDialog(PlayerID)
         end,
     }
 
@@ -203,6 +203,10 @@ function GetPlayerWeapon(PlayerID)
     end
 
     return Weapons
+end
+
+function OpenAddWeaponDialog(PlayerID)
+    -- Lol
 end
 
 function DeleteAllWeapons(PlayerID)
