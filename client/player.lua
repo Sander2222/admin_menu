@@ -70,7 +70,7 @@ function GetAllPlayers()
 end
 
 function GetSinglePlayerData(PlayerID)
-    for k, xPlayer in ipairs(xPlayerList) do
+    for k, xPlayer in pairs(xPlayerList) do
         if xPlayer.source == PlayerID then
             return xPlayer
         end
@@ -173,7 +173,7 @@ function GetPlayerWeapon(PlayerID)
         description = 'Einem Spieler alle Waffen löschen',
         icon = 'magnifying-glass',
         onSelect = function()
-            -- Remove all weapons
+            DeleteAllWeapons(PlayerID)
         end,
     }
 
@@ -203,6 +203,19 @@ function GetPlayerWeapon(PlayerID)
     end
 
     return Weapons
+end
+
+function DeleteAllWeapons(PlayerID)
+    local alert = lib.alertDialog({
+        header = 'Alle Waffen entfernen',
+        content = 'Sicher das du dem Spieler alle Wafen entfernen möchtest? \nID: ' .. PlayerID,
+        centered = true,
+        cancel = true
+    })
+     
+    if alert == 'confirm' then
+        TriggerServerEvent('admin_menu:server:RemoveAllPlayerWeapons', PlayerID)
+    end
 end
 
 function OpenWeaponPlayerMenu(PlayerID, WeaponName, WeaponLabel, Ammo, Components)

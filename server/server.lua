@@ -171,6 +171,29 @@ AddEventHandler('admin_menu:server:UpdatePlayerJob',function(JobName, Grade, Tar
     end
 end)
 
+RegisterServerEvent('admin_menu:server:RemoveAllPlayerWeapons')
+AddEventHandler('admin_menu:server:RemoveAllPlayerWeapons', function(Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
+        local PlayerWeapons = xTarget.getLoadout() 
+        local msg = ''
+
+        if #PlayerWeapons == 0 then
+            Config.ServerNotify(source, 'Der Spieler hat keine Waffen')
+            return
+        end
+        
+        for k, v in ipairs(PlayerWeapons) do
+            xTarget.removeWeapon(v.name)
+            msg = msg .. v.name .. ', '
+        end
+
+        Config.ServerNotify(Target, 'Dir wurden alle deine Waffen entfernt')
+
+        AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler alle Waffen entfernt', 'player', {'Waffen: ' .. msg})
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:RemoveAllPlayerItems')
 AddEventHandler('admin_menu:server:RemoveAllPlayerItems',function(Target)
     if CheckGroup(source, true) then
