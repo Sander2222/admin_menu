@@ -17,7 +17,13 @@ end)
 ESX.RegisterServerCallback('admin_menu:callback:GetAllPlayer', function(src, cb)
 
     if CheckGroup(src, true) then
-        cb(ESX.GetExtendedPlayers())
+        local AllPLayers = ESX.GetExtendedPlayers()
+        
+        for k, v in pairs(AllPLayers) do
+            v.steam = GetPlayerName(v.playerId)
+        end
+
+        cb(AllPLayers)
     end
 end)
 
