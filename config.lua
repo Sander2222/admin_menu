@@ -20,13 +20,6 @@ Config.ServerNotify = function(src, msg)
     })
 end
 
-Config.WeaponList = {
-    {
-        name = 'WEAPON_PISTOL',
-        label = 'Pistol'
-    }
-}
-
 Config.PermaBanTime = {
     day = 7,
     hours = 24,
