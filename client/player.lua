@@ -12,6 +12,65 @@ function ShowPlayerMenu()
     lib.showContext('PlayerMenu')
 end
 
+function OpenSearchPlayerDialog()
+    local input = lib.inputDialog('Spieler Kicken', {
+        {type = 'input', label = 'Steamname/ID/Name', description = 'Gebe hier ein Steamnamen, ID oder den Namen von einem Spieler ein', required = true, min = 1, max = 1000}
+    })
+
+    if not input then return end      
+    
+    local Search = input[1]
+    local IsNumber = false
+    
+    if Search == '' or Search == ' ' then 
+        Config.ClientNotify('Deine Nachricht ist leer')
+
+        return
+    end
+
+    if tonumber(Search) then
+        IsNumber = true
+    end
+
+    if string.len(Search) < 3 and not IsNumber then
+        Config.ClientNotify('du musst mindestens 3 zeichen eingeben')
+
+        return
+    end
+
+    SearchForPlayers(Search)
+end
+
+function SearchForPlayers(Search)
+    local Players = {}
+    local UpperSearch = string.upper(Search)
+
+    for k, v in pairs(xPlayerList) do
+
+        -- Check ID
+        if UpperSearch == string.upper(tostring(v.playerId)) then
+
+            table.insert(Players, v)
+            return
+        end
+
+        -- Checkname
+        if string.match(string.upper(v.name), UpperSearch) ~= nil then
+
+            table.insert(Players, v)
+            return
+        end
+
+        if string.match(string.upper(v.steam), UpperSearch) ~= nil then
+
+            table.insert(Players, v)
+            return
+        end
+    end
+
+    -- return Players
+end
+
 function GetAllPlayers()
     local PlayerList = {}
 
@@ -24,7 +83,7 @@ function GetAllPlayers()
             description = 'Spieler suchen',
             icon = 'magnifying-glass',
             onSelect = function()
-    
+                OpenSearchPlayerDialog()
             end,
         }
     
@@ -33,7 +92,7 @@ function GetAllPlayers()
             description = 'Spieler Refresh',
             icon = 'arrows-rotate',
             onSelect = function()
-    
+                ShowPlayerMenu()
             end,
         }
     
