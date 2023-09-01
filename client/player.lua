@@ -164,7 +164,7 @@ function GetPlayerWeapon(PlayerID)
         description = 'Einem Spieler eine Waffe hinzufügen',
         icon = 'magnifying-glass',
         onSelect = function()
-            OpenAddWeaponDialog(PlayerID)
+            OpenAddWeaponMenu(PlayerID)
         end,
     }
 
@@ -205,8 +205,63 @@ function GetPlayerWeapon(PlayerID)
     return Weapons
 end
 
-function OpenAddWeaponDialog(PlayerID)
-    -- Lol
+function OpenAddWeaponMenu(PlayerID)
+    lib.registerContext({
+        id = 'WeaponListMenu',
+        title = 'Add Weapon',
+        options = GetAllGunsPlayer(PlayerID)
+    })
+
+    lib.showContext('WeaponListMenu')
+end
+
+function GetAllGunsPlayer(PlayerID)
+    local Guns = {}
+
+    local SpeedMenu =  {
+        title = 'Schnellauswahl',
+        description = 'Schnell Waffe geben',
+        icon = 'gun',
+        onSelect = function()
+            SearchForWeapon()
+        end,
+    }
+
+    table.insert(Guns, SpeedMenu)
+    table.insert(Guns, AddPlaceHolder())
+
+    for k, WeaponData in ipairs(ESX.GetWeaponList()) do
+        local TmpTable =
+            {
+                title = WeaponData.label,
+                description = WeaponData.name,
+                icon = 'gun',
+                onSelect = function()
+                    GiveWeaponToPlayer(WeaponData.name, WeaponData.label, PlayerID)
+                end,
+            }
+
+            table.insert(Guns, TmpTable)
+    end
+    return Guns
+end
+
+function GiveWeaponToPlayer(WeaponName, WeaponLabel, PlayerID)
+    local input = lib.inputDialog('Weapon Info: ' .. WeaponLabel, {
+        {type = 'input', label = 'Ammunation', description = 'Anzahl von der Munition', default= 250, required = true, min = 1, max = 600}
+    })
+
+    if not input then return end
+
+    local Ammo = tonumber(input[1])
+
+    if Ammo == nil then
+        Config.ClientNotify('Du musst eine Zahl angeben')
+
+        return
+    end
+
+    TriggerServerEvent('admin_menu:server:GiveWeaponToPlayer', WeaponName, Ammo, PlayerID)
 end
 
 function DeleteAllWeapons(PlayerID)
