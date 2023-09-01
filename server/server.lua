@@ -112,6 +112,23 @@ AddEventHandler('admin_menu:server:KickPlayer',function(msg, Target)
     end
 end)
 
+RegisterNetEvent('admin_menu:server:GiveWeaponToPlayer')
+AddEventHandler('admin_menu:server:GiveWeaponToPlayer',function(WeaponName, Ammo, Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
+
+        print(WeaponName)
+        if not xTarget.hasWeapon(string.upper(WeaponName)) then
+            xTarget.addWeapon(string.upper(WeaponName), Ammo)
+            Config.ServerNotify(Target, 'Ein Admin hat dir eine Waffe gegeben: ' .. ESX.GetWeaponLabel(string.upper(WeaponName)))
+        else
+            Config.ServerNotify(source, 'Der Spieler hat diese Waffe schon')
+        end
+
+        AddWebhookMessage(source, Target, 'Ein Admin hat einem anderen Spieler eine Waffe gegeben', 'player', {'Weapon: ' .. WeaponName, 'Ammu: ' .. Ammo})
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:GiveWeapon')
 AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
     if CheckGroup(source, true) then
