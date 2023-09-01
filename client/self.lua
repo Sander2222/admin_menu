@@ -273,7 +273,7 @@ function GetAllGuns()
     table.insert(Guns, SpeedMenu)
     table.insert(Guns, AddPlaceHolder())
 
-    for k, WeaponData in ipairs(Config.WeaponList) do
+    for k, WeaponData in ipairs(ESX.GetWeaponList()) do
         local TmpTable =
             {
                 title = WeaponData.label,
