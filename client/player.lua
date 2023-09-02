@@ -154,6 +154,15 @@ function OpenSinglePlayerMenu(PlayerID)
         title = 'Adminmenu',
         options =  {
             {
+                title = 'Ban Player',
+                description = 'Spieler Bannen',
+                icon = 'user-doctor',
+                arrow = true,
+                onSelect = function()
+                    OpenPlayerBanDialog(PlayerID)
+                end,
+            },
+            {
                 title = 'Inventory',
                 description = 'Spieler Inventory',
                 icon = 'boxes-stacked',
@@ -226,6 +235,20 @@ function OpenSinglePlayerMenu(PlayerID)
     })
 
     lib.showContext('SinglePlayerMenu')
+end
+
+function OpenPlayerBanDialog(PlayerID)
+    local input = lib.inputDialog('Dialog title', {
+        {type = 'date', label = 'Date input', icon = {'far', 'calendar'}, default = true, format = "DD/MM/YYYY"},
+        {type = 'input', label = 'Reason', description = 'Some input description', default = 'Modding', required = true, min = 4, max = 16},
+      })
+       
+              
+
+      local timestamp = math.floor(input[1] / 1000)
+      local Reason = input[2]
+
+      TriggerServerEvent('admin_menu:server:AddPlayerBan', timestamp, Reason)
 end
 
 function OpenGivePlayerMoneyMenu(PlayerID)
