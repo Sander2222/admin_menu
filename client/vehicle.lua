@@ -28,6 +28,7 @@ function  OpenVehMenu()
                 title = 'Spawn Vehicle',
                 description = 'Player Actions',
                 icon = 'car-on',
+                arrow = true,
                 onSelect = function()
                     OpenVehSpawnnMenu()
                     -- Config.ClientNotify('Du hast dir %s gespawmt')
@@ -37,6 +38,7 @@ function  OpenVehMenu()
                 title = 'Give Player Vehicle',
                 description = 'Player Actions',
                 icon = 'hand-holding-heart',
+                arrow = true,
                 onSelect = function()
                     Config.ClientNotify('Du hast dem Spieler: &s folgendes Fahrzeug: %s gegeben')
                 end,
@@ -45,6 +47,7 @@ function  OpenVehMenu()
                 title = 'Delete Player Vehicle',
                 description = 'Player Actions',
                 icon = 'car-burst',
+                arrow = true,
                 onSelect = function()
                     Config.ClientNotify('Du hast dem Spieler: &s folgendes Fahrzeug: %s entzogen')
                 end,
