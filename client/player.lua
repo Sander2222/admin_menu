@@ -159,7 +159,7 @@ function OpenSinglePlayerMenu(PlayerID)
                 icon = 'user-doctor',
                 arrow = true,
                 onSelect = function()
-                    OpenPlayerBanDialog(PlayerID)
+                    OpenPlayerBanMenu(PlayerID)
                 end,
             },
             {
@@ -237,18 +237,79 @@ function OpenSinglePlayerMenu(PlayerID)
     lib.showContext('SinglePlayerMenu')
 end
 
+
+function OpenPlayerBanMenu(PlayerID)
+    lib.registerContext({
+        id = 'BanPlayerMenu',
+        title = 'Money Menu',
+        options = {
+            {
+                title = 'Spezifisch bannen',
+                description = 'Spieler nach bestimmten Tagen bannen',
+                icon = 'money-bill',
+                onSelect = function()
+                    OpenPlayerBanDialog(PlayerID)
+                end,
+            },
+            {
+                title = 'Für eine Stunde',
+                description = 'Bannen für eine Stunde',
+                icon = 'money-check',
+                onSelect = function()
+                    OpenAddBanReasonDialog(PlayerID, Config.Times.hour)
+                end,
+            },
+            {
+                title = 'Für einen Tag',
+                description = 'Bannen für eine Stunde',
+                icon = 'money-check',
+                onSelect = function()
+                    OpenAddBanReasonDialog(PlayerID, Config.Times.day)
+                end,
+            },
+            {
+                title = 'Für eine Woche',
+                description = 'Bannen für eine Stunde',
+                icon = 'money-check',
+                onSelect = function()
+                    OpenAddBanReasonDialog(PlayerID, Config.Times.day * 7)
+                end,
+            },
+            {
+                title = 'Permanent',
+                description = 'Bannen für eine Stunde',
+                icon = 'money-check',
+                onSelect = function()
+                    -- Noch machen
+                    -- OpenAddBanReasonDialog(PlayerID)
+                end,
+            },
+        }
+    })
+
+    lib.showContext('BanPlayerMenu')
+end
+
+function OpenAddBanReasonDialog(PlayerID, Time)
+    local input = lib.inputDialog('Dialog title', {
+        {type = 'input', label = 'Reason', description = 'Some input description', required = true, min = 3, max = 200},
+      })
+
+      local Reason = input[1]
+
+      TriggerServerEvent('admin_menu:server:AddPlayerBan', Time, Reason, 'custom')
+end
+
 function OpenPlayerBanDialog(PlayerID)
     local input = lib.inputDialog('Dialog title', {
         {type = 'date', label = 'Date input', icon = {'far', 'calendar'}, default = true, format = "DD/MM/YYYY"},
-        {type = 'input', label = 'Reason', description = 'Some input description', default = 'Modding', required = true, min = 4, max = 16},
+        {type = 'input', label = 'Reason', description = 'Some input description', default = 'Modding', required = true, min = 3, max = 200},
       })
-       
-              
 
       local timestamp = math.floor(input[1] / 1000)
       local Reason = input[2]
 
-      TriggerServerEvent('admin_menu:server:AddPlayerBan', timestamp, Reason)
+      TriggerServerEvent('admin_menu:server:AddPlayerBan', timestamp, Reason, 'normal')
 end
 
 function OpenGivePlayerMoneyMenu(PlayerID)
