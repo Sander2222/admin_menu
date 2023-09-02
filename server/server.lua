@@ -246,7 +246,24 @@ AddEventHandler('admin_menu:server:GiveMoney',function(Money, Type)
             xPlayer.addAccountMoney('bank', Money)
             Config.ServerNotify(source, 'Du hast dir ' .. tostring(Money).. '$ gegeben')
         end
-        AddWebhookMessage(source, nil, 'Ein Admin hat sich Bargeld gegeben', 'self', {'Count: ' .. Money})
+        AddWebhookMessage(source, nil, 'Ein Admin hat sich Bargeld gegeben', 'self', {'Count: ' .. Money, 'Type: ' ..Type})
+    end
+end)
+
+RegisterNetEvent('admin_menu:server:GiveMoneyToPlayer')
+AddEventHandler('admin_menu:server:GiveMoneyToPlayer',function(Money, Type, Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
+
+        if Type == 'Hand' then
+            xTarget.addMoney(Money)
+            Config.ServerNotify(Target, 'Dir wurden ' .. tostring(Money).. '$ gegeben')
+        elseif Type == 'Bank' then
+            xTarget.addAccountMoney('bank', Money)
+            Config.ServerNotify(Target, 'Dir wurden ' .. tostring(Money).. '$ gegeben')
+        end
+
+        AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler geld gegeben', 'player', {'Count: ' .. Money, 'Type: ' ..Type})
     end
 end)
 
