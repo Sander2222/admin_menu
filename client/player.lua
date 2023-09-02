@@ -1,7 +1,8 @@
 local xPlayerList = {}
 
-function ShowPlayerMenu()
-    local PlayerTable = GetAllPlayers()
+function ShowPlayerMenu(PlayerList)
+    print("open")
+    local PlayerTable = GetAllPlayers(PlayerList)
     
     lib.registerContext({
         id = 'PlayerMenu',
@@ -38,7 +39,7 @@ function OpenSearchPlayerDialog()
         return
     end
 
-    SearchForPlayers(Search)
+    ShowPlayerMenu(SearchForPlayers(Search))
 end
 
 function SearchForPlayers(Search)
@@ -68,15 +69,24 @@ function SearchForPlayers(Search)
         end
     end
 
-    -- return Players
+    if #Players == 0 then
+        Config.ClientNotify('Es wurde kein Spieler gefunden')
+    else 
+        return Players
+    end
+
 end
 
-function GetAllPlayers()
+function GetAllPlayers(PlayerList)
     local PlayerList = {}
 
 
     ESX.TriggerServerCallback("admin_menu:callback:GetAllPlayer", function(Players)
         xPlayerList = Players 
+
+        if #PlayerList > 0 then
+            xPlayerList = PlayerList
+        end
 
         local Search = {
             title = 'Suchen',
@@ -100,11 +110,11 @@ function GetAllPlayers()
         table.insert(PlayerList, Refresh)
         table.insert(PlayerList, AddPlaceHolder())
 
-        for i, xPlayer in pairs(Players) do
+        for i, xPlayer in pairs(xPlayerList) do
 
             local TmpTable = {
                 title = xPlayer.name,
-                description = 'ID: ' .. xPlayer.source,
+                description = 'ID: ' .. xPlayer.source .. '  Steam: ' .. xPlayer.steam,
                 icon = 'user',
                 arrow = true,
                 onSelect = function()
