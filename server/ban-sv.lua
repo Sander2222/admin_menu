@@ -12,60 +12,83 @@
 --     end)
 -- end)
 
--- RegisterServerEvent('admin_menu:kickPlayer')
--- AddEventHandler('admin_menu:kickPlayerr', function(BanDuration)
---     DropPlayer(source, (Config.Language[Config.Local]['ban_field']))
---     local xPlayer = ESX.GetPlayerFromId(source)
---     local entryDuration = BanDuration
---     local formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+RegisterNetEvent('admin_menu:server:AddPlayerBan')
+AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Type)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    
+    local entryDuration
+    local formattedDate
 
---     MySQL.update.await('UPDATE users SET entry_ban = @entry_ban, entry_duration = @entry_duration WHERE identifier = @identifier',
--- 	{
---         ['@entry_ban'] = 1,
---         ['@entry_duration'] = formattedDate,
---         ['@identifier'] = xPlayer.getIdentifier()
--- 	})
--- end)
+    if Type == 'normal' then
+        -- Add Day to ban the player to the next day 
+        entryDuration = Timestamp + Config.Times.day
+        formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+    elseif Type == 'custom' then
 
--- AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
---     local source = source
---     local license = GetPlayerIdentifierByType(source, 'license')
---     license = string.gsub(license, "license:", "")
---     MySQL.query("SELECT `admin_ban`, `ban_duration` FROM `users` WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ? LIMIT 1", { license }, function(result)
---         if Config.DebugMode then
---         print(ESX.DumpTable(result))
---         end
---         if #result == 0 then
---             deferrals.update((Config.Language[Config.Local]['check_ban_state']))
---             Wait(1500)
---             deferrals.done()
---         else
---             local row = result[1]
---                 if row.admin_ban == true then
---                     deferrals.defer()
---                     deferrals.update((Config.Language[Config.Local]['check_ban_state']))
---                     Wait(1500)
---                     local given_timestamp = row.ban_duration / 1000
---                     local current_timestamp = os.time()
---                     local time_difference = os.difftime(current_timestamp, given_timestamp)
---                     local ban_duration = -- Hier aus der DB die länge abfragen
---                     Wait(1000)
---                     if time_difference >= ban_duration then
---                         MySQL.execute("UPDATE `users` SET `admin_ban` = 0, `ban_duration` = NULL WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ?", { license }, function()end)
---                         deferrals.defer()
---                         deferrals.update((Config.Language[Config.Local]['set_unban_msg']))
---                         Wait(1500)
---                         deferrals.done()
---                     else
---                         local remaining_seconds = ban_duration - time_difference
---                         local remaining_days = math.floor(remaining_seconds / (24 * 60 * 60))
---                         local remaining_hours = math.floor((remaining_seconds % (24 * 60 * 60)) / (60 * 60))
---                         local remaining_minutes = math.floor((remaining_seconds % (60 * 60)) / 60)
---                         remaining_seconds = math.floor(remaining_seconds % 60)
---                         deferrals.done((Config.Language[Config.Local]['fail_entry_ban']):format(remaining_days, remaining_hours, remaining_minutes, remaining_seconds))
---                     end
---                 end
---             deferrals.done()
---         end
---     end)
--- end)
+        entryDuration = os.time() + Timestamp
+        formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+
+        print(formattedDate)
+        print(Timestamp)
+        print(os.time())
+
+
+    end
+
+    MySQL.insert('UPDATE users SET bantime = ? WHERE identifier = ?', { formattedDate, xPlayer.getIdentifier() }, function(id)
+        local Date = os.date("%d.%m.%Y", entryDuration)
+        local Time = os.date("%H:%M:%S", entryDuration)
+        xPlayer.kick(('Du wurdest von diesem Server gebannt. \n Grund: %s\n\n Datum: %s\n Zeit: %s \n\n den Support findest du hier: %s'):format(Reason,  Date, Time, 'discord.gg/ssio'))
+    end)
+end)
+
+AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
+    local source = source
+    local license = GetPlayerIdentifierByType(source, 'license')
+    license = string.gsub(license, "license:", "")
+
+    MySQL.query("SELECT bantime FROM users WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ? LIMIT 1", { license }, function(result)
+        deferrals.defer()
+        Wait(1000)
+        deferrals.update('Ban wird geprüft :)')
+        
+        if #result == 0 then            
+            deferrals.done()
+        else 
+
+            local DBTime = result[1].bantime
+            if tonumber(DBTime) ~= 0 then
+                deferrals.update('Ban wird geprüft')
+                local Time = DBTime / 1000
+                local NowTime = os.time()
+                
+                local timedif = Time - NowTime
+                local future_time = os.date("%d.%m.%Y %H:%M", NowTime + timedif)
+                
+                if timedif <= 0 then
+                    deferrals.update('Dein Ban ist ausgelaufen und du wurdest entbannt')
+                    Wait(1500)
+                    deferrals.done()
+                else
+                    local years = math.floor(timedif / Config.Times.year)
+                    timedif = timedif % 31536000
+                
+                    local months = math.floor(timedif / Config.Times.month)
+                    timedif = timedif % 2592000
+                
+                    local days = math.floor(timedif / Config.Times.day)
+                    timedif = timedif % 86400
+                
+                    local hours = math.floor(timedif / Config.Times.hour)
+                    timedif = timedif % 3600
+                
+                    local minutes, seconds = math.floor(timedif / Config.Times.minute), timedif % Config.Times.sec
+                
+                    deferrals.done(('\nDu bist noch gebannt bis: %s\nVerbleibende Zeit: %d Jahre, %d Monate, %d Tage, %d Stunden, %d Minuten, %d Sekunden'):format(future_time, years, months, days, hours, minutes, seconds))
+                end
+            else
+                deferrals.done()
+            end
+        end
+    end)
+end)
