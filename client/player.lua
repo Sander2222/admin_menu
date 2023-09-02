@@ -1,7 +1,6 @@
 local xPlayerList = {}
 
 function ShowPlayerMenu(PlayerList)
-    print("open")
     local PlayerTable = GetAllPlayers(PlayerList)
     
     lib.registerContext({
@@ -69,7 +68,6 @@ function SearchForPlayers(Search)
         end
     end
 
-    print(#Players)
     if #Players == 0 then
         Config.ClientNotify('Es wurde kein Spieler gefunden')
     else
