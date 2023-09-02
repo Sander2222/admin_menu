@@ -8,7 +8,8 @@ description 'performant adminmenu'
 
 server_script {
 	'server/*.lua',
-	'svconfig.lua'
+	'svconfig.lua',
+	'@oxmysql/lib/MySQL.lua'
 }
 
 client_scripts {
