@@ -52,26 +52,28 @@ function SearchForPlayers(Search)
         if UpperSearch == string.upper(tostring(v.playerId)) then
 
             table.insert(Players, v)
-            return
+            break
         end
 
         -- Checkname
         if string.match(string.upper(v.name), UpperSearch) ~= nil then
 
             table.insert(Players, v)
-            return
+            break
         end
 
         if string.match(string.upper(v.steam), UpperSearch) ~= nil then
 
             table.insert(Players, v)
-            return
+            break
         end
     end
 
+    print(#Players)
     if #Players == 0 then
         Config.ClientNotify('Es wurde kein Spieler gefunden')
-    else 
+    else
+        Config.ClientNotify(('Es wurden %s Spieler gefunden'):format(tostring(#Players)))
         return Players
     end
 
