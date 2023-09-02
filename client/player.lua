@@ -92,6 +92,7 @@ function GetAllPlayers(PlayerList)
             title = 'Suchen',
             description = 'Spieler suchen',
             icon = 'magnifying-glass',
+            arrow = true,
             onSelect = function()
                 OpenSearchPlayerDialog()
             end,
@@ -156,6 +157,7 @@ function OpenSinglePlayerMenu(PlayerID)
                 title = 'Inventory',
                 description = 'Spieler Inventory',
                 icon = 'boxes-stacked',
+                arrow = true,
                 onSelect = function()
                     OpenPlayerInventory(PlayerID)
                 end,
@@ -164,6 +166,7 @@ function OpenSinglePlayerMenu(PlayerID)
                 title = 'Weapon',
                 description = 'Spieler Inventory',
                 icon = 'weapon',
+                arrow = true,
                 onSelect = function()
                     OpenPlayerWeaponMenu(PlayerID)
                 end,
@@ -172,6 +175,7 @@ function OpenSinglePlayerMenu(PlayerID)
                 title = 'Job Menu',
                 description = 'Job Menu',
                 icon = 'user-doctor',
+                arrow = true,
                 onSelect = function()
                     OpenPlayerJobMenu(PlayerID)
                 end,
@@ -180,6 +184,7 @@ function OpenSinglePlayerMenu(PlayerID)
                 title = 'Send Message',
                 description = 'Spieler eine Nachricht schicken',
                 icon = 'message',
+                arrow = true,
                 onSelect = function()
                     OpenSendMSGPlayerDialog(PlayerID)
                 end,
@@ -188,6 +193,7 @@ function OpenSinglePlayerMenu(PlayerID)
                 title = 'Kick Player',
                 description = 'Ein Spieler von dem Server kicken',
                 icon = 'message',
+                arrow = true,
                 onSelect = function()
                     KickPlayerDialog(PlayerID)
                 end,
@@ -208,10 +214,63 @@ function OpenSinglePlayerMenu(PlayerID)
                     TriggerServerEvent('admin_menu:server:GiveArmorToPlayer', PlayerID)
                 end,
             },
+            {
+                title = 'GiveMoney',
+                description = 'einem Spieler Geld geben',
+                icon = 'money',
+                onSelect = function()
+                    OpenGivePlayerMoneyMenu(PlayerID)
+                end,
+            },
         }
     })
 
     lib.showContext('SinglePlayerMenu')
+end
+
+function OpenGivePlayerMoneyMenu(PlayerID)
+    lib.registerContext({
+        id = 'MoneyPlayerMenu',
+        title = 'Money Menu',
+        options = {
+            {
+                title = 'Give Money',
+                description = 'Player Actions',
+                icon = 'money-bill',
+                onSelect = function()
+                    GiveMoneyToPlayerDialog('Hand', PlayerID)
+                end,
+            },
+            {
+                title = 'Give Bank Money',
+                description = 'Player Actions',
+                icon = 'money-check',
+                onSelect = function()
+                    GiveMoneyToPlayerDialog('Bank', PlayerID)
+                end,
+            },
+        }
+    })
+
+    lib.showContext('MoneyPlayerMenu')
+end
+
+function GiveMoneyToPlayerDialog(Type, PlayerID)
+    local input = lib.inputDialog('Add Money', {
+        {type = 'number', label = 'Money', description = 'Wie viel Geld', icon = 'hashtag'},
+    })
+
+    if not input then return end
+
+    local Money = tonumber(input[1])
+
+    if Money == nil then
+        Config.ClientNotify('Du musst eine Zahl angeben')
+
+        return
+    end
+
+    TriggerServerEvent('admin_menu:server:GiveMoneyToPlayer', Money, Type, PlayerID)
 end
 
 function OpenPlayerWeaponMenu(PlayerID)
