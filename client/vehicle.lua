@@ -4,9 +4,6 @@ function  OpenVehMenu()
     lib.registerContext({
         id = 'VehMenu',
         title = 'Vehicle Menu',
-        onBack = function()
-            OpenMenu() -- Steht in Docs geht aber nicht
-        end,
         options = {
             {
                 title = 'Delete Vehicle',
@@ -31,7 +28,6 @@ function  OpenVehMenu()
                 arrow = true,
                 onSelect = function()
                     OpenVehSpawnnMenu()
-                    -- Config.ClientNotify('Du hast dir %s gespawmt')
                 end,
             },
             {
@@ -40,7 +36,6 @@ function  OpenVehMenu()
                 icon = 'hand-holding-heart',
                 arrow = true,
                 onSelect = function()
-                    Config.ClientNotify('Du hast dem Spieler: &s folgendes Fahrzeug: %s gegeben')
                 end,
             },
             {
@@ -49,7 +44,6 @@ function  OpenVehMenu()
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
-                    Config.ClientNotify('Du hast dem Spieler: &s folgendes Fahrzeug: %s entzogen')
                 end,
             },
         }
@@ -59,16 +53,25 @@ function  OpenVehMenu()
 end
 
 function DelNearVehicle()
-    local playerCoords = GetEntityCoords(ped) -- Hole die Koordinaten des Spielers
+    local playerCoords = GetEntityCoords(ped)
     local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, 10.0) -- Erhalte Fahrzeuge im Umkreis von 10 Einheiten (du kannst den Radius anpassen)
-    
-    for i = 1, #vehicles do 
-        local vehicle = vehicles[i]
-        if DoesEntityExist(vehicle) then
-            DeleteEntity(vehicle)
-        end
+    local FirstVehicle = vehicles[1]
+    local VehiclePedIsIn = GetVehiclePedIsIn(ped, false)
+
+    print(VehiclePedIsIn)
+
+    if VehiclePedIsIn ~= 0 then
+        DeleteEntity(VehiclePedIsIn)
+        Config.ClientNotify('Du hast das Fahrzeug in deiner Nähe gelöscht')
+    else
+        if DoesEntityExist(FirstVehicle) then
+            DeleteEntity(FirstVehicle)
+            Config.ClientNotify('Du hast das Fahrzeug in deiner Nähe gelöscht')
+        else
+            Config.ClientNotify('Es ist kein Fahrzeug in der nähe')
+        end 
     end
-    Config.ClientNotify('Du hast das Fahrzeug in deiner Nähe gelöscht')
+
 end
 
 function DelVehicleRadiusMenu()
