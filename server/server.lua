@@ -307,6 +307,39 @@ AddEventHandler('admin_menu:server:RemoveItem',function(ItemName, Count, Target,
     end
 end)
 
+RegisterNetEvent('admin_menu:server:AddVehicleToPlayer')
+AddEventHandler('admin_menu:server:AddVehicleToPlayer', function (vehicleProps, Target)
+    local source = source
+    if CheckGroup(source, true) then
+
+        function InsertVehicleInDB(Target)
+            local xTarget = ESX.GetPlayerFromId(Target)
+
+            MySQL.Async.execute('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (@owner, @plate, @vehicle)',
+            {
+                ['@owner']   = xTarget.identifier,
+                ['@plate']   = vehicleProps.plate,
+                ['@vehicle'] = json.encode(vehicleProps)
+            }, function (rowsChanged)
+                if Target ~= source then
+                    Config.ServerNotify(Target, 'Dir wurde ein Fahrzeug gegeben')
+                    Config.ServerNotify(source, 'Du hast einem Spieler ein Fahrzeug gegeben')
+                else 
+                    Config.ServerNotify(source, 'Du hast dir das Fahrzeug in die Garage gepackt')
+                end
+            end)
+        end
+
+        if Target ~= nil then
+            InsertVehicleInDB(Target)
+        else 
+            InsertVehicleInDB(source)
+        end
+    end
+
+
+end)
+
 function GetPlayerFootprints(Player)
     local Footer = ''
 
