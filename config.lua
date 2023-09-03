@@ -37,5 +37,6 @@ Config.Times = {
     day = 86400,
     hour = 3600,
     minute = 60,
-    sec = 60
+    sec = 60,
+    per = 2052757800
 }
