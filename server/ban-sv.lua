@@ -19,23 +19,29 @@ AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Typ
     local entryDuration
     local formattedDate
 
+    print(os.time())
+
     if Type == 'normal' then
         -- Add Day to ban the player to the next day 
         entryDuration = Timestamp + Config.Times.day
         formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
     elseif Type == 'custom' then
+        if Config.Times.per == Timestamp then
+            entryDuration = Timestamp
+            formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
 
-        entryDuration = os.time() + Timestamp
-        formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+            MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xPlayer.getIdentifier() }, function(id)
+                xPlayer.kick(('Du wurdest permanent von dem Server gebannt. \n Grund: %s\n\n den Support findest du hier: %s'):format(Reason, 'discord.gg/ssio'))
+            end)
 
-        print(formattedDate)
-        print(Timestamp)
-        print(os.time())
-
-
+            return
+        else 
+            entryDuration = os.time() + Timestamp
+            formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+        end
     end
 
-    MySQL.insert('UPDATE users SET bantime = ? WHERE identifier = ?', { formattedDate, xPlayer.getIdentifier() }, function(id)
+    MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xPlayer.getIdentifier() }, function(id)
         local Date = os.date("%d.%m.%Y", entryDuration)
         local Time = os.date("%H:%M:%S", entryDuration)
         xPlayer.kick(('Du wurdest von diesem Server gebannt. \n Grund: %s\n\n Datum: %s\n Zeit: %s \n\n den Support findest du hier: %s'):format(Reason,  Date, Time, 'discord.gg/ssio'))
@@ -47,7 +53,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
     local license = GetPlayerIdentifierByType(source, 'license')
     license = string.gsub(license, "license:", "")
 
-    MySQL.query("SELECT bantime FROM users WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ? LIMIT 1", { license }, function(result)
+    MySQL.query("SELECT bantime, banreason FROM users WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ? LIMIT 1", { license }, function(result)
         deferrals.defer()
         Wait(1000)
         deferrals.update('Ban wird geprüft :)')
@@ -57,7 +63,15 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
         else 
 
             local DBTime = result[1].bantime
+            local Reason = result[1].banreason
             if tonumber(DBTime) ~= 0 then
+
+                -- Check if permanet
+                if Config.Times.per == (DBTime / 1000) then
+
+                    deferrals.done(('\nDu bist permanent von diesem Server gebannt\nGrund: %s\n\nSupport findest du hier: %s'):format(Reason, 'https:/discord.gg/ssio'))
+                end
+
                 deferrals.update('Ban wird geprüft')
                 local Time = DBTime / 1000
                 local NowTime = os.time()
@@ -84,7 +98,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
                 
                     local minutes, seconds = math.floor(timedif / Config.Times.minute), timedif % Config.Times.sec
                 
-                    deferrals.done(('\nDu bist noch gebannt bis: %s\nVerbleibende Zeit: %d Jahre, %d Monate, %d Tage, %d Stunden, %d Minuten, %d Sekunden'):format(future_time, years, months, days, hours, minutes, seconds))
+                    deferrals.done(('\nDu bist noch gebannt bis: %s\nVerbleibende Zeit: %d Jahre, %d Monate, %d Tage, %d Stunden, %d Minuten, %d Sekunden\n\nGrund: %s'):format(future_time, years, months, days, hours, minutes, seconds, Reason))
                 end
             else
                 deferrals.done()

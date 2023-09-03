@@ -280,8 +280,7 @@ function OpenPlayerBanMenu(PlayerID)
                 description = 'Bannen für eine Stunde',
                 icon = 'money-check',
                 onSelect = function()
-                    -- Noch machen
-                    -- OpenAddBanReasonDialog(PlayerID)
+                    OpenAddBanReasonDialog(PlayerID, Config.Times.per)
                 end,
             },
         }
