@@ -7,19 +7,19 @@ RegisterCommand('adminmenu', function(source, args)
         if CanOpen then
             OpenMenu()
         else
-            Config.ClientNotify('Server: Dieser Befehl ist nur für Admins verfügbar.')
+            Config.ClientNotify(Locals.OnlyAdmin)
         end
     end)
 end)
 
 function OpenMenu()
     lib.registerContext({
-        id = 'some_menu',
-        title = 'Adminmenu',
+        id = 'MainMenu',
+        title = Locals.Main.AdminMenu,
         options = {
             {
-                title = 'Self',
-                description = 'Self Actions',
+                title = Locals.Main.Self,
+                description = Locals.Main.Self .. Locals.Main.Actions,
                 icon = 'user',
                 arrow = true,
                 onSelect = function()
@@ -27,8 +27,8 @@ function OpenMenu()
                 end,
             },
             {
-                title = 'Player',
-                description = 'Player Actions',
+                title = Locals.Main.Player,
+                description = Locals.Main.Player .. Locals.Main.Actions,
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
@@ -36,8 +36,8 @@ function OpenMenu()
                 end,
             },
             {
-                title = 'Vehicle',
-                description = 'Player Actions',
+                title = Locals.Main.Vehicle,
+                description = Locals.Main.Vehicle .. Locals.Main.Actions,
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
@@ -45,43 +45,27 @@ function OpenMenu()
                 end,
             },
             {
-                title = 'Server',
-                description = 'Player Actions',
+                title = Locals.Main.Server,
+                description = Locals.Main.Server .. Locals.Main.Actions,
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
                     OpenServerMenu()
                 end,
             },
-            {
-                title = 'Weather',
-                description = 'Waether Actions',
-                icon = 'circle',
-                arrow = true,
-                onSelect = function()
-                    -- lib.showMenu('menu_world_related_options')
-                end,
-            },
-            --   {
-            --     title = 'Menu button',
-            --     description = 'Takes you to another menu!',
-            --     menu = 'other_menu',
-            --     icon = 'bars'
-            --   },
-            --   {
-            --     title = 'Event button',
-            --     description = 'Open a menu from the event and send event data',
-            --     icon = 'check',
-            --     event = 'test_event',
+            -- {
+            --     title = 'Weather',
+            --     description = 'Waether Actions',
+            --     icon = 'circle',
             --     arrow = true,
-            --     args = {
-            --       someValue = 500
-            --     }
-            --   }
+            --     onSelect = function()
+            --         -- lib.showMenu('menu_world_related_options')
+            --     end,
+            -- },
         }
     })
 
-    lib.showContext('some_menu')
+    lib.showContext('MainMenu')
 end
 
 function AddPlaceHolder()

@@ -1,4 +1,16 @@
 Locals = {
+
+    OnlyAdmin = 'This command is for admin use only',
+
+    Main = {
+        AdminMenu = ' Admin menu',
+
+        Actions = ' Actions',
+        Self = 'Self',
+        Player = 'Player',
+        Vehicle = 'Vehicle',
+        Server = 'Server',
+    },
     Self = {
         SelfMenu = 'Self Menu',
         ReviveMe = 'Revive me',
