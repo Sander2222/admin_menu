@@ -106,3 +106,50 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
         end
     end)
 end)
+
+RegisterCommand('unban', function (source, args)
+    TriggerEvent('admin_menu:server:UnbanPlayer', args[1], source)
+end)
+
+RegisterNetEvent('admin_menu:server:UnbanPlayer')
+AddEventHandler('admin_menu:server:UnbanPlayer',function(identifier, PlayerID)
+
+    function Notify(MSG)
+        if PlayerID == 0 then
+            print(MSG)
+        else 
+            Config.ServerNotify(PlayerID, MSG)
+        end
+    end
+
+    function UnbanPlayer(identifier)
+        MySQL.query("SELECT identifier, bantime, banreason FROM users WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ? LIMIT 1", { identifier }, function(result)
+            if #result == 0 then
+                Notify("Diesen Spieler gibt es nicht")
+                return
+            end
+    
+            local char = result[1].identifier:match("^(.-):")
+    
+            if char then
+                if result[1].bantime ~= 0 then
+                    MySQL.update("UPDATE users SET bantime = NULL, banreason = '' WHERE identifier = ?", { char .. ':' .. identifier }, function(affectedRows)
+                        Notify("Spieler ist entbannt")
+                    end)
+                else
+                    Notify("Dieser Spieler hat keinen Ban")
+                end
+            else
+                Notify("Ungültiger Identifier-Format")
+            end
+        end)
+    end
+
+    if PlayerID == 0 then
+        UnbanPlayer(identifier)
+    else 
+        if CheckGroup(PlayerID, true) then
+            UnbanPlayer(identifier)
+        end
+    end
+end)
