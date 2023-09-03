@@ -6,8 +6,8 @@ function  OpenVehMenu()
         title = 'Vehicle Menu',
         options = {
             {
-                title = 'Delete Vehicle',
-                description = 'Player Actions',
+                title = 'Delete one vehicle',
+                description = 'Ein Auto löschen',
                 icon = 'car-burst',
                 onSelect = function()
                     DelNearVehicle()
@@ -18,7 +18,7 @@ function  OpenVehMenu()
                 description = 'Player Actions',
                 icon = 'car-burst',
                 onSelect = function()
-                    DelVehicleRadiusMenu()
+                    OpenDelVehicleRadiusDialog()
                 end,
             },
             {
@@ -36,6 +36,7 @@ function  OpenVehMenu()
                 icon = 'hand-holding-heart',
                 arrow = true,
                 onSelect = function()
+
                 end,
             },
             {
@@ -54,11 +55,9 @@ end
 
 function DelNearVehicle()
     local playerCoords = GetEntityCoords(ped)
-    local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, 10.0) -- Erhalte Fahrzeuge im Umkreis von 10 Einheiten (du kannst den Radius anpassen)
+    local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, 5.0)
     local FirstVehicle = vehicles[1]
     local VehiclePedIsIn = GetVehiclePedIsIn(ped, false)
-
-    print(VehiclePedIsIn)
 
     if VehiclePedIsIn ~= 0 then
         DeleteEntity(VehiclePedIsIn)
@@ -74,24 +73,27 @@ function DelNearVehicle()
 
 end
 
-function DelVehicleRadiusMenu()
-    local input = lib.inputDialog('Delete Radius', {'radius'})
+function OpenDelVehicleRadiusDialog()
+    local input = lib.inputDialog('Delete Vehicle in Radius', {
+        {type = 'number', label = 'Radius', description = 'In wie vielen Metern sollen alle Fahrzeuge entfernt werden', required = true, default = 5, icon = 'hashtag'},
+    })
 
-    if not input then return end
+    if not input then return end  
 
-    local radius = tonumber(input[1])
+    local Radius = tonumber(input[1]) / 1.0
 
-    if radius then
+    if Radius then
         local playerCoords = GetEntityCoords(ped)
-        local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, radius)
+        local vehicles = ESX.Game.GetVehiclesInArea(playerCoords, Radius)
 
-        for i = 1, #vehicles do 
+        for i = 1, #vehicles do
             local vehicle = vehicles[i]
             if DoesEntityExist(vehicle) then
                 DeleteEntity(vehicle)
             end
         end
-        Config.ClientNotify(('Du hast die Fahrzeuge im Umkreis von %s gelöscht'):format(input[1]))
+
+        Config.ClientNotify(('Du hast die Fahrzeuge im Umkreis von %s gelöscht'):format(Radius))
     end
 end
 
@@ -99,48 +101,57 @@ function OpenVehSpawnnMenu()
     local input = lib.inputDialog('Spawn Vehicle', {
         {type = 'input', label = 'Vehicle Hash', description = 'Write here Vehicle Hash', required = true, min = 4, max = 16},
         {type = 'input', label = 'Vehicle Plate', description = 'Write here you Vehicle Plate', icon = 'hashtag'},
-        {type = 'color', label = 'Vehicle Primarycolor', default = '#eb4034'},
-        {type = 'color', label = 'Vehicle Secondarycolor', default = '#eb4034'},
-        --  {type = 'checkbox', label = 'Save in DB'},
+        {type = 'checkbox', label = 'Random Plate'},
+        {type = 'color', label = 'Vehicle Primarycolor', default = '#000000'},
+        {type = 'color', label = 'Vehicle Secondarycolor', default = '#000000'},
+        {type = 'checkbox', label = 'Save in DB'}
     })
 
     if not input then return end
 
+    local VehicleSpawnName = string.lower(input[1])
     local vehHash = GetHashKey(input[1])
+    local numberPlate = input[2]
+    local RandomPlate = input[3]
+    local PriR, PriG, PriB = ConvertHexToRGB(input[4])
+    local SecR, SecG, SecB = ConvertHexToRGB(input[5])
+    local InsertInDB = input[6]
 
     if not IsModelInCdimage(vehHash) or not IsModelAVehicle(vehHash) then
 
-        Config.ClientNotify('Ungültiger Fahrzeughash')
+        Config.ClientNotify('Ungültiger Fahrzeughash oder spawnname existiert nicht')
         return 
     end
-
-    local PriR, PriG, PriB = ConvertHexToRGB(input[3])
-    local SecR, SecG, SecB = ConvertHexToRGB(input[4])
-
-    local spawnCoords = GetEntityCoords(ped)
-
-    local numberPlate = input[2]
     
-    print(numberPlate)
-    if numberPlate == '' or numberPlate == ' ' then
-        numberPlate = Config.BasicPlate
+    if RandomPlate then
+        numberPlate = GenerateRandomString(8)
+    else 
+        if numberPlate == '' or numberPlate == ' ' then
+            numberPlate = Config.BasicPlate
+        end
     end
 
-    ESX.Streaming.RequestModel(vehHash)
+    ESX.Game.SpawnVehicle(VehicleSpawnName, GetEntityCoords(ped), 100.0, function(vehicle)
+        SetVehicleNumberPlateText(vehicle, numberPlate)
 
-    local vehicle = CreateVehicle(vehHash, spawnCoords.x, spawnCoords.y, spawnCoords.z, 0.0, true, false)
+        SetVehicleCustomPrimaryColour(vehicle, PriR, PriG, PriB)
+        SetVehicleCustomPrimaryColour(vehicle, SecR, SecG, SecB)
+        SetPedIntoVehicle(ped, vehicle, -1)
 
-
-    SetVehicleNumberPlateText(vehicle, numberPlate)
-
-    SetVehicleCustomPrimaryColour(vehicle, PriR, PriG, PriB)
-    SetVehicleCustomPrimaryColour(vehicle, SecR, SecG, SecB)
-    SetPedIntoVehicle(ped, vehicle, -1)
+        if InsertInDB then
+            TriggerServerEvent('admin_menu:server:AddVehicleToPlayer', ESX.Game.GetVehicleProperties(vehicle), nil)
+        end
+      end)
 
     Config.ClientNotify('Fahrzeug erfolgreich gespawnt!')
 end
 
-function ConvertHexToRGB(hex)
-    hex = hex:gsub("#","")
-    return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
+function GenerateRandomString(length)
+    local chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    local randomString = ""
+    for _ = 1, length do
+        local randomIndex = math.random(#chars)
+        randomString = randomString .. string.sub(chars, randomIndex, randomIndex)
+    end
+    return randomString
 end
