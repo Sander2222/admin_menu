@@ -66,4 +66,16 @@ Locals = {
             KilledSelf = 'An admin killed himself',
         }
     },
+    
+    Player = {
+
+    },
+
+    Vehicle = {
+
+    },
+
+    Server = {
+        
+    }
 }
