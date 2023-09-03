@@ -4,51 +4,51 @@ local ped = cache.ped
 function OpenSelfMenu()
     lib.registerContext({
         id = 'SelfMenu',
-        title = 'Self Menu',
+        title = Locals.Self.SelfMenu,
         options = {
             {
-                title = 'Revive me',
-                description = 'Player Actions',
+                title = Locals.Self.ReviveMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'notes-medical',
                 onSelect = function()
                     TriggerEvent('esx_ambulancejob:revive')
-                    Config.ClientNotify('Du hast dich selbst wiederbelebt')
-                    TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich selbst revived', 'self')
+                    Config.ClientNotify(Locals.Self.RevivedSelf)
+                    TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.RevivedSelf, 'self')
                 end,
             },
             {
-                title = 'Heal',
-                description = 'Player Actions',
+                title = Locals.Self.HealMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'star-of-life',
                 onSelect = function()
                     SetEntityHealth(ped, 200)
-                    Config.ClientNotify('Du hast dich gehielt')
-                    TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich gehealt', 'self')
+                    Config.ClientNotify(Locals.Self.HealSelf)
+                    TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.HealedSelf, 'self')
                 end,
             },
             {
-                title = 'Give Armor',
-                description = 'Player Actions',
+                title = Locals.Self.ArmorMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'shield-halved',
                 onSelect = function()
                     SetPedArmour(ped, 100)
-                    Config.ClientNotify('Du hast dir selbst armor gegeben')
-                    TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich armor gegeben', 'self')
+                    Config.ClientNotify(Locals.Self.ArmorSelf)
+                    TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.ArmorSelf, 'self')
                 end,
             },
             {
-                title = 'Kill Self',
-                description = 'Player Actions',
+                title = Locals.Self.KillMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'skull',
                 onSelect = function()
                     SetEntityHealth(ped, 0)
-                    Config.ClientNotify('Du hast dich selbst getötet')
-                    TriggerServerEvent('admin_menu:server:SendWebhook', 'Ein Admin hat sich selbst getötet', 'self')
+                    Config.ClientNotify(Locals.Self.KillSelf)
+                    TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.KilledSelf, 'self')
                 end,
             },
             {
-                title = 'Give Weapon',
-                description = 'Player Actions',
+                title = Locals.Self.WeaponMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'gun',
                 arrow = true,
                 onSelect = function()
@@ -56,8 +56,8 @@ function OpenSelfMenu()
                 end,
             },
             {
-                title = 'Give Item',
-                description = 'Player Actions',
+                title = Locals.Self.ItemMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'gavel',
                 arrow = true,
                 onSelect = function()
@@ -65,8 +65,8 @@ function OpenSelfMenu()
                 end,
             },
             {
-                title = 'Give Money',
-                description = 'Player Actions',
+                title = Locals.Self.MoneyMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'money-bill-wave',
                 arrow = true,
                 onSelect = function()
@@ -74,8 +74,8 @@ function OpenSelfMenu()
                 end,
             },
             {
-                title = 'Noclip',
-                description = 'Player Actions',
+                title = Locals.Self.NoclipMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'skull',
                 onSelect = function()
                     Noclip()
@@ -90,19 +90,19 @@ end
 function OpenMoneyMenu()
     lib.registerContext({
         id = 'MoneyMenu',
-        title = 'Money Menu',
+        title =  Locals.Self.SelfMenu,
         options = {
             {
-                title = 'Give Money',
-                description = 'Player Actions',
+                title = Locals.Self.MoneyMe,
+                description = Locals.Self.SelfMenu,
                 icon = 'money-bill',
                 onSelect = function()
                     GiveMoney('Hand')
                 end,
             },
             {
-                title = 'Give Bank Money',
-                description = 'Player Actions',
+                title = Locals.Self.MoneyMeBank,
+                description = Locals.Self.SelfMenu,
                 icon = 'money-check',
                 onSelect = function()
                     GiveMoney('Bank')
@@ -115,8 +115,8 @@ function OpenMoneyMenu()
 end
 
 function GiveMoney(Type)
-    local input = lib.inputDialog('Add Money', {
-        {type = 'number', label = 'Money', description = 'Wie viel Geld', icon = 'hashtag'},
+    local input = lib.inputDialog(Locals.Self.MoneyAdd, {
+        {type = 'number', label = Locals.Self.Money, description = Locals.Self.MoneyMuch, icon = 'hashtag'},
     })
 
     if not input then return end
@@ -124,7 +124,7 @@ function GiveMoney(Type)
     local Money = tonumber(input[1])
 
     if Money == nil then
-        Config.ClientNotify('Du musst eine Zahl angeben')
+        Config.ClientNotify(Locals.Self.MoneyEnterNumber)
 
         return
     end
@@ -142,7 +142,7 @@ function OpenItemMenu()
 
     lib.registerContext({
         id = 'ItemListMenu',
-        title = 'Self Menu',
+        title = Locals.Self.SelfMenu,
         options = Items
     })
 
@@ -155,8 +155,8 @@ function GetAllItems()
     ESX.TriggerServerCallback('admin_menu:callback:GetAllitems', function(Items)
 
         local SpeedMenu =  {
-            title = 'Schnellauswahl',
-            description = 'Schnell Item geben',
+            title = Locals.Self.ItemQuickSelection,
+            description = Locals.Self.ItemDesc,
             icon = 'gun',
             onSelect = function()
                 SearchForItem()
@@ -171,14 +171,14 @@ function GetAllItems()
             local TmpTable =
             {
                 title = itemData.label,
-                description = 'Spawnname: ' .. itemName,
+                description = Locals.Self.ItemName .. ': ' .. itemName,
                 icon = 'bread-slice',
                 onSelect = function()
                     GiveItem(itemName)
                 end,
                 metadata = {
-                    {label = 'Weight', value = itemData.weight},
-                    {label = 'Can Remove', value = itemData.canRemove}
+                    {label = Locals.Self.ItemWeight, value = itemData.weight},
+                    {label = Locals.Self.ItemCanRemove, value = itemData.canRemove}
                 },
             }
 
@@ -191,9 +191,9 @@ function GetAllItems()
 end
 
 function SearchForItem()
-    local input = lib.inputDialog('Add Item', {
-        {type = 'input', label = 'Spawnname', description = 'Welches item', required = true, min = 1, max = 600},
-        {type = 'number', label = 'Counter', description = 'Wie viele Items', icon = 'hashtag'},
+    local input = lib.inputDialog(Locals.Self.ItemAdd, {
+        {type = 'input', label = Locals.Self.ItemName, description = Locals.Self.ItemWhich, required = true, min = 1, max = 600},
+        {type = 'number', label = Locals.Self.ItemCount, description = Locals.Self.ItemMuch, icon = 'hashtag'},
     })
 
     if not input then return end
@@ -202,7 +202,7 @@ function SearchForItem()
     local Count = tonumber(input[2])
 
     if Count == nil then
-        Config.ClientNotify('Du musst eine Zahl angeben')
+        Config.ClientNotify(Locals.Self.ItemEnterNumber)
 
         return
     end
@@ -211,8 +211,8 @@ function SearchForItem()
 end
 
 function GiveItem(ItemName)
-    local input = lib.inputDialog('Add Count: ' .. ItemName, {
-        {type = 'input', label = 'Count', description = 'Wie Viele', default= 1, required = true, min = 1, max = 600}
+    local input = lib.inputDialog(Locals.Self.ItemAddCount .. ': ' .. ItemName, {
+        {type = 'input', label = Locals.Self.ItemCount, description = Locals.Self.ItemMuch, Locals.Self.ItemMuch, default= 1, required = true, min = 1, max = 600}
     })
 
     if not input then return end
@@ -220,7 +220,7 @@ function GiveItem(ItemName)
     local Count = tonumber(input[1])
 
     if Count == nil then
-        Config.ClientNotify('Du musst eine Zahl angeben')
+        Config.ClientNotify(Locals.Self.ItemEnterNumber)
 
         return
     end
@@ -231,39 +231,19 @@ end
 function OpenGunMenu()
     lib.registerContext({
         id = 'WeaponListMenu',
-        title = 'Self Menu',
+        title = Locals.Self.SelfMenu,
         options = GetAllGuns()
     })
 
     lib.showContext('WeaponListMenu')
 end
 
-function SearchForWeapon()
-    local input = lib.inputDialog('Add Weapon', {
-        {type = 'input', label = 'Spawnname', description = 'Welche Waffe', required = true, min = 1, max = 600},
-        {type = 'number', label = 'Ammu', description = 'Wie viel Munition', icon = 'hashtag'},
-    })
-
-    if not input then return end
-
-    local WeaponName = input[1]
-    local Count = tonumber(input[2])
-
-    if Count == nil then
-        Config.ClientNotify('Du musst eine Zahl angeben')
-
-        return
-    end
-
-    TriggerServerEvent('admin_menu:server:GiveWeapon', WeaponName, Count)
-end
-
 function GetAllGuns()
     local Guns = {}
 
     local SpeedMenu =  {
-        title = 'Schnellauswahl',
-        description = 'Schnell Waffe geben',
+        title = Locals.Self.WeaponQuickSelection,
+        description = Locals.Self.WeaponDsec,
         icon = 'gun',
         onSelect = function()
             SearchForWeapon()
@@ -289,10 +269,30 @@ function GetAllGuns()
     return Guns
 end
 
+function SearchForWeapon()
+    local input = lib.inputDialog(Locals.Self.WeaponAdd, {
+        {type = 'input', label = Locals.Self.WeaponName, description = Locals.Self.WeaponWhich, required = true, min = 1, max = 600},
+        {type = 'number', label = Locals.Self.WeaponAmmu, description = Locals.Self.WeaponAmmuDesc, icon = 'hashtag'},
+    })
+
+    if not input then return end
+
+    local WeaponName = input[1]
+    local Count = tonumber(input[2])
+
+    if Count == nil then
+        Config.ClientNotify(Locals.Self.WeaponEnterNumber)
+
+        return
+    end
+
+    TriggerServerEvent('admin_menu:server:GiveWeapon', WeaponName, Count)
+end
+
 function GiveGun(GunName, GunLabel)
-    local input = lib.inputDialog('Weapon Info: ' .. GunLabel, {
-        {type = 'input', label = 'Ammunation', description = 'Anzahl von der Munition', default= 250, required = true, min = 1, max = 600},
-        {type = 'checkbox', label = 'Not with ESX?'},
+    local input = lib.inputDialog(Locals.Self.WeaponInfo .. ': ' .. GunLabel, {
+        {type = 'input', label = Locals.Self.WeaponAmmu, description = Locals.Self.WeaponAmmuDesc, default= 250, required = true, min = 1, max = 600},
+        {type = 'checkbox', label = Locals.Self.WeaponWithESX},
     })
 
     if not input then return end
@@ -301,7 +301,7 @@ function GiveGun(GunName, GunLabel)
     local WithESX = input[2]
 
     if Ammo == nil then
-        Config.ClientNotify('Du musst eine Zahl angeben')
+        Config.ClientNotify(Locals.Self.WeaponEnterNumber)
 
         return
     end
@@ -315,29 +315,24 @@ function GiveGun(GunName, GunLabel)
     end
 end
 
-
-
-
-
-
 -- Brauchst seine eigene Notify ESX NOCLIP TRIGGER xPlayer.triggerEvent('esx:noclip')
-function Noclip()
-    ESX.TriggerServerCallback("esx:isUserAdmin", function(admin)
-		if admin then
-    local player = PlayerId()
+-- function Noclip()
+--     ESX.TriggerServerCallback("esx:isUserAdmin", function(admin)
+-- 		if admin then
+--     local player = PlayerId()
 
-    local msg = "disabled"
-	if(noclip == false)then
-		noclip_pos = GetEntityCoords(ESX.PlayerData.ped, false)
-	end
+--     local msg = "disabled"
+-- 	if(noclip == false)then
+-- 		noclip_pos = GetEntityCoords(ESX.PlayerData.ped, false)
+-- 	end
 
-	noclip = not noclip
+-- 	noclip = not noclip
 
-	if(noclip)then
-		msg = "enabled"
-	end
+-- 	if(noclip)then
+-- 		msg = "enabled"
+-- 	end
 
-	TriggerEvent("chatMessage", "Noclip has been ^2^*" .. msg)
-	end
-	end)
-end
+-- 	TriggerEvent("chatMessage", "Noclip has been ^2^*" .. msg)
+-- 	end
+-- 	end)
+-- end
