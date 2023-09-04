@@ -11,9 +11,11 @@ function OpenSelfMenu()
                 description = Locals.Self.SelfMenu,
                 icon = 'notes-medical',
                 onSelect = function()
-                    TriggerEvent('esx_ambulancejob:revive')
-                    Config.ClientNotify(Locals.Self.RevivedSelf)
-                    TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.RevivedSelf, 'self')
+                    if CanUseFunction('revive') then
+                        TriggerEvent('esx_ambulancejob:revive')
+                        Config.ClientNotify(Locals.Self.RevivedSelf)
+                        TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.RevivedSelf, 'self')
+                    end
                 end,
             },
             {
@@ -21,9 +23,11 @@ function OpenSelfMenu()
                 description = Locals.Self.SelfMenu,
                 icon = 'star-of-life',
                 onSelect = function()
-                    SetEntityHealth(ped, 200)
-                    Config.ClientNotify(Locals.Self.HealSelf)
-                    TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.HealedSelf, 'self')
+                    if CanUseFunction('heal') then
+                        SetEntityHealth(ped, 200)
+                        Config.ClientNotify(Locals.Self.HealSelf)
+                        TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.HealedSelf, 'self')
+                    end
                 end,
             },
             {
@@ -31,9 +35,11 @@ function OpenSelfMenu()
                 description = Locals.Self.SelfMenu,
                 icon = 'shield-halved',
                 onSelect = function()
-                    SetPedArmour(ped, 100)
-                    Config.ClientNotify(Locals.Self.ArmorSelf)
-                    TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.ArmorSelf, 'self')
+                    if CanUseFunction('armor') then
+                        SetPedArmour(ped, 100)
+                        Config.ClientNotify(Locals.Self.ArmorSelf)
+                        TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.ArmorSelf, 'self')
+                    end
                 end,
             },
             {
@@ -41,9 +47,11 @@ function OpenSelfMenu()
                 description = Locals.Self.SelfMenu,
                 icon = 'skull',
                 onSelect = function()
-                    SetEntityHealth(ped, 0)
-                    Config.ClientNotify(Locals.Self.KillSelf)
-                    TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.KilledSelf, 'self')
+                    if CanUseFunction('kill') then
+                        SetEntityHealth(ped, 0)
+                        Config.ClientNotify(Locals.Self.KillSelf)
+                        TriggerServerEvent('admin_menu:server:SendWebhook', Locals.Self.Webhooks.KilledSelf, 'self')
+                    end
                 end,
             },
             {
@@ -52,7 +60,9 @@ function OpenSelfMenu()
                 icon = 'gun',
                 arrow = true,
                 onSelect = function()
-                    OpenGunMenu()
+                    if CanUseFunction('weapon') then
+                        OpenGunMenu()
+                    end
                 end,
             },
             {
@@ -61,7 +71,9 @@ function OpenSelfMenu()
                 icon = 'gavel',
                 arrow = true,
                 onSelect = function()
-                    OpenItemMenu()
+                    if CanUseFunction('item') then
+                        OpenItemMenu()
+                    end
                 end,
             },
             {
@@ -70,7 +82,9 @@ function OpenSelfMenu()
                 icon = 'money-bill-wave',
                 arrow = true,
                 onSelect = function()
-                    OpenMoneyMenu()
+                    if CanUseFunction('money') then
+                        OpenMoneyMenu()
+                    end
                 end,
             },
             {
@@ -78,7 +92,9 @@ function OpenSelfMenu()
                 description = Locals.Self.SelfMenu,
                 icon = 'skull',
                 onSelect = function()
-                    Noclip()
+                    if CanUseFunction('noclip') then
+                        Noclip()
+                    end
                 end,
             },
         }
