@@ -1,18 +1,10 @@
 --- @usage This function checks if the player is able to use the adminmenu
 function CheckGroup(Player, DoAction)
-    if Config.UseAceSystem then
-        if IsPlayerAceAllowed(Player, 'adminmenu') then
-            return true
-        end
-    else
-        local xPlayer = ESX.GetPlayerFromId(Player)
-        local PlayerGroup = xPlayer.getGroup()
+    local xPlayer = ESX.GetPlayerFromId(Player)
+    local PlayerGroup = xPlayer.getGroup()
 
-        for k, v in ipairs(Config.ESXGroups) do
-            if v == PlayerGroup then
-                return true
-            end
-        end
+    if Config.Groups[PlayerGroup] then
+        return true
     end
 
     if DoAction then
