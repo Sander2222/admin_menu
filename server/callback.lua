@@ -1,7 +1,9 @@
 ESX.RegisterServerCallback('admin_menu:callback:CheckGroup', function(src, cb)
+    local xPlayer = ESX.GetPlayerFromId(src)
+    local Group = xPlayer.getGroup()
 
     if CheckGroup(src, false) then
-        cb(true)
+        cb(true, Group)
     else 
         cb(false)
     end
