@@ -13,39 +13,42 @@
 -- end)
 
 RegisterNetEvent('admin_menu:server:AddPlayerBan')
-AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Type)
-    local xPlayer = ESX.GetPlayerFromId(source)
+AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Type, Target)
+    local source = source
+    local xTarget = ESX.GetPlayerFromId(Target)
     
     local entryDuration
     local formattedDate
 
-    print(os.time())
-
-    if Type == 'normal' then
-        -- Add Day to ban the player to the next day 
-        entryDuration = Timestamp + Config.Times.day
-        formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
-    elseif Type == 'custom' then
-        if Config.Times.per == Timestamp then
-            entryDuration = Timestamp
+    if CanPlayerGetBanned(source) then
+        if Type == 'normal' then
+            -- Add Day to ban the player to the next day 
+            entryDuration = Timestamp + Config.Times.day
             formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
-
-            MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xPlayer.getIdentifier() }, function(id)
-                xPlayer.kick(('Du wurdest permanent von dem Server gebannt. \n Grund: %s\n\n den Support findest du hier: %s'):format(Reason, 'discord.gg/ssio'))
-            end)
-
-            return
-        else 
-            entryDuration = os.time() + Timestamp
-            formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+        elseif Type == 'custom' then
+            if Config.Times.per == Timestamp then
+                entryDuration = Timestamp
+                formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+    
+                MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
+                    xTarget.kick(('Du wurdest permanent von dem Server gebannt. \n Grund: %s\n\n den Support findest du hier: %s'):format(Reason, 'discord.gg/ssio'))
+                end)
+    
+                return
+            else 
+                entryDuration = os.time() + Timestamp
+                formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+            end
         end
+    
+        MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
+            local Date = os.date("%d.%m.%Y", entryDuration)
+            local Time = os.date("%H:%M:%S", entryDuration)
+            xTarget.kick(('Du wurdest von diesem Server gebannt. \n Grund: %s\n\n Datum: %s\n Zeit: %s \n\n den Support findest du hier: %s'):format(Reason,  Date, Time, 'discord.gg/ssio'))
+        end)
+    else 
+        Config.ServerNotify(source, 'Dieser Spieler kann nicht gebannt werden')
     end
-
-    MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xPlayer.getIdentifier() }, function(id)
-        local Date = os.date("%d.%m.%Y", entryDuration)
-        local Time = os.date("%H:%M:%S", entryDuration)
-        xPlayer.kick(('Du wurdest von diesem Server gebannt. \n Grund: %s\n\n Datum: %s\n Zeit: %s \n\n den Support findest du hier: %s'):format(Reason,  Date, Time, 'discord.gg/ssio'))
-    end)
 end)
 
 AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
@@ -153,3 +156,16 @@ AddEventHandler('admin_menu:server:UnbanPlayer',function(identifier, PlayerID)
         end
     end
 end)
+
+function CanPlayerGetBanned(PlayerID)
+    local xPlayer = ESX.GetPlayerFromId(PlayerID)
+    local Group = xPlayer.getGroup()
+
+    for k, v in pairs(SVConfig.NotBannedRoles) do
+        if Group then
+            return true
+        end
+    end
+
+    return false
+end
