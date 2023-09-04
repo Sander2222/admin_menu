@@ -1,3 +1,7 @@
+ALTER TABLE users
+ADD bantime TIMESTAMP,
+ADD banreason VARCHAR(500);
+
 DELIMITER $$
 
 CREATE TRIGGER before_insert_users
