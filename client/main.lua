@@ -1,10 +1,13 @@
+local Group
+
 if Config.UseOpenKey then
     RegisterKeyMapping('adminmenu', 'Open Adminmenu', 'keyboard', Config.DefaultOpenKey)
 end
 
 RegisterCommand('adminmenu', function(source, args)
-    ESX.TriggerServerCallback('admin_menu:callback:CheckGroup', function(CanOpen)
+    ESX.TriggerServerCallback('admin_menu:callback:CheckGroup', function(CanOpen, PlayerGroup)
         if CanOpen then
+            Group = PlayerGroup
             OpenMenu()
         else
             Config.ClientNotify(Locals.OnlyAdmin)
@@ -23,7 +26,9 @@ function OpenMenu()
                 icon = 'user',
                 arrow = true,
                 onSelect = function()
-                    OpenSelfMenu()
+                    if CanUseFunction('self') then
+                        OpenSelfMenu()
+                    end
                 end,
             },
             {
@@ -32,7 +37,9 @@ function OpenMenu()
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
-                    ShowPlayerMenu()
+                    if CanUseFunction('player') then
+                        ShowPlayerMenu()
+                    end
                 end,
             },
             {
@@ -41,7 +48,9 @@ function OpenMenu()
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
-                    OpenVehMenu()
+                    if CanUseFunction('vehicle') then
+                        OpenVehMenu()
+                    end
                 end,
             },
             {
@@ -50,7 +59,9 @@ function OpenMenu()
                 icon = 'circle',
                 arrow = true,
                 onSelect = function()
-                    OpenServerMenu()
+                    if CanUseFunction('server') then
+                        OpenServerMenu()
+                    end
                 end,
             },
             -- {
@@ -81,4 +92,17 @@ end
 function ConvertHexToRGB(hex)
     hex = hex:gsub("#","")
     return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
+end
+
+function CanUseFunction(Menu)
+    if Config.Groups[Group] then
+        if Config.Groups[Group][Menu] then
+            return true
+        else
+            Config.ClientNotify('Diese Funktion ist nicht für dich freigeschalten')
+            return false
+        end
+    else 
+        Config.ClientNotify('lol')
+    end
 end
