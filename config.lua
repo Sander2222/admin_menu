@@ -2,12 +2,6 @@ Config = {}
 
 Config.UseOpenKey = true 
 Config.DefaultOpenKey = 'F5'
-Config.UseAceSystem = false
-Config.ESXGroups = {
-    'admin',
-    'mod',
-    'sup'
-}
 
 Config.ClientNotify = function(msg)
     ESX.ShowNotification(msg)
@@ -20,11 +14,25 @@ Config.ServerNotify = function(src, msg)
     })
 end
 
-Config.PermaBanTime = {
-    day = 7,
-    hours = 24,
-    minutes = 60,
-    seconds = 60
+Config.Groups = {
+    ['admin'] = {
+
+        -- Menus
+        ['self'] = true,
+        ['player'] = true,
+        ['vehicle'] = true,
+        ['server'] = true,
+
+
+        ['revive'] = true,
+        ['heal'] = true,
+        ['armor'] = true,
+        ['kill'] = true,
+        ['weapon'] = true,
+        ['item'] = true,
+        ['money'] = true,
+        ['noclip'] = true
+    }
 }
 
 Config.BasicPlate = 'Test'
