@@ -296,7 +296,7 @@ function OpenAddBanReasonDialog(PlayerID, Time)
 
       local Reason = input[1]
 
-      TriggerServerEvent('admin_menu:server:AddPlayerBan', Time, Reason, 'custom')
+      TriggerServerEvent('admin_menu:server:AddPlayerBan', Time, Reason, 'custom', PlayerID)
 end
 
 function OpenPlayerBanDialog(PlayerID)
@@ -308,7 +308,7 @@ function OpenPlayerBanDialog(PlayerID)
       local timestamp = math.floor(input[1] / 1000)
       local Reason = input[2]
 
-      TriggerServerEvent('admin_menu:server:AddPlayerBan', timestamp, Reason, 'normal')
+      TriggerServerEvent('admin_menu:server:AddPlayerBan', timestamp, Reason, 'normal', PlayerID)
 end
 
 function OpenGivePlayerMoneyMenu(PlayerID)
