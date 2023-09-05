@@ -373,9 +373,11 @@ function SendDiscord(message)
 end
 
 
-RegisterServerEvent('SyncAnnounceToClients')
-AddEventHandler('SyncAnnounceToClients', function(message)
-    TriggerClientEvent('DisplaySyncAnnounce', -1, message)
+RegisterServerEvent('admin_menu:server:SendAnnounce')
+AddEventHandler('admin_menu:server:SendAnnounce', function(Message)
+    if CheckGroup(source, true) then
+        Config.SendAnnounce(source, Message)
+    end
 end)
 
 RegisterServerEvent('ReviveAllPlayer')

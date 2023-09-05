@@ -9,7 +9,7 @@ function OpenServerMenu()
                 icon = 'bullhorn',
                 arrow = true,
                 onSelect = function()
-                    OpenAnnounceMenu()
+                    OpenAnnounceDialog()
                 end,
             },
             {
@@ -60,10 +60,14 @@ function OpenServerMenu()
     lib.showContext('ServMenu')
 end
 
-function OpenAnnounceMenu()
-    local msg = lib.inputDialog('Announce', {'msg'})
-    if not msg then return end
-    TriggerServerEvent('SyncAnnounceToClients', msg)
+function OpenAnnounceDialog()
+    local input = lib.inputDialog(Locals.Self.MoneyAdd, {
+        {type = 'input', label = 'Announce Message', description = 'dings'},
+    })
+
+    if not input then return end
+
+    TriggerServerEvent('admin_menu:server:SendAnnounce', input[1])
 end
 
 RegisterNetEvent('DisplaySyncAnnounce')

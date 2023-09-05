@@ -35,6 +35,25 @@ Config.Groups = {
     }
 }
 
+--- @param Player -- in this case is the source from the player that send the message
+Config.SendAnnounce = function(Player, Message)
+    TriggerClientEvent('ox_lib:notify', -1, {
+        id = 'some_identifier',
+        title = 'Announce',
+        description = Message,
+        position = 'top',
+        style = {
+            backgroundColor = '#141517',
+            color = '#C1C2C5',
+            ['.description'] = {
+              color = '#909296'
+            }
+        },
+        icon = 'ban',
+        iconColor = '#C53030'
+    })
+end
+
 Config.BasicPlate = 'Test'
 Config.UnemployedJob = 'unemployed'
 Config.UnemployedJobGrade = 0
