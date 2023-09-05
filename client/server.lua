@@ -17,7 +17,7 @@ function OpenServerMenu()
                 description = 'Player Actions',
                 icon = 'laptop-medical',
                 onSelect = function()
-                    TriggerServerEvent('ReviveAllPlayer')
+                    OpenReviveDialog()
                 end,
             },
             {
@@ -58,6 +58,19 @@ function OpenServerMenu()
     })
 
     lib.showContext('ServMenu')
+end
+
+function OpenReviveDialog()
+    local alert = lib.alertDialog({
+        header = 'Revive Player',
+        content = 'Sicher das du jeden Spieler reviven möchtest?',
+        centered = true,
+        cancel = true
+    })
+     
+    if alert then
+        TriggerServerEvent('admin_menu:server:ReviveAllPlayer')
+    end
 end
 
 function OpenAnnounceDialog()

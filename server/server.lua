@@ -380,9 +380,11 @@ AddEventHandler('admin_menu:server:SendAnnounce', function(Message)
     end
 end)
 
-RegisterServerEvent('ReviveAllPlayer')
-AddEventHandler('ReviveAllPlayer', function()
-    TriggerClientEvent('esx_ambulancejob:revive', -1)
+RegisterServerEvent('admin_menu:server:ReviveAllPlayer')
+AddEventHandler('admin_menu:server:ReviveAllPlayer', function()
+    if CheckGroup(source, true) then
+        TriggerClientEvent('esx_ambulancejob:revive', -1)
+    end
 end)
 
 local blackoutActive = false
