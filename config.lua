@@ -35,7 +35,6 @@ Config.Groups = {
     }
 }
 
---- @param Player -- in this case is the source from the player that send the message
 Config.SendAnnounce = function(Player, Message)
     TriggerClientEvent('ox_lib:notify', -1, {
         id = 'some_identifier',
