@@ -36,7 +36,7 @@ function  OpenVehMenu()
                 icon = 'hand-holding-heart',
                 arrow = true,
                 onSelect = function()
-
+                    OpenGiveVehicleToPlayerDialog()
                 end,
             },
             {
@@ -51,6 +51,16 @@ function  OpenVehMenu()
     })
 
     lib.showContext('VehMenu')
+end
+
+function OpenGiveVehicleToPlayerDialog()
+    local input = lib.inputDialog('Fahrzeug geben', {
+        {type = 'input', label = 'Spieler ID', description = 'Gebe hier ein Steamnamen, ID oder den Namen von einem Spieler ein', required = true, min = 1, max = 1000}
+    })
+
+    if not input then return end 
+    
+    OpenVehSpawnnMenu(tonumber(input[1]))
 end
 
 function DelNearVehicle()
@@ -97,7 +107,7 @@ function OpenDelVehicleRadiusDialog()
     end
 end
 
-function OpenVehSpawnnMenu()
+function OpenVehSpawnnMenu(PlayerID)
     local input = lib.inputDialog('Spawn Vehicle', {
         {type = 'input', label = 'Vehicle Hash', description = 'Write here Vehicle Hash', required = true, min = 4, max = 16},
         {type = 'input', label = 'Vehicle Plate', description = 'Write here you Vehicle Plate', icon = 'hashtag'},
@@ -131,6 +141,7 @@ function OpenVehSpawnnMenu()
         end
     end
 
+
     ESX.Game.SpawnVehicle(VehicleSpawnName, GetEntityCoords(ped), 100.0, function(vehicle)
         SetVehicleNumberPlateText(vehicle, numberPlate)
 
@@ -138,10 +149,15 @@ function OpenVehSpawnnMenu()
         SetVehicleCustomPrimaryColour(vehicle, SecR, SecG, SecB)
         SetPedIntoVehicle(ped, vehicle, -1)
 
-        if InsertInDB then
-            TriggerServerEvent('admin_menu:server:AddVehicleToPlayer', ESX.Game.GetVehicleProperties(vehicle), nil)
+        if InsertInDB or PlayerID then
+            TriggerServerEvent('admin_menu:server:AddVehicleToPlayer', ESX.Game.GetVehicleProperties(vehicle), PlayerID)
+        end
+
+        if PlayerID then
+            DeleteEntity(vehicle)
         end
       end)
+
 
     Config.ClientNotify('Fahrzeug erfolgreich gespawnt!')
 end
