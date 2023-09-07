@@ -299,6 +299,36 @@ AddEventHandler('admin_menu:server:RemoveItem',function(ItemName, Count, Target,
     end
 end)
 
+RegisterNetEvent('admin_menu:server:DeletePlayerVehicle')
+AddEventHandler('admin_menu:server:DeletePlayerVehicle',function(Plate, DeleteIngame)
+    if CheckGroup(source, true) then
+        local Plate = string.upper(Trim(Plate))
+
+        print(Plate)
+        MySQL.query('SELECT owner FROM owned_vehicles WHERE plate = ?', {Plate}, function(response)
+            if #response ~= 0 then
+                MySQL.update('DELETE FROM owned_vehicles WHERE owner = ? AND plate = ?', {response[1].owner, Plate}, function(affectedRows)
+                    if affectedRows then
+                        if DeleteIngame then
+                            Vehicles = GetAllVehicles()
+
+                            print(ESX.DumpTable(Vehicles))
+                            for k, Vehicle in pairs(Vehicles) do
+                                if GetVehicleNumberPlateText(Vehicle) == Plate then
+                                    DeleteEntity(Vehicle)
+                                    print("fahrzeug weg")
+                                end
+                            end
+                        end
+                    end
+                end)
+            else 
+                -- Notify gibts nicht
+            end
+        end)
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:AddVehicleToPlayer')
 AddEventHandler('admin_menu:server:AddVehicleToPlayer', function (vehicleProps, Target)
     local source = source
@@ -372,6 +402,14 @@ function SendDiscord(message)
     PerformHttpRequest(SVConfig.Webhooks, function(err, text, headers) end, 'POST', json.encode({username = name, embeds = embed}), { ['Content-Type'] = 'application/json' })
 end
 
+-- Deletes all spaces
+function Trim(str)
+
+    str = string.gsub(str, "^%s+", "")
+    str = string.gsub(str, "%s+$", "")
+    
+    return str
+  end
 
 RegisterServerEvent('admin_menu:server:SendAnnounce')
 AddEventHandler('admin_menu:server:SendAnnounce', function(Message)

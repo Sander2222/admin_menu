@@ -45,6 +45,7 @@ function  OpenVehMenu()
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
+                    OpenDeleteVehicleDialog()
                 end,
             },
         }
@@ -53,12 +54,23 @@ function  OpenVehMenu()
     lib.showContext('VehMenu')
 end
 
+function OpenDeleteVehicleDialog()
+    local input = lib.inputDialog('Fahrzeug löschen', {
+        {type = 'input', label = 'Kennzeichen', description = 'Das Plate von dem Fahrzeug', required = true, min = 1, max = 1000},
+        {type = 'checkbox', label = 'Fahrzeug direkt löschen'},
+    })
+
+    if not input then return end
+
+    TriggerServerEvent('admin_menu:server:DeletePlayerVehicle', input[1], input[2])
+end
+
 function OpenGiveVehicleToPlayerDialog()
     local input = lib.inputDialog('Fahrzeug geben', {
         {type = 'input', label = 'Spieler ID', description = 'Gebe hier ein Steamnamen, ID oder den Namen von einem Spieler ein', required = true, min = 1, max = 1000}
     })
 
-    if not input then return end 
+    if not input then return end
     
     OpenVehSpawnnMenu(tonumber(input[1]))
 end
