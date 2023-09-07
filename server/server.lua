@@ -302,6 +302,7 @@ end)
 RegisterNetEvent('admin_menu:server:DeletePlayerVehicle')
 AddEventHandler('admin_menu:server:DeletePlayerVehicle',function(Plate, DeleteIngame)
     if CheckGroup(source, true) then
+        local source = source
         local Plate = string.upper(Trim(Plate))
 
         print(Plate)
@@ -312,18 +313,20 @@ AddEventHandler('admin_menu:server:DeletePlayerVehicle',function(Plate, DeleteIn
                         if DeleteIngame then
                             Vehicles = GetAllVehicles()
 
-                            print(ESX.DumpTable(Vehicles))
                             for k, Vehicle in pairs(Vehicles) do
                                 if GetVehicleNumberPlateText(Vehicle) == Plate then
                                     DeleteEntity(Vehicle)
-                                    print("fahrzeug weg")
                                 end
                             end
+
+                            local xTarget = ESX.GetPlayerFromIdentifier(response[1].owner)
+
+                            Config.ServerNotify(xTarget.playerId, 'Ein Fahrzeug von dir wurde entfernt: ' .. Plate)                            
                         end
                     end
                 end)
             else 
-                -- Notify gibts nicht
+                Config.ServerNotify(source, 'Dieses Fahrzeug gibt es nicht')
             end
         end)
     end
@@ -333,6 +336,11 @@ RegisterNetEvent('admin_menu:server:AddVehicleToPlayer')
 AddEventHandler('admin_menu:server:AddVehicleToPlayer', function (vehicleProps, Target)
     local source = source
     if CheckGroup(source, true) then
+
+        if not CheckIfPlayerIsOnline(Target) then
+            Config.ServerNotify(source, 'Diese ID gibt es nicht')
+            return
+        end
 
         function InsertVehicleInDB(Target)
             local xTarget = ESX.GetPlayerFromId(Target)
@@ -358,9 +366,19 @@ AddEventHandler('admin_menu:server:AddVehicleToPlayer', function (vehicleProps, 
             InsertVehicleInDB(source)
         end
     end
-
-
 end)
+
+function CheckIfPlayerIsOnline(Target)
+    local xPlayers = ESX.GetExtendedPlayers()
+
+    for _, xPlayer in pairs(xPlayers) do
+        if xPlayer.source == Target then
+            return true
+        end
+    end
+
+    return false
+end
 
 function GetPlayerFootprints(Player)
     local Footer = ''
@@ -409,7 +427,7 @@ function Trim(str)
     str = string.gsub(str, "%s+$", "")
     
     return str
-  end
+end
 
 RegisterServerEvent('admin_menu:server:SendAnnounce')
 AddEventHandler('admin_menu:server:SendAnnounce', function(Message)

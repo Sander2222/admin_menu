@@ -168,10 +168,7 @@ function OpenVehSpawnnMenu(PlayerID)
         if PlayerID then
             DeleteEntity(vehicle)
         end
-      end)
-
-
-    Config.ClientNotify('Fahrzeug erfolgreich gespawnt!')
+    end)
 end
 
 function GenerateRandomString(length)
