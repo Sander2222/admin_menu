@@ -159,7 +159,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 icon = 'user-doctor',
                 arrow = true,
                 onSelect = function()
-                    OpenPlayerBanMenu(PlayerID)
+                    if CanUseFunction('ban') then
+                        OpenPlayerBanMenu(PlayerID)
+                    end
                 end,
             },
             {
@@ -168,7 +170,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 icon = 'boxes-stacked',
                 arrow = true,
                 onSelect = function()
-                    OpenPlayerInventory(PlayerID)
+                    if CanUseFunction('inventory') then
+                        OpenPlayerInventory(PlayerID)
+                    end
                 end,
             },
             {
@@ -177,7 +181,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 icon = 'weapon',
                 arrow = true,
                 onSelect = function()
-                    OpenPlayerWeaponMenu(PlayerID)
+                    if CanUseFunction('pWeapon') then
+                        OpenPlayerWeaponMenu(PlayerID)
+                    end
                 end,
             },
             {
@@ -186,7 +192,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 icon = 'user-doctor',
                 arrow = true,
                 onSelect = function()
-                    OpenPlayerJobMenu(PlayerID)
+                    if CanUseFunction('job') then
+                        OpenPlayerJobMenu(PlayerID)
+                    end
                 end,
             },
             {
@@ -195,7 +203,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 icon = 'message',
                 arrow = true,
                 onSelect = function()
-                    OpenSendMSGPlayerDialog(PlayerID)
+                    if CanUseFunction('msg') then
+                        OpenSendMSGPlayerDialog(PlayerID)
+                    end
                 end,
             },
             {
@@ -204,7 +214,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 icon = 'message',
                 arrow = true,
                 onSelect = function()
-                    KickPlayerDialog(PlayerID)
+                    if CanUseFunction('kick') then
+                        KickPlayerDialog(PlayerID)
+                    end
                 end,
             },
             {
@@ -212,7 +224,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 description = 'einen Spieler töten',
                 icon = 'message',
                 onSelect = function()
-                    TriggerServerEvent('admin_menu:server:KillPlayer', PlayerID)
+                    if CanUseFunction('pkill') then
+                        TriggerServerEvent('admin_menu:server:KillPlayer', PlayerID)
+                    end
                 end,
             },
             {
@@ -220,7 +234,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 description = 'einem Spieler Armor geben',
                 icon = 'message',
                 onSelect = function()
-                    TriggerServerEvent('admin_menu:server:GiveArmorToPlayer', PlayerID)
+                    if CanUseFunction('parmor') then
+                        TriggerServerEvent('admin_menu:server:GiveArmorToPlayer', PlayerID)
+                    end
                 end,
             },
             {
@@ -228,7 +244,9 @@ function OpenSinglePlayerMenu(PlayerID)
                 description = 'einem Spieler Geld geben',
                 icon = 'money',
                 onSelect = function()
-                    OpenGivePlayerMoneyMenu(PlayerID)
+                    if CanUseFunction('pmoney') then
+                        OpenGivePlayerMoneyMenu(PlayerID)
+                    end
                 end,
             },
         }
@@ -280,7 +298,9 @@ function OpenPlayerBanMenu(PlayerID)
                 description = 'Bannen für eine Stunde',
                 icon = 'money-check',
                 onSelect = function()
-                    OpenAddBanReasonDialog(PlayerID, Config.Times.per)
+                    if CanUseFunction('banperm') then
+                        OpenAddBanReasonDialog(PlayerID, Config.Times.per)
+                    end
                 end,
             },
         }
