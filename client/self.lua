@@ -174,6 +174,7 @@ function GetAllItems()
             title = Locals.Self.ItemQuickSelection,
             description = Locals.Self.ItemDesc,
             icon = 'gun',
+            arrow = true,
             onSelect = function()
                 SearchForItem()
             end,
@@ -261,6 +262,7 @@ function GetAllGuns()
         title = Locals.Self.WeaponQuickSelection,
         description = Locals.Self.WeaponDsec,
         icon = 'gun',
+        arrow = true,
         onSelect = function()
             SearchForWeapon()
         end,
