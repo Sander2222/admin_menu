@@ -10,7 +10,9 @@ function  OpenVehMenu()
                 description = 'Ein Auto löschen',
                 icon = 'car-burst',
                 onSelect = function()
-                    DelNearVehicle()
+                    if CanUseFunction('delveh') then
+                        DelNearVehicle()
+                    end
                 end,
             },
             {
@@ -18,7 +20,9 @@ function  OpenVehMenu()
                 description = 'Player Actions',
                 icon = 'car-burst',
                 onSelect = function()
-                    OpenDelVehicleRadiusDialog()
+                    if CanUseFunction('delradiusveh') then
+                        OpenDelVehicleRadiusDialog()
+                    end
                 end,
             },
             {
@@ -27,7 +31,9 @@ function  OpenVehMenu()
                 icon = 'car-on',
                 arrow = true,
                 onSelect = function()
-                    OpenVehSpawnnMenu()
+                    if CanUseFunction('spawnveh') then
+                        OpenVehSpawnnMenu()
+                    end
                 end,
             },
             {
@@ -36,7 +42,9 @@ function  OpenVehMenu()
                 icon = 'hand-holding-heart',
                 arrow = true,
                 onSelect = function()
-                    OpenGiveVehicleToPlayerDialog()
+                    if CanUseFunction('giveveh') then
+                        OpenGiveVehicleToPlayerDialog()
+                    end
                 end,
             },
             {
@@ -45,7 +53,9 @@ function  OpenVehMenu()
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
-                    OpenDeleteVehicleDialog()
+                    if CanUseFunction('delplayerveh') then
+                        OpenDeleteVehicleDialog()
+                    end
                 end,
             },
         }
