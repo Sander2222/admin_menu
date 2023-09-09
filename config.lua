@@ -23,7 +23,7 @@ Config.Groups = {
         ['vehicle'] = true,
         ['server'] = true,
 
-
+        -- Self
         ['revive'] = true,
         ['heal'] = true,
         ['armor'] = true,
@@ -31,7 +31,26 @@ Config.Groups = {
         ['weapon'] = true,
         ['item'] = true,
         ['money'] = true,
-        ['noclip'] = true
+        ['noclip'] = true,
+
+        -- Player
+        ['ban'] = true,
+        ['banperm'] = true,
+        ['inventory'] = true,
+        ['pWeapon'] = true,
+        ['job'] = true,
+        ['msg'] = true,
+        ['kick'] = true,
+        ['pkill'] = true,
+        ['parmor'] = true,
+        ['pmoney'] = true,
+
+        -- Vehicle
+        ['delveh'] = true,
+        ['delradiusveh'] = true,
+        ['spawnveh'] = true,
+        ['giveveh'] = true,
+        ['delplayerveh'] = true
     }
 }
 
