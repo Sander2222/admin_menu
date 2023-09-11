@@ -35,10 +35,7 @@ function OpenServerMenu()
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
-                    local vehicles = GetGamePool("CVehicle")
-                    for _, vehicle in pairs(vehicles) do
-                        DeleteEntity(vehicle)
-                    end
+                    OpenDelAllVehDialog()
                 end,
             },
             {
@@ -58,6 +55,19 @@ function OpenServerMenu()
     })
 
     lib.showContext('ServMenu')
+end
+
+function OpenDelAllVehDialog()
+    local alert = lib.alertDialog({
+        header = 'Delete all Vehicles',
+        content = 'Sicher das du alle Fahrzeuge löschen möchtest?',
+        centered = true,
+        cancel = true
+    })
+     
+    if alert then
+        TriggerServerEvent('admin_menu:server:ReviveAllPlayer')
+    end
 end
 
 function OpenReviveDialog()
