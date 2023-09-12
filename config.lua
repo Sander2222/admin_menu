@@ -50,8 +50,56 @@ Config.Groups = {
         ['delradiusveh'] = true,
         ['spawnveh'] = true,
         ['giveveh'] = true,
-        ['delplayerveh'] = true
-    }
+        ['delplayerveh'] = true,
+
+        -- Server 
+        ['announce'] = true,
+        ['reviveall'] = true,
+        ['delallveh'] = true
+    },
+
+    ['mod'] = {
+
+        -- Menus
+        ['self'] = true,
+        ['player'] = true,
+        ['vehicle'] = true,
+        ['server'] = false,
+
+        -- Self
+        ['revive'] = true,
+        ['heal'] = true,
+        ['armor'] = true,
+        ['kill'] = true,
+        ['weapon'] = true,
+        ['item'] = true,
+        ['money'] = true,
+        ['noclip'] = true,
+
+        -- Player
+        ['ban'] = true,
+        ['banperm'] = false,
+        ['inventory'] = true,
+        ['pWeapon'] = true,
+        ['job'] = true,
+        ['msg'] = true,
+        ['kick'] = true,
+        ['pkill'] = true,
+        ['parmor'] = true,
+        ['pmoney'] = true,
+
+        -- Vehicle
+        ['delveh'] = true,
+        ['delradiusveh'] = true,
+        ['spawnveh'] = true,
+        ['giveveh'] = true,
+        ['delplayerveh'] = true,
+
+        -- Server 
+        ['announce'] = true,
+        ['reviveall'] = true,
+        ['delallveh'] = true
+    },
 }
 
 Config.SendAnnounce = function(Player, Message)
