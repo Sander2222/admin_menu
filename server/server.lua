@@ -285,6 +285,22 @@ AddEventHandler('admin_menu:server:GiveItem',function(ItemName, Count, Target)
     end
 end)
 
+RegisterNetEvent('admin_menu:server:DelAllVehicles')
+AddEventHandler('admin_menu:server:DelAllVehicles',function()
+    local source = source
+    if CheckGroup(source, true) then
+        Vehicles = GetAllVehicles()
+
+        for k, Vehicle in pairs(Vehicles) do
+            if GetVehicleNumberPlateText(Vehicle) == Plate then
+                DeleteEntity(Vehicle)
+            end
+        end
+
+        Config.ServerNotify(souce, ('Du hast %s Fahrzeuge gelöscht'):format(#Vehicles))
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:RemoveItem')
 AddEventHandler('admin_menu:server:RemoveItem',function(ItemName, Count, Target, All)
     if CheckGroup(source, true) then

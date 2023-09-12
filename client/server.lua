@@ -66,7 +66,7 @@ function OpenDelAllVehDialog()
     })
      
     if alert then
-        TriggerServerEvent('admin_menu:server:ReviveAllPlayer')
+        TriggerServerEvent('admin_menu:server:DelAllVehicles')
     end
 end
 
