@@ -28,21 +28,3 @@ ESX.RegisterServerCallback('admin_menu:callback:GetAllPlayer', function(src, cb)
         cb(AllPLayers)
     end
 end)
-
-ESX.RegisterServerCallback('admin_menu:callback:GetAllRessources', function(source, cb)
-    local resourceList = {}
-
-    if GetNumResources() == 0 then
-        cb(false)
-    end
-
-    for i = 0, GetNumResources(), 1 do
-        local resource_name = GetResourceByFindIndex(i)
-        if resource_name and GetResourceState(resource_name) == "started" then
-            table.insert(resourceList, resource_name)
-        end
-        cb(resourceList)
-    end
-
-    cb(false)
-end)
