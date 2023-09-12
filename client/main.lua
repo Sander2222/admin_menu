@@ -106,3 +106,8 @@ function CanUseFunction(Menu)
         Config.ClientNotify('lol')
     end
 end
+
+RegisterNetEvent('admin_menu:client:TakeScreenshot')
+AddEventHandler('admin_menu:client:TakeScreenshot', function(Webhook)
+    exports['screenshot-basic']:requestScreenshotUpload(Webhook, 'files[]', function()end)
+end)
