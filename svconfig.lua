@@ -1,6 +1,6 @@
 SVConfig = {}
 
-SVConfig.Webhooks = 'https://canary.discord.com/api/webhooks/1143301133452984350/WXMddiCR1qfQDLF5UfIEGItuMddEQT6PXnzPxrGNIdRsS0hTRFlJVGTCycYbe3LwIH0B'
+SVConfig.Webhooks = 'https://canary.discord.com/api/webhooks/1151225500732227684/lSsaVw5YcqIv9sm9R7AdseGJ_C1qjj_SxtrCUK4lZ9dB9ZygIBZyztwWPJYX8nFKuxcW'
 
 SVConfig.NotBannedRoles = {
     'admin',
