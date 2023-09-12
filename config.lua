@@ -44,6 +44,7 @@ Config.Groups = {
         ['pkill'] = true,
         ['parmor'] = true,
         ['pmoney'] = true,
+        ['screenshot'] = true,
 
         -- Vehicle
         ['delveh'] = true,

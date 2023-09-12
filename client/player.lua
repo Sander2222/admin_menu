@@ -187,6 +187,17 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
+                title = 'Take Screenshot',
+                description = 'Take a screenshot from a player',
+                icon = 'weapon',
+                arrow = true,
+                onSelect = function()
+                    if CanUseFunction('screenshot') then
+                        OpenPlayerWeaponMenu(PlayerID)
+                    end
+                end,
+            },
+            {
                 title = 'Job Menu',
                 description = 'Job Menu',
                 icon = 'user-doctor',

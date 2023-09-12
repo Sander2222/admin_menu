@@ -428,6 +428,23 @@ function GetPlayerFootprints(Player)
   return Footer
 end
 
+function SendPic(base64Image)
+    local embed = {
+        {
+            ["color"] = 134,
+            ["title"] = 'Logs',
+            ["description"] = "Hier ist das Bild:",
+            ["footer"] = {
+                ["text"] = 'logs',
+            },
+            ["image"] = {
+                ["url"] = "data:image/png;base64," .. base64Image -- Hier die Base64-Daten einfügen
+            }
+        }
+    }
+
+    PerformHttpRequest(SVConfig.Webhooks, function(err, text, headers) end, 'POST', json.encode({ username = name, embeds = embed }), { ['Content-Type'] = 'application/json' })
+end
 
 function SendDiscord(message)
     local embed = {
