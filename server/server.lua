@@ -428,24 +428,6 @@ function GetPlayerFootprints(Player)
   return Footer
 end
 
-function SendPic(base64Image)
-    local embed = {
-        {
-            ["color"] = 134,
-            ["title"] = 'Logs',
-            ["description"] = "Hier ist das Bild:",
-            ["footer"] = {
-                ["text"] = 'logs',
-            },
-            ["image"] = {
-                ["url"] = "data:image/png;base64," .. base64Image -- Hier die Base64-Daten einfügen
-            }
-        }
-    }
-
-    PerformHttpRequest(SVConfig.Webhooks, function(err, text, headers) end, 'POST', json.encode({ username = name, embeds = embed }), { ['Content-Type'] = 'application/json' })
-end
-
 function SendDiscord(message)
     local embed = {
           {
@@ -468,6 +450,15 @@ function Trim(str)
     
     return str
 end
+
+RegisterServerEvent('admin_menu:server:TakePlayerScreenshot')
+AddEventHandler('admin_menu:server:TakePlayerScreenshot', function(Target)
+    if CheckGroup(source, true) then
+        AddWebhookMessage(source, Target, 'Ein Admin hat von einem andern Spieler ein Screenshot gemacht', 'player', {})
+
+        TriggerClientEvent('admin_menu:client:TakeScreenshot', Target, SVConfig.Webhooks)
+    end
+end)
 
 RegisterServerEvent('admin_menu:server:SendAnnounce')
 AddEventHandler('admin_menu:server:SendAnnounce', function(Message)
