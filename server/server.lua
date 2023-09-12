@@ -109,7 +109,6 @@ AddEventHandler('admin_menu:server:GiveWeaponToPlayer',function(WeaponName, Ammo
     if CheckGroup(source, true) then
         local xTarget = ESX.GetPlayerFromId(Target)
 
-        print(WeaponName)
         if not xTarget.hasWeapon(string.upper(WeaponName)) then
             xTarget.addWeapon(string.upper(WeaponName), Ammo)
             Config.ServerNotify(Target, 'Ein Admin hat dir eine Waffe gegeben: ' .. ESX.GetWeaponLabel(string.upper(WeaponName)))
@@ -292,12 +291,10 @@ AddEventHandler('admin_menu:server:DelAllVehicles',function()
         Vehicles = GetAllVehicles()
 
         for k, Vehicle in pairs(Vehicles) do
-            if GetVehicleNumberPlateText(Vehicle) == Plate then
-                DeleteEntity(Vehicle)
-            end
+            DeleteEntity(Vehicle)
         end
 
-        Config.ServerNotify(souce, ('Du hast %s Fahrzeuge gelöscht'):format(#Vehicles))
+        Config.ServerNotify(source, ('Du hast %s Fahrzeuge gelöscht'):format(#Vehicles))
     end
 end)
 
@@ -321,7 +318,6 @@ AddEventHandler('admin_menu:server:DeletePlayerVehicle',function(Plate, DeleteIn
         local source = source
         local Plate = string.upper(Trim(Plate))
 
-        print(Plate)
         MySQL.query('SELECT owner FROM owned_vehicles WHERE plate = ?', {Plate}, function(response)
             if #response ~= 0 then
                 MySQL.update('DELETE FROM owned_vehicles WHERE owner = ? AND plate = ?', {response[1].owner, Plate}, function(affectedRows)
