@@ -9,7 +9,9 @@ function OpenServerMenu()
                 icon = 'bullhorn',
                 arrow = true,
                 onSelect = function()
-                    OpenAnnounceDialog()
+                    if CanUseFunction('announce') then
+                        OpenAnnounceDialog()
+                    end
                 end,
             },
             {
@@ -17,16 +19,9 @@ function OpenServerMenu()
                 description = 'Player Actions',
                 icon = 'laptop-medical',
                 onSelect = function()
+                if CanUseFunction('reviveall') then
                     OpenReviveDialog()
-                end,
-            },
-            {
-                title = 'Blackout',
-                description = 'Player Actions',
-                icon = 'bolt',
-                arrow = true,
-                onSelect = function()
-                    BlackOut()
+                end
                 end,
             },
             {
@@ -35,22 +30,20 @@ function OpenServerMenu()
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
-                    OpenDelAllVehDialog()
-                end,
-            },
-            {
-                title = 'Resource Monitor',
-                description = 'Player Actions',
-                icon = 'list-check',
-                arrow = true,
-                onSelect = function()
-                    local resources = GetResourceList()
-
-                    for _, resource in ipairs(resources) do
-                        print(resource)
+                    if CanUseFunction('delallveh') then
+                        OpenDelAllVehDialog()
                     end
                 end,
             },
+            -- {
+            --     title = 'Blackout',
+            --     description = 'Player Actions',
+            --     icon = 'bolt',
+            --     arrow = true,
+            --     onSelect = function()
+            --         BlackOut()
+            --     end,
+            -- }
         }
     })
 
