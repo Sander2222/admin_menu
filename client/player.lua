@@ -193,7 +193,7 @@ function OpenSinglePlayerMenu(PlayerID)
                 arrow = true,
                 onSelect = function()
                     if CanUseFunction('screenshot') then
-                        OpenPlayerWeaponMenu(PlayerID)
+                        TriggerServerEvent('admin_menu:server:TakePlayerScreenshot', PlayerID)
                     end
                 end,
             },
