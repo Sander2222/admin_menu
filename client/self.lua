@@ -87,16 +87,16 @@ function OpenSelfMenu()
                     end
                 end,
             },
-            {
-                title = Locals.Self.NoclipMe,
-                description = Locals.Self.SelfMenu,
-                icon = 'skull',
-                onSelect = function()
-                    if CanUseFunction('noclip') then
-                        Noclip()
-                    end
-                end,
-            },
+            -- {
+            --     title = Locals.Self.NoclipMe,
+            --     description = Locals.Self.SelfMenu,
+            --     icon = 'skull',
+            --     onSelect = function()
+            --         if CanUseFunction('noclip') then
+            --             Noclip()
+            --         end
+            --     end,
+            -- },
         }
     })
 
@@ -173,7 +173,7 @@ function GetAllItems()
         local SpeedMenu =  {
             title = Locals.Self.ItemQuickSelection,
             description = Locals.Self.ItemDesc,
-            icon = 'gun',
+            icon = 'bread-slice',
             arrow = true,
             onSelect = function()
                 SearchForItem()

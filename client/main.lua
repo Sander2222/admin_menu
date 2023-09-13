@@ -23,7 +23,7 @@ function OpenMenu()
             {
                 title = Locals.Main.Self,
                 description = Locals.Main.Self .. Locals.Main.Actions,
-                icon = 'user',
+                icon = 'image-portrait',
                 arrow = true,
                 onSelect = function()
                     if CanUseFunction('self') then
@@ -34,7 +34,7 @@ function OpenMenu()
             {
                 title = Locals.Main.Player,
                 description = Locals.Main.Player .. Locals.Main.Actions,
-                icon = 'circle',
+                icon = 'user',
                 arrow = true,
                 onSelect = function()
                     if CanUseFunction('player') then
@@ -45,7 +45,7 @@ function OpenMenu()
             {
                 title = Locals.Main.Vehicle,
                 description = Locals.Main.Vehicle .. Locals.Main.Actions,
-                icon = 'circle',
+                icon = 'car',
                 arrow = true,
                 onSelect = function()
                     if CanUseFunction('vehicle') then
@@ -56,7 +56,7 @@ function OpenMenu()
             {
                 title = Locals.Main.Server,
                 description = Locals.Main.Server .. Locals.Main.Actions,
-                icon = 'circle',
+                icon = 'server',
                 arrow = true,
                 onSelect = function()
                     if CanUseFunction('server') then
