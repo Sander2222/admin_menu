@@ -5,7 +5,7 @@ function ShowPlayerMenu(PlayerList)
     
     lib.registerContext({
         id = 'PlayerMenu',
-        title = 'Adminmenu',
+        title = Locals.Main.AdminMenu,
         options =  PlayerTable
     })
 
@@ -13,8 +13,8 @@ function ShowPlayerMenu(PlayerList)
 end
 
 function OpenSearchPlayerDialog()
-    local input = lib.inputDialog('Spieler Kicken', {
-        {type = 'input', label = 'Steamname/ID/Name', description = 'Gebe hier ein Steamnamen, ID oder den Namen von einem Spieler ein', required = true, min = 1, max = 1000}
+    local input = lib.inputDialog(Locals.Player.KickPlayer, {
+        {type = 'input', label = Locals.Player.IDs, description = Locals.Player.EnterIDs, required = true, min = 1, max = 1000}
     })
 
     if not input then return end      
@@ -23,7 +23,7 @@ function OpenSearchPlayerDialog()
     local IsNumber = false
     
     if Search == '' or Search == ' ' then 
-        Config.ClientNotify('Deine Nachricht ist leer')
+        Config.ClientNotify(Locals.Player.Empty)
 
         return
     end
@@ -33,7 +33,7 @@ function OpenSearchPlayerDialog()
     end
 
     if string.len(Search) < 3 and not IsNumber then
-        Config.ClientNotify('du musst mindestens 3 zeichen eingeben')
+        Config.ClientNotify(Locals.Player.AtLeast3)
 
         return
     end
@@ -69,9 +69,9 @@ function SearchForPlayers(Search)
     end
 
     if #Players == 0 then
-        Config.ClientNotify('Es wurde kein Spieler gefunden')
+        Config.ClientNotify(Locals.Player.NoPlayerFound)
     else
-        Config.ClientNotify(('Es wurden %s Spieler gefunden'):format(tostring(#Players)))
+        Config.ClientNotify((Locals.Player.PlayerFound):format(tostring(#Players)))
         return Players
     end
 
@@ -89,8 +89,8 @@ function GetAllPlayers(PlayerList)
         end
 
         local Search = {
-            title = 'Suchen',
-            description = 'Spieler suchen',
+            title = Locals.Player.Search,
+            description = Locals.Player.SearchPlayer,
             icon = 'magnifying-glass',
             arrow = true,
             onSelect = function()
@@ -99,8 +99,8 @@ function GetAllPlayers(PlayerList)
         }
     
         local Refresh = {
-            title = 'Refresh',
-            description = 'Spieler Refresh',
+            title = Locals.Player.Refresh,
+            description = Locals.Player.RefreshList,
             icon = 'arrows-rotate',
             onSelect = function()
                 ShowPlayerMenu()
@@ -115,15 +115,15 @@ function GetAllPlayers(PlayerList)
 
             local TmpTable = {
                 title = xPlayer.name,
-                description = 'ID: ' .. xPlayer.source .. '  Steam: ' .. xPlayer.steam,
+                description = Locals.Player.ID .. ': ' .. xPlayer.source .. Locals.Player.Steam .. ' : ' .. xPlayer.steam,
                 icon = 'user',
                 arrow = true,
                 onSelect = function()
                     OpenSinglePlayerMenu(xPlayer.source)
                 end,
                 metadata = {
-                    {label = 'Job', value = xPlayer.job.label},
-                    {label = 'Group', value = xPlayer.group}
+                    {label = Locals.Player.Job, value = xPlayer.job.label},
+                    {label = Locals.Player.Group, value = xPlayer.group}
                 },
             }
 
@@ -151,11 +151,11 @@ function OpenSinglePlayerMenu(PlayerID)
     
     lib.registerContext({
         id = 'SinglePlayerMenu',
-        title = 'Adminmenu',
+        title = Locals.Main.AdminMenu,
         options =  {
             {
-                title = 'Ban Player',
-                description = 'Spieler Bannen',
+                title = Locals.Player.Ban,
+                description = Locals.Player.BanPlayer,
                 icon = 'user-doctor',
                 arrow = true,
                 onSelect = function()
@@ -165,8 +165,8 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = 'Inventory',
-                description = 'Spieler Inventory',
+                title = Locals.Player.Inventory,
+                description = Locals.Player.PlayerInventory,
                 icon = 'boxes-stacked',
                 arrow = true,
                 onSelect = function()
@@ -176,19 +176,19 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = 'Weapon',
-                description = 'Spieler Inventory',
+                title = Locals.Player.Weapon,
+                description = Locals.Player.PlayerWeapons,
                 icon = 'weapon',
                 arrow = true,
                 onSelect = function()
                     if CanUseFunction('pWeapon') then
                         OpenPlayerWeaponMenu(PlayerID)
                     end
-                end,
+                end, 
             },
             {
-                title = 'Take Screenshot',
-                description = 'Take a screenshot from a player',
+                title = Locals.Player.TakeScreenshot,
+                description = Locals.Player.PlayerScreenshot,
                 icon = 'weapon',
                 arrow = true,
                 onSelect = function()
@@ -198,8 +198,8 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = 'Job Menu',
-                description = 'Job Menu',
+                title = Locals.Player.JobMenu,
+                description = Locals.Player.PlayerJobMenu,
                 icon = 'user-doctor',
                 arrow = true,
                 onSelect = function()
@@ -209,8 +209,8 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = 'Send Message',
-                description = 'Spieler eine Nachricht schicken',
+                title = Locals.Player.SendMsg,
+                description = Locals.Player.PlayerSendMsg,
                 icon = 'message',
                 arrow = true,
                 onSelect = function()
@@ -220,8 +220,8 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = 'Kick Player',
-                description = 'Ein Spieler von dem Server kicken',
+                title = Locals.Player.Kick,
+                description = Locals.Player.PlayerKick,
                 icon = 'message',
                 arrow = true,
                 onSelect = function()
@@ -231,8 +231,8 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = 'Kill Player',
-                description = 'einen Spieler töten',
+                title = Locals.Player.Kill,
+                description =  Locals.Player.PlayerKill,
                 icon = 'message',
                 onSelect = function()
                     if CanUseFunction('pkill') then
@@ -241,8 +241,8 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = 'Give Armor Player',
-                description = 'einem Spieler Armor geben',
+                title = Locals.Player.Armor,
+                description = Locals.Player.PlayerArmor,
                 icon = 'message',
                 onSelect = function()
                     if CanUseFunction('parmor') then
@@ -251,8 +251,8 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = 'GiveMoney',
-                description = 'einem Spieler Geld geben',
+                title =  Locals.Player.Money,
+                description = Locals.Player.PlayerMoney,
                 icon = 'money',
                 onSelect = function()
                     if CanUseFunction('pmoney') then
@@ -270,7 +270,7 @@ end
 function OpenPlayerBanMenu(PlayerID)
     lib.registerContext({
         id = 'BanPlayerMenu',
-        title = 'Money Menu',
+        title = Locals.Player.BanMenu,
         options = {
             {
                 title = 'Spezifisch bannen',
