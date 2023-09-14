@@ -106,6 +106,7 @@ Locals = {
         Money = 'Give money',
         PlayerMoney = 'Give a player money',
 
+        -- Ban Menu
         BanMenu = 'Ban menu',
         SpecificBan = 'Specific ban', 
         SpecificBanDesc = 'Ban players after certain days',
@@ -117,6 +118,35 @@ Locals = {
         BanWeekDesc = 'for 1 week',
         BanPerm = 'Ban permanent',
         BanPermDesc = 'Ban for permanent',
+        Reason = 'Reason',
+        ReasonDesc = 'Ban reason',
+        DateInput = 'Date input',
+
+        -- Money Menu
+        MoneyMenu = 'Money menu',
+        MoneyName = 'Money',
+        MoneyBank ='Give money bank',
+        MoneyAdd = 'Add money',
+        MoneyMuch = 'how much money',
+        MoneyEnterNumber = 'You must enter a valid number',
+
+        Weapon = 'Weapon',
+        WeaponAddPlayer = 'Add a weapon to a player',
+        WeaponGive = 'Give weapon',
+        WeaponDelAll = 'Delete all weapons',
+        WeaponDelAllDesc = 'Delete all weapons from a player',
+        WeaponAmmu = 'Ammunition',
+        WeaponTintIndex = 'Tint Index',
+        WeaponAdd = 'Add weapon',
+        WeaponQuickSelection = 'Quick selection',
+        WeaponDsec = 'Quickly give weapon',
+        WeaponAmmuDesc = 'How much ammunition',
+        WeaponInfo = 'Weapon info',
+        WeaponEnterNumber = 'You must enter a valid number',
+        WeaponDelAllSure = 'Are you sure you want to remove all the weapons from the player',
+        
+        WeaponName = 'Spawn name',
+        WeaponWhich = 'Which weapon',
     },
 
     Vehicle = {

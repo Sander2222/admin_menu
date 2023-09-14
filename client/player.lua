@@ -322,7 +322,7 @@ end
 
 function OpenAddBanReasonDialog(PlayerID, Time)
     local input = lib.inputDialog('Dialog title', {
-        {type = 'input', label = 'Reason', description = 'Some input description', required = true, min = 3, max = 200},
+        {type = 'input', label = Locals.Player.Reason, description = Locals.Player.ReasonDesc, required = true, min = 3, max = 200},
       })
 
       local Reason = input[1]
@@ -332,8 +332,8 @@ end
 
 function OpenPlayerBanDialog(PlayerID)
     local input = lib.inputDialog('Dialog title', {
-        {type = 'date', label = 'Date input', icon = {'far', 'calendar'}, default = true, format = "DD/MM/YYYY"},
-        {type = 'input', label = 'Reason', description = 'Some input description', default = 'Modding', required = true, min = 3, max = 200},
+        {type = 'date', label = Locals.Player.DateInput, icon = {'far', 'calendar'}, default = true, format = "DD/MM/YYYY"},
+        {type = 'input', label = Locals.Player.Reason, description = Locals.Player.ReasonDesc, required = true, min = 3, max = 200},
       })
 
       local timestamp = math.floor(input[1] / 1000)
@@ -345,19 +345,19 @@ end
 function OpenGivePlayerMoneyMenu(PlayerID)
     lib.registerContext({
         id = 'MoneyPlayerMenu',
-        title = 'Money Menu',
+        title = Locals.Player.MoneyMenu,
         options = {
             {
-                title = 'Give Money',
-                description = 'Player Actions',
+                title = Locals.Player.Money,
+                description = Locals.Player.MoneyAdd,
                 icon = 'money-bill',
                 onSelect = function()
                     GiveMoneyToPlayerDialog('Hand', PlayerID)
                 end,
             },
             {
-                title = 'Give Bank Money',
-                description = 'Player Actions',
+                title = Locals.Player.MoneyBank,
+                description = Locals.Player.MoneyAdd,
                 icon = 'money-check',
                 onSelect = function()
                     GiveMoneyToPlayerDialog('Bank', PlayerID)
@@ -370,8 +370,8 @@ function OpenGivePlayerMoneyMenu(PlayerID)
 end
 
 function GiveMoneyToPlayerDialog(Type, PlayerID)
-    local input = lib.inputDialog('Add Money', {
-        {type = 'number', label = 'Money', description = 'Wie viel Geld', icon = 'hashtag'},
+    local input = lib.inputDialog(Locals.Player.MoneyAdd, {
+        {type = 'number', label = Locals.Player.MoneyName, description = Locals.Player.MoneyMuch, icon = 'hashtag'},
     })
 
     if not input then return end
@@ -379,7 +379,7 @@ function GiveMoneyToPlayerDialog(Type, PlayerID)
     local Money = tonumber(input[1])
 
     if Money == nil then
-        Config.ClientNotify('Du musst eine Zahl angeben')
+        Config.ClientNotify(Locals.Player.MoneyEnterNumber)
 
         return
     end
@@ -390,7 +390,7 @@ end
 function OpenPlayerWeaponMenu(PlayerID)
     lib.registerContext({
         id = 'SinglePlayerWeaponMenu',
-        title = 'Adminmenu',
+        title = Locals.Main.AdminMenu,
         options =  GetPlayerWeapon(PlayerID)
     })
 
@@ -402,8 +402,8 @@ function GetPlayerWeapon(PlayerID)
     local Weapons = {}
 
     local Add = {
-        title = 'Waffe hinzufügen',
-        description = 'Einem Spieler eine Waffe hinzufügen',
+        title = Locals.Main.WeaponGive,
+        description = Locals.Player.WeaponAddPlayer,
         icon = 'magnifying-glass',
         onSelect = function()
             OpenAddWeaponMenu(PlayerID)
@@ -411,8 +411,8 @@ function GetPlayerWeapon(PlayerID)
     }
 
     local DelAll = {
-        title = 'Alle Waffen löshen',
-        description = 'Einem Spieler alle Waffen löschen',
+        title = Locals.Player.WeaponDelAll,
+        description = Locals.Player.WeaponDelAllDesc,
         icon = 'magnifying-glass',
         onSelect = function()
             DeleteAllWeapons(PlayerID)
@@ -435,8 +435,8 @@ function GetPlayerWeapon(PlayerID)
                     OpenWeaponPlayerMenu(PlayerID, v.name, v.label, v.ammo, v.components)
                 end,
                 metadata = {
-                    {label = 'Ammo', value = v.ammo},
-                    {label = 'Tint Index', value = v.tintIndex}
+                    {label = Locals.Player.WeaponAmmu, value = v.ammo},
+                    {label = Locals.Player.WeaponTintIndex, value = v.tintIndex}
                 },
             }
 
@@ -450,7 +450,7 @@ end
 function OpenAddWeaponMenu(PlayerID)
     lib.registerContext({
         id = 'WeaponListMenu',
-        title = 'Add Weapon',
+        title = Locals.Player.WeaponAdd,
         options = GetAllGunsPlayer(PlayerID)
     })
 
@@ -461,8 +461,8 @@ function GetAllGunsPlayer(PlayerID)
     local Guns = {}
 
     local SpeedMenu =  {
-        title = 'Schnellauswahl',
-        description = 'Schnell Waffe geben',
+        title = Locals.Player.WeaponQuickSelection,
+        description = Locals.Player.WeaponDsec,
         icon = 'gun',
         onSelect = function()
             SearchForWeapon()
@@ -489,8 +489,8 @@ function GetAllGunsPlayer(PlayerID)
 end
 
 function GiveWeaponToPlayer(WeaponName, WeaponLabel, PlayerID)
-    local input = lib.inputDialog('Weapon Info: ' .. WeaponLabel, {
-        {type = 'input', label = 'Ammunation', description = 'Anzahl von der Munition', default= 250, required = true, min = 1, max = 600}
+    local input = lib.inputDialog( Locals.Player.WeaponInfo .. ': ' .. WeaponLabel, {
+        {type = 'input', label = Locals.Player.WeaponAmmu, description = Locals.Player.WeaponAmmuDesc, default= 250, required = true, min = 1, max = 600}
     })
 
     if not input then return end
@@ -498,7 +498,7 @@ function GiveWeaponToPlayer(WeaponName, WeaponLabel, PlayerID)
     local Ammo = tonumber(input[1])
 
     if Ammo == nil then
-        Config.ClientNotify('Du musst eine Zahl angeben')
+        Config.ClientNotify(Locals.Player.WeaponEnterNumber)
 
         return
     end
@@ -508,8 +508,8 @@ end
 
 function DeleteAllWeapons(PlayerID)
     local alert = lib.alertDialog({
-        header = 'Alle Waffen entfernen',
-        content = 'Sicher das du dem Spieler alle Wafen entfernen möchtest? \nID: ' .. PlayerID,
+        header = Locals.Player.WeaponDelAll,
+        content = Locals.Player.WeaponDelAllSure .. '\nID: ' .. PlayerID,
         centered = true,
         cancel = true
     })
@@ -523,7 +523,7 @@ function OpenWeaponPlayerMenu(PlayerID, WeaponName, WeaponLabel, Ammo, Component
 
     lib.registerContext({
         id = 'PlayerWeaponActionsMenu',
-        title = 'Item: ' .. WeaponLabel,
+        title = Locals.Player.Weapon .. ': ' .. WeaponLabel,
         options = {
             {
                 title = 'Munition anpassen',
