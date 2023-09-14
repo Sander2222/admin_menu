@@ -107,6 +107,16 @@ Locals = {
         PlayerMoney = 'Give a player money',
 
         BanMenu = 'Ban menu',
+        SpecificBan = 'Specific ban', 
+        SpecificBanDesc = 'Ban players after certain days',
+        BanHour = '1 hour',
+        BanHourDesc = 'for 1 hour',
+        BanDay = '1 day',
+        BanDayDesc = 'for 1 day',
+        BanWeek = '1 week',
+        BanWeekDesc = 'for 1 week',
+        BanPerm = 'Ban permanent',
+        BanPermDesc = 'Ban for permanent',
     },
 
     Vehicle = {

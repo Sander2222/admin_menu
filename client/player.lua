@@ -273,40 +273,40 @@ function OpenPlayerBanMenu(PlayerID)
         title = Locals.Player.BanMenu,
         options = {
             {
-                title = 'Spezifisch bannen',
-                description = 'Spieler nach bestimmten Tagen bannen',
+                title = Locals.Player.SpecificBan,
+                description = Locals.Player.SpecificBanDesc,
                 icon = 'money-bill',
                 onSelect = function()
                     OpenPlayerBanDialog(PlayerID)
                 end,
             },
             {
-                title = 'Für eine Stunde',
-                description = 'Bannen für eine Stunde',
+                title = Locals.Player.BanHour,
+                description = Locals.Player.BanHourDesc,
                 icon = 'money-check',
                 onSelect = function()
                     OpenAddBanReasonDialog(PlayerID, Config.Times.hour)
                 end,
             },
             {
-                title = 'Für einen Tag',
-                description = 'Bannen für eine Stunde',
+                title = Locals.Player.BanDay,
+                description = Locals.Player.BanDayDesc,
                 icon = 'money-check',
                 onSelect = function()
                     OpenAddBanReasonDialog(PlayerID, Config.Times.day)
                 end,
             },
             {
-                title = 'Für eine Woche',
-                description = 'Bannen für eine Stunde',
+                title = Locals.Player.BanWeek,
+                description = Locals.Player.BanWeekDesc,
                 icon = 'money-check',
                 onSelect = function()
                     OpenAddBanReasonDialog(PlayerID, Config.Times.day * 7)
                 end,
             },
             {
-                title = 'Permanent',
-                description = 'Bannen für eine Stunde',
+                title = Locals.Player.BanPerm,
+                description = Locals.Player.BanPermDesc,
                 icon = 'money-check',
                 onSelect = function()
                     if CanUseFunction('banperm') then
