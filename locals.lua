@@ -130,7 +130,7 @@ Locals = {
         MoneyMuch = 'how much money',
         MoneyEnterNumber = 'You must enter a valid number',
 
-        Weapon = 'Weapon',
+        -- Weapon
         WeaponAddPlayer = 'Add a weapon to a player',
         WeaponGive = 'Give weapon',
         WeaponDelAll = 'Delete all weapons',
