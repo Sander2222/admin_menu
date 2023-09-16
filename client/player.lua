@@ -23,7 +23,7 @@ function OpenSearchPlayerDialog()
     local IsNumber = false
     
     if Search == '' or Search == ' ' then 
-        Config.ClientNotify(Locals.Player.Empty)
+        Config.ClientNotify(Locals.Main.Empty)
 
         return
     end
@@ -321,7 +321,7 @@ function OpenPlayerBanMenu(PlayerID)
 end
 
 function OpenAddBanReasonDialog(PlayerID, Time)
-    local input = lib.inputDialog('Dialog title', {
+    local input = lib.inputDialog(Locals.Player.Ban, {
         {type = 'input', label = Locals.Player.Reason, description = Locals.Player.ReasonDesc, required = true, min = 3, max = 200},
       })
 
@@ -331,7 +331,7 @@ function OpenAddBanReasonDialog(PlayerID, Time)
 end
 
 function OpenPlayerBanDialog(PlayerID)
-    local input = lib.inputDialog('Dialog title', {
+    local input = lib.inputDialog(Locals.Player.Ban, {
         {type = 'date', label = Locals.Player.DateInput, icon = {'far', 'calendar'}, default = true, format = "DD/MM/YYYY"},
         {type = 'input', label = Locals.Player.Reason, description = Locals.Player.ReasonDesc, required = true, min = 3, max = 200},
       })
@@ -526,8 +526,8 @@ function OpenWeaponPlayerMenu(PlayerID, WeaponName, WeaponLabel, Ammo, Component
         title = Locals.Player.Weapon .. ': ' .. WeaponLabel,
         options = {
             {
-                title = 'Munition anpassen',
-                description = 'Munition: ' .. Ammo,
+                title = Locals.Player.WeaponAdjustAmmunition,
+                description = Locals.Player.WeaponAmmu .. ': ' .. Ammo,
                 icon = 'plus',
                 arrow = true,
                 onSelect = function()
@@ -535,23 +535,23 @@ function OpenWeaponPlayerMenu(PlayerID, WeaponName, WeaponLabel, Ammo, Component
                 end,
             },
             {
-                title = 'Waffe entfernen',
-                description = 'Diese Waffe entfernen (' ..  WeaponLabel.. ')',
+                title = Locals.Player.WeaponRemove,
+                description = Locals.Player.WeaponRemoveDesc .. ' (' ..  WeaponLabel.. ')',
                 icon = 'magnifying-glass',
                 onSelect = function()
                     TriggerServerEvent('admin_menu:server:RemovePlayerWeapon', WeaponName, PlayerID)
                 end,
             },
             {
-                title = 'Componenten anpassen',
-                description = 'Spieler hat so viele Componenten: ' .. #Components,
+                title = Locals.Player.WeaponAdjustComponent,
+                description = Locals.Player.WeaponHasComponent .. ': ' .. #Components,
                 icon = 'magnifying-glass',
                 arrow = true,
                 onSelect = function()
                     if #Components ~= 0 then
                         OpenWeaponComponentMenu(PlayerID, WeaponName, Components)
-                    else 
-                        ESX.ShowNotification('Der Spieler hat keine Componenten')
+                    else
+                        Config.ClientNotify(Locals.Player.WeaponNoComponent)
                     end
                 end,
             },
@@ -564,7 +564,7 @@ end
 function OpenWeaponComponentMenu(PlayerID, WeaponName, Components)
     lib.registerContext({
         id = 'WeaponComponentMenu',
-        title = 'Waffen Components Menu',
+        title = Locals.Player.ComponentMenu,
         options = GetWeaponComponentsMenu(PlayerID, WeaponName, Components)
     })
 
@@ -576,8 +576,8 @@ function GetWeaponComponentsMenu(PlayerID, WeaponName, Components)
 
     for k, v in pairs(Components) do
         local TmpTable = {
-            title = 'Component: ' .. v,
-            description = 'Component entfernen',
+            title = Locals.Player.WeaponComponent .. ': ' .. v,
+            description = Locals.Player.WeaponComponentRemove,
             icon = 'user-doctor',
             arrow = true,
             onSelect = function()
@@ -592,34 +592,28 @@ function GetWeaponComponentsMenu(PlayerID, WeaponName, Components)
 end
 
 function OpenUpdateAmmonationDialog(PlayerID, WeaponName, Ammo)
-    local input = lib.inputDialog('Weapon: ' ..  ESX.GetWeaponLabel(WeaponName), {
-        {type = 'input', label = 'Ammo', description = 'Waffen Munition', default = Ammo, required = true, min = 1, max = 1000}
+    local input = lib.inputDialog(Locals.Player.Weapon .. ': ' ..  ESX.GetWeaponLabel(WeaponName), {
+        {type = 'input', label = Locals.Player.WeaponAmmu, description = Locals.Player.WeaponAmmuDesc, default = Ammo, required = true, min = 1, max = 1000}
     })
 
     if not input then return end      
     
     local Count = tonumber(input[1])
-    
-    if Count == tonumber(Ammo) then 
-        Config.ClientNotify('Es ist der gleich Betrag')
-
-        return
-    end
 
     TriggerServerEvent('admin_menu:server:UpdatePlayerAmmo', WeaponName, Count, Ammo, PlayerID)
 end
 
 function KickPlayerDialog(PlayerID)
-    local input = lib.inputDialog('Spieler Kicken', {
-        {type = 'input', label = 'Message', description = 'Nachricht die beim Kick angezeigt wird', required = true, min = 1, max = 1000}
+    local input = lib.inputDialog(Locals.Player.KickPlayer, {
+        {type = 'input', label = Locals.Main.Message, description = Locals.Player.KickDesc, required = true, min = 1, max = 1000}
     })
 
-    if not input then return end      
+    if not input then return end
     
     local MSG = input[1]
     
-    if MSG == '' or MSG == ' ' then 
-        Config.ClientNotify('Deine Nachricht ist leer')
+    if MSG == '' or MSG == ' ' then
+        Config.ClientNotify(Locals.Main.Empty)
 
         return
     end
@@ -629,8 +623,8 @@ end
 
 function OpenSendMSGPlayerDialog(PlayerID)
 
-    local input = lib.inputDialog('Send Message', {
-        {type = 'input', label = 'Message', description = 'Privatnachricht', required = true, min = 1, max = 1000}    
+    local input = lib.inputDialog(Locals.Player.SendMessage, {
+        {type = 'input', label = Locals.Main.Message, description = Locals.Player.PrivateMessage, required = true, min = 1, max = 1000}
     })
 
     if not input then return end      
@@ -638,7 +632,7 @@ function OpenSendMSGPlayerDialog(PlayerID)
     local MSG = input[1]
     
     if MSG == '' or MSG == ' ' then 
-        Config.ClientNotify('Deine Nachricht ist leer')
+        Config.ClientNotify(Locals.Main.Empty)
 
         return
     end
@@ -651,11 +645,11 @@ function OpenPlayerJobMenu(PlayerID)
 
     lib.registerContext({
         id = 'JobMenu',
-        title = 'Job: ' .. JobData.name ..  ' Grade: ' .. JobData.grade,
+        title = Locals.Player.JobName .. ': ' .. JobData.name ..  Locals.Player.JobGrade.. ': ' .. JobData.grade,
         options = {
             {
-                title = 'Job ändern',
-                description = 'Job Daten ändern',
+                title = Locals.Player.JobChange,
+                description = Locals.Player.JobChange .. ': ' .. JobData.name,
                 icon = 'user-doctor',
                 arrow = true,
                 onSelect = function()
@@ -663,8 +657,8 @@ function OpenPlayerJobMenu(PlayerID)
                 end,
             },
             {
-                title = 'Job zurücksetzen',
-                description = 'Job auf Arbietslos setzten',
+                title = Locals.Player.JobReset,
+                description = Locals.Player.JobResetDesc,
                 icon = 'user-doctor',
                 arrow = true,
                 onSelect = function()
@@ -680,9 +674,9 @@ end
 function OpenUpdateJobDialog(PlayerID)
     local JobData = GetSinglePlayerData(PlayerID).job
 
-    local input = lib.inputDialog('Change Job Data', {
-        {type = 'input', label = 'Jobname', description = JobData.name, default = JobData.name, required = true, min = 1, max = 600},
-        {type = 'number', label = 'Grade', description = '', default = JobData.grade, icon = 'hashtag'},
+    local input = lib.inputDialog(Locals.Player.JobChange, {
+        {type = 'input', label = Locals.Player.JobName, description = JobData.name, default = JobData.name, required = true, min = 1, max = 600},
+        {type = 'number', label = Locals.Player.JobGrade, default = JobData.grade, icon = 'hashtag'},
     })
 
     if not input then return end      
@@ -696,7 +690,7 @@ end
 function OpenPlayerInventory(PlayerID)
     lib.registerContext({
         id = 'SinglePlayerInventarMenu',
-        title = 'Adminmenu',
+        title = Locals.Main.AdminMenu,
         options =  GetInventoryItem(PlayerID)
     })
 
@@ -704,9 +698,9 @@ function OpenPlayerInventory(PlayerID)
 end
 
 function AddNewItemToPlayer(PlayerID)
-    local input = lib.inputDialog('Add Item', {
-        {type = 'input', label = 'Item name', description = 'Item', required = true, min = 1, max = 600},
-        {type = 'number', label = 'Counter', description = 'Wie viele Items', default = 1, icon = 'hashtag'},
+    local input = lib.inputDialog(Locals.Player.ItemAdd, {
+        {type = 'input', label = Locals.Player.ItemName, description = Locals.Player.Item, required = true, min = 1, max = 600},
+        {type = 'number', label = Locals.Player.ItemCount, description = Locals.Player.ItemMuch, default = 1, icon = 'hashtag'},
     })
 
     if not input then return end      
@@ -723,8 +717,8 @@ function GetInventoryItem(PlayerID)
 
 
     local Add = {
-        title = 'Item hinzufügen',
-        description = 'Einem Spieler ein Item hinzufügen',
+        title = Locals.Player.ItemAdd,
+        description = Locals.Player.ItemAddDesc,
         icon = 'magnifying-glass',
         onSelect = function()
             AddNewItemToPlayer(PlayerID)
@@ -732,8 +726,8 @@ function GetInventoryItem(PlayerID)
     }
 
     local DelAll = {
-        title = 'Alle Items löshen',
-        description = 'Einem Spieler alle Items löschen',
+        title = Locals.Player.ItemDellAll,
+        description = Locals.Player.ItemDellAllDesc,
         icon = 'magnifying-glass',
         onSelect = function()
             DeleteAllInventoryItems(PlayerID)
@@ -756,8 +750,8 @@ function GetInventoryItem(PlayerID)
                     OpenItemPlayerMenu(PlayerID, v.name, v.label, v.count)
                 end,
                 metadata = {
-                    {label = 'Count', value = v.count},
-                    {label = 'Max Weight', value = v.count * v.weight},
+                    {label = Locals.Player.ItemCount, value = v.count},
+                    {label = Locals.Player.ItemMax, value = v.count * v.weight},
                 },
             }
 
@@ -772,11 +766,11 @@ end
 function OpenItemPlayerMenu(PlayerID, ItemName, ItemLabel, ItemCount)
     lib.registerContext({
         id = 'PlayerItemActionsMenu',
-        title = 'Item: ' .. ItemName,
+        title = Locals.Player.Item .. ': ' .. ItemName,
         options = {
             {
-                title = 'Item hinzufügen',
-                description = 'Diesen Item hinzufügen (' ..  ItemLabel.. ')',
+                title = Locals.Player.ItemAdd,
+                description = Locals.Player.ItemAddDesc .. ' (' ..  ItemLabel.. ')',
                 icon = 'plus',
                 arrow = true,
                 onSelect = function()
@@ -784,16 +778,16 @@ function OpenItemPlayerMenu(PlayerID, ItemName, ItemLabel, ItemCount)
                 end,
             },
             {
-                title = 'Alle Items entfernen',
-                description = 'Dieses item komplett entfernen (' ..  ItemLabel.. ')',
+                title = Locals.Player.ItemDellAll,
+                description = Locals.Player.ItemDellAllDesc .. ' (' ..  ItemLabel.. ')',
                 icon = 'magnifying-glass',
                 onSelect = function()
                     TriggerServerEvent('admin_menu:server:RemoveItem', ItemName, ItemCount, PlayerID, true)
                 end,
             },
             {
-                title = 'Item einzelne Items entfernen',
-                description = 'Nur einzelne Items entfernen (' ..  ItemLabel.. ')',
+                title = Locals.Player.ItemOnlySingle,
+                description = Locals.Player.ItemOnlySingleDesc .. ' (' ..  ItemLabel.. ')',
                 icon = 'magnifying-glass',
                 arrow = true,
                 onSelect = function()
@@ -808,8 +802,8 @@ end
 
 function DeleteAllInventoryItems(PlayerID)
     local alert = lib.alertDialog({
-        header = 'Alle Items entfernen',
-        content = 'Sicher das du dem Spieler alle Items entfernen möchtest? \nID: ' .. PlayerID,
+        header = Locals.Player.ItemDellAll,
+        content = Locals.Player.ItemDelAllDia .. ' \nID: ' .. PlayerID,
         centered = true,
         cancel = true
     })
@@ -820,9 +814,9 @@ function DeleteAllInventoryItems(PlayerID)
 end
 
 function RemovePlayerItems(PlayerID, ItemName, ItemLabel)
-    local input = lib.inputDialog('Remove Item: ' .. ItemLabel, {
-        {type = 'input', label = 'Item name', description = 'Ausgewähltes Item', disabled = true, default = ItemName, required = true, min = 1, max = 600},
-        {type = 'number', label = 'Counter', description = 'Wie viele Items', default = 1, icon = 'hashtag'},
+    local input = lib.inputDialog(Locals.Player.ItemRemove .. ': ' .. ItemLabel, {
+        {type = 'input', label = Locals.Player.Item, description = Locals.Player.Item, disabled = true, default = ItemName, required = true, min = 1, max = 600},
+        {type = 'number', label = Locals.Player.ItemCount, description = Locals.Player.ItemMuch, default = 1, icon = 'hashtag'},
     })
 
     if not input then return end      
@@ -833,9 +827,9 @@ function RemovePlayerItems(PlayerID, ItemName, ItemLabel)
 end
 
 function AddItemToPlayer(PlayerID, ItemName, ItemLabel)
-    local input = lib.inputDialog('Add Item: ' .. ItemLabel, {
-        {type = 'input', label = 'Item name', description = 'Welches item', disabled = true, default = ItemName, required = true, min = 1, max = 600},
-        {type = 'number', label = 'Counter', description = 'Wie viele Items', default = 1, icon = 'hashtag'},
+    local input = lib.inputDialog(Locals.Player.ItemAdd .. ': ' .. ItemLabel, {
+        {type = 'input', label = Locals.Player.Item, description = Locals.Player.Item, disabled = true, default = ItemName, required = true, min = 1, max = 600},
+        {type = 'number', label = Locals.Player.ItemCount, description = Locals.Player.ItemMuch, default = 1, icon = 'hashtag'},
     })
 
     if not input then return end

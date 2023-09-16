@@ -10,6 +10,9 @@ Locals = {
         Player = 'Player',
         Vehicle = 'Vehicle',
         Server = 'Server',
+
+        Message = 'Message',
+        Empty = 'Your input is empty',
     },
     Self = {
         SelfMenu = 'Self Menu',
@@ -68,10 +71,10 @@ Locals = {
     },
     
     Player = {
-        KickPlayer = 'Kick Player',
+        KickPlayer = 'Kick player',
         IDs = 'Steamname/ID/Name',
         EnterIDs = 'Enter a Steam name, ID or the name of a player here',
-        Empty = 'Your input is empty',
+
         AtLeast3 = 'you must enter at least 3 characters',
         NoPlayerFound = 'No player was found',
         PlayerFound = '%s players were found',
@@ -144,9 +147,45 @@ Locals = {
         WeaponInfo = 'Weapon info',
         WeaponEnterNumber = 'You must enter a valid number',
         WeaponDelAllSure = 'Are you sure you want to remove all the weapons from the player',
-        
-        WeaponName = 'Spawn name',
-        WeaponWhich = 'Which weapon',
+        WeaponAdjustAmmunition = 'Adjust ammunition',
+        WeaponRemove = 'Remove weapon',
+        WeaponRemoveDesc = 'Remove this weapon',
+        WeaponAdjustComponent = 'Adjust components',
+        WeaponHasComponent = 'Player has so many components',
+        WeaponNoComponent = 'The player has no components',
+        ComponentMenu = 'Waffen components Menu',
+        WeaponComponent = 'Component',
+        WeaponComponentRemove = 'Remove Component',
+
+        -- Kick
+        KickDesc = 'Message displayed on kick',
+
+        -- Message
+        SendMessage = 'Send message',
+        PrivateMessage = 'Privat message',
+
+        -- Job
+        JobName = 'Job name',
+        JobGrade = 'Grade',
+        JobChange = 'Change job',
+        JobReset = 'Reset job',
+        JobResetDesc = 'Set the player job to default',
+
+        -- Item
+        Item = 'item',
+        ItemAdd = 'Add item',
+        ItemAddDesc = 'Add an item to a player',
+        ItemName = 'Item name',
+        ItemCount = 'Count',
+        ItemMuch = 'How much items',
+        ItemDellAll = 'Delete all items',
+        ItemDellAllDesc = 'delete all items from one player',
+        ItemDelAllDia = 'Sure you want to remove all items from the player?',
+        ItemMax = 'Max Weight',
+        ItemOnlySingle = 'Remove only single item',
+        ItemOnlySingleDesc = 'remove only specific number',
+        ItemRemove = 'Remove item',
+
     },
 
     Vehicle = {
