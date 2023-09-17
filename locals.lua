@@ -185,11 +185,15 @@ Locals = {
         ItemOnlySingle = 'Remove only single item',
         ItemOnlySingleDesc = 'remove only specific number',
         ItemRemove = 'Remove item',
-
     },
 
     Vehicle = {
-
+        Menu = 'Vehicle Menu',
+        DelOne = 'Delete one vehicle',
+        DelRadius = 'Delete vehicle radius',
+        Spawn = 'Spawn vehicle',
+        GivePlayer = 'Give vehicle to player',
+        DelPlayer = 'Delete vehicle from player',
     },
 
     Server = {

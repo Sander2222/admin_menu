@@ -3,11 +3,11 @@ local ped = cache.ped
 function  OpenVehMenu()
     lib.registerContext({
         id = 'VehMenu',
-        title = 'Vehicle Menu',
+        title = Locals.Vehicle.Menu,
         options = {
             {
-                title = 'Delete one vehicle',
-                description = 'Ein Auto löschen',
+                title = Locals.Vehicle.DelOne,
+                description = Locals.Vehicle.Menu,
                 icon = 'car-burst',
                 onSelect = function()
                     if CanUseFunction('delveh') then
@@ -16,8 +16,8 @@ function  OpenVehMenu()
                 end,
             },
             {
-                title = 'Delete Vehicle Radius',
-                description = 'Player Actions',
+                title = Locals.Vehicle.DelRadius,
+                description = Locals.Vehicle.Menu,
                 icon = 'car-burst',
                 onSelect = function()
                     if CanUseFunction('delradiusveh') then
@@ -26,8 +26,8 @@ function  OpenVehMenu()
                 end,
             },
             {
-                title = 'Spawn Vehicle',
-                description = 'Player Actions',
+                title = Locals.Vehicle.Spawn,
+                description = Locals.Vehicle.Menu,
                 icon = 'car-on',
                 arrow = true,
                 onSelect = function()
@@ -37,8 +37,8 @@ function  OpenVehMenu()
                 end,
             },
             {
-                title = 'Give Player Vehicle',
-                description = 'Player Actions',
+                title = Locals.Vehicle.GivePlayer,
+                description = Locals.Vehicle.Menu,
                 icon = 'hand-holding-heart',
                 arrow = true,
                 onSelect = function()
@@ -48,8 +48,8 @@ function  OpenVehMenu()
                 end,
             },
             {
-                title = 'Delete Player Vehicle',
-                description = 'Player Actions',
+                title = Locals.Vehicle.DelPlayer,
+                description = Locals.Vehicle.Menu,
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
