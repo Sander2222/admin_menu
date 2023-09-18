@@ -115,7 +115,7 @@ function GetAllPlayers(PlayerList)
 
             local TmpTable = {
                 title = xPlayer.name,
-                description = Locals.Player.ID .. ': ' .. xPlayer.source .. Locals.Player.Steam .. ' : ' .. xPlayer.steam,
+                description = Locals.Main.ID .. ': ' .. xPlayer.source .. Locals.Player.Steam .. ' : ' .. xPlayer.steam,
                 icon = 'user',
                 arrow = true,
                 onSelect = function()

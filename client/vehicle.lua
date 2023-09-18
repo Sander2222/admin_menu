@@ -65,9 +65,9 @@ function  OpenVehMenu()
 end
 
 function OpenDeleteVehicleDialog()
-    local input = lib.inputDialog('Fahrzeug löschen', {
-        {type = 'input', label = 'Kennzeichen', description = 'Das Plate von dem Fahrzeug', required = true, min = 1, max = 1000},
-        {type = 'checkbox', label = 'Fahrzeug direkt löschen'},
+    local input = lib.inputDialog(Locals.Vehicle.DelVehicle, {
+        {type = 'input', label = Locals.Vehicle.Plate, description = Locals.Vehicle.Vehicleplate, required = true, min = 1, max = 1000},
+        {type = 'checkbox', label = Locals.Vehicle.InstantDelete},
     })
 
     if not input then return end
@@ -76,8 +76,8 @@ function OpenDeleteVehicleDialog()
 end
 
 function OpenGiveVehicleToPlayerDialog()
-    local input = lib.inputDialog('Fahrzeug geben', {
-        {type = 'input', label = 'Spieler ID', description = 'Gebe hier ein Steamnamen, ID oder den Namen von einem Spieler ein', required = true, min = 1, max = 1000}
+    local input = lib.inputDialog(Locals.Vehicle.GiveVehicle, {
+        {type = 'input', label = Locals.Main.ID, description = Locals.Player.GiveEnterID, required = true, min = 1, max = 1000}
     })
 
     if not input then return end
@@ -93,25 +93,26 @@ function DelNearVehicle()
 
     if VehiclePedIsIn ~= 0 then
         DeleteEntity(VehiclePedIsIn)
-        Config.ClientNotify('Du hast das Fahrzeug in deiner Nähe gelöscht')
+        Config.ClientNotify(Locals.Vehicle.DelNear)
     else
         if DoesEntityExist(FirstVehicle) then
             DeleteEntity(FirstVehicle)
-            Config.ClientNotify('Du hast das Fahrzeug in deiner Nähe gelöscht')
+            Config.ClientNotify(Locals.Vehicle.DelNear)
         else
-            Config.ClientNotify('Es ist kein Fahrzeug in der nähe')
+            Config.ClientNotify(Locals.Vehicle.NoVehNear)
         end 
     end
 
 end
 
 function OpenDelVehicleRadiusDialog()
-    local input = lib.inputDialog('Delete Vehicle in Radius', {
-        {type = 'number', label = 'Radius', description = 'In wie vielen Metern sollen alle Fahrzeuge entfernt werden', required = true, default = 5, icon = 'hashtag'},
+    local input = lib.inputDialog(Locals.Vehicle.DelInRadius, {
+        {type = 'number', label = Locals.Vehicle.Radius, description = Locals.Vehicle.RadiusDesc, required = true, default = 5, icon = 'hashtag'},
     })
 
     if not input then return end  
 
+    -- to Float
     local Radius = tonumber(input[1]) / 1.0
 
     if Radius then
@@ -125,18 +126,18 @@ function OpenDelVehicleRadiusDialog()
             end
         end
 
-        Config.ClientNotify(('Du hast die Fahrzeuge im Umkreis von %s gelöscht'):format(Radius))
+        Config.ClientNotify((Locals.Vehicle.Delsuccess):format(Radius))
     end
 end
 
 function OpenVehSpawnnMenu(PlayerID)
-    local input = lib.inputDialog('Spawn Vehicle', {
-        {type = 'input', label = 'Vehicle Hash', description = 'Write here Vehicle Hash', required = true, min = 4, max = 16},
-        {type = 'input', label = 'Vehicle Plate', description = 'Write here you Vehicle Plate', icon = 'hashtag'},
-        {type = 'checkbox', label = 'Random Plate'},
-        {type = 'color', label = 'Vehicle Primarycolor', default = '#000000'},
-        {type = 'color', label = 'Vehicle Secondarycolor', default = '#000000'},
-        {type = 'checkbox', label = 'Save in DB'}
+    local input = lib.inputDialog(Locals.Vehicle.SpawnVehicle, {
+        {type = 'input', label = Locals.Vehicle.SpawnName, description = Locals.Vehicle.SpawnNameDesc, required = true, min = 4, max = 16},
+        {type = 'input', label = Locals.Vehicle.Plate, description = Locals.Vehicle.PlateDesc, icon = 'hashtag'},
+        {type = 'checkbox', label = Locals.Vehicle.RandomPlate},
+        {type = 'color', label = Locals.Vehicle.PrimaryColor, default = '#000000'},
+        {type = 'color', label = Locals.Vehicle.PrimaryColor, default = '#000000'},
+        {type = 'checkbox', label = Locals.Vehicle.SaveInDB}
     })
 
     if not input then return end
@@ -151,8 +152,8 @@ function OpenVehSpawnnMenu(PlayerID)
 
     if not IsModelInCdimage(vehHash) or not IsModelAVehicle(vehHash) then
 
-        Config.ClientNotify('Ungültiger Fahrzeughash oder spawnname existiert nicht')
-        return 
+        Config.ClientNotify(Locals.Vehicle.noTExistent)
+        return
     end
     
     if RandomPlate then
@@ -162,7 +163,6 @@ function OpenVehSpawnnMenu(PlayerID)
             numberPlate = Config.BasicPlate
         end
     end
-
 
     ESX.Game.SpawnVehicle(VehicleSpawnName, GetEntityCoords(ped), 100.0, function(vehicle)
         SetVehicleNumberPlateText(vehicle, numberPlate)

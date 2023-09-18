@@ -13,6 +13,7 @@ Locals = {
 
         Message = 'Message',
         Empty = 'Your input is empty',
+        ID = 'ID',
     },
     Self = {
         SelfMenu = 'Self Menu',
@@ -83,7 +84,6 @@ Locals = {
         SearchPlayer = 'Search player',
         Refresh = 'Refresh',
         RefreshList = 'Refresh list',
-        ID = 'ID',
         Steam = 'Steam',
         Job = 'Job',
         Group = 'Group',
@@ -194,6 +194,33 @@ Locals = {
         Spawn = 'Spawn vehicle',
         GivePlayer = 'Give vehicle to player',
         DelPlayer = 'Delete vehicle from player',
+
+        DelVehicle = 'Delete vehicle',
+        Plate = 'Plate',
+        Vehicleplate = 'Vehicle plate',
+        InstantDelete = 'Delete vehicle instant',
+
+        -- Spawn
+        SpawnVehicle = 'Spawn vehicle',
+        GiveVehicle = 'Give vehicle',
+        GiveEnterID = 'Enter player ID',
+        SpawnName = 'Spawnname',
+        SpawnNameDesc = 'Enter the spawnname from the vehicle',
+        PlateDesc = 'Enter the plate (not needed)',
+        RandomPlate = 'Random plate',
+        PrimaryColor = 'Primary color',
+        SecondaryColor = 'Secondary color',
+        SaveInDB = 'Save in DB?',
+        noTExistent = 'non-existent spawnname',
+
+        -- Del
+        NoVehNear = 'There is no vehicle nearby',
+        DelNear = 'You have deleted the vehicle near you',
+
+        DelInRadius = 'Delete vehicles in radius',
+        Radius = 'Radius',
+        RadiusDesc = 'In how many meters should be removed all vehicles',
+        Delsuccess  = 'You have deleted the vehicles within %s radius', -- %s is how many vehicles (int)
     },
 
     Server = {
