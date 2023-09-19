@@ -10,7 +10,8 @@ function CheckGroup(Player, DoAction)
     end
 
     if DoAction then
-        xPlayer.kick('Du wurdest vorerst gekickt weil du ein Event getriggert hast, was du nicht darfst')
+        xPlayer.kick(Locals.Server.NoGroup)
+        -- Webhook
     end
 
     return false
@@ -28,14 +29,14 @@ function AddWebhookMessage(AdminID, Target, msg, type, Data)
 
             if #Data ~= 0 then
 
-                msg = msg .. '\n\n **Data:** \n'
+                msg = msg .. '\n\n **' .. Locals.Server.Data .. ':** \n'
 
                 for k, v in pairs(Data) do
                     msg = msg .. v .. '\n'
                 end
             end
 
-            msg = msg .. '\n\n **Player Info:** \n' .. GetPlayerFootprints(AdminID)
+            msg = msg .. '\n\n **' .. Locals.Server.PlayerInfo .. ':** \n' .. GetPlayerFootprints(AdminID)
 
             SendDiscord(msg)
         elseif type == 'player' then
@@ -43,17 +44,17 @@ function AddWebhookMessage(AdminID, Target, msg, type, Data)
 
             if #Data ~= 0 then
 
-                msg = msg .. '\n\n **Data:** \n'
+                msg = msg .. '\n\n **'.. Locals.Server.Data .. ':** \n'
 
                 for k, v in pairs(Data) do
                     msg = msg .. v .. '\n'
                 end
             end
 
-            msg = msg .. '\n\n **Admin Info:** \n' .. GetPlayerFootprints(AdminID)
+            msg = msg .. '\n\n **' .. Locals.Server.AdminInfo .. ':** \n' .. GetPlayerFootprints(AdminID)
 
 
-            msg = msg .. '\n\n **Player Info:** \n' .. GetPlayerFootprints(Target)
+            msg = msg .. '\n\n **' .. Locals.Server.PlayerInfo .. ':** \n' .. GetPlayerFootprints(Target)
 
             SendDiscord(msg)
         end
@@ -65,7 +66,7 @@ AddEventHandler('admin_menu:server:KillPlayer',function(Target)
     if CheckGroup(source, true) then
         TriggerClientEvent('esx:killPlayer', Target)
 
-        AddWebhookMessage(source, Target, 'Ein Admin hat einen anderen Spieler über das Adminmenu getötet', 'player', {'Target ID: ' .. tostring(Target)})
+        AddWebhookMessage(source, Target, Locals.Server.AdminKillPlayer, 'player', {'Target ID: ' .. tostring(Target)})
     end
 end)
 
@@ -76,7 +77,7 @@ AddEventHandler('admin_menu:server:GiveArmorToPlayer',function(Target)
 
         SetPedArmour(Ped, 100)
 
-        AddWebhookMessage(source, Target, 'Ein Admin hat einen anderen Spieler Armor gegeben', 'player', {'Target ID: ' .. tostring(Target)})
+        AddWebhookMessage(source, Target, Locals.Server.AdminArmorPlayr, 'player', {'Target ID: ' .. tostring(Target)})
     end
 end)
 
@@ -87,10 +88,10 @@ AddEventHandler('admin_menu:server:RemoveWeaponComponent',function(Target, Weapo
 
         if xTarget.hasWeaponComponent(string.upper(WeaponName), Component) then
             xTarget.removeWeaponComponent(string.upper(WeaponName), Component)
-            AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler eine Waffen Componente entfernt', 'player', {'Weapon: ' .. WeaponName, 'Component: ' .. Component})
-            Config.ServerNotify(Target, 'Ein Admin hat die eine Waffen Componente entfernt: ' .. Component)
+            AddWebhookMessage(source, Target, Locals.ser.AdminRemoveCompPlayer, 'player', {'Weapon: ' .. WeaponName, 'Component: ' .. Component})
+            Config.ServerNotify(Target, Locals.Server.AdminRemoveCompPlayerNotifyTarget .. ': ' .. Component)
         else
-            Config.ServerNotify(source, 'Der Spieler hat diese Componente nicht')
+            Config.ServerNotify(source, Locals.Server.AdminRemoveCompPlayerNotifyAdmin)
         end
     end
 end)
@@ -101,11 +102,11 @@ AddEventHandler('admin_menu:server:KickPlayer',function(msg, Target)
         local xTarget = ESX.GetPlayerFromId(Target)
 
         if xTarget ~= nil then
-            xTarget.kick('Server Kick: ' ..msg)
-            AddWebhookMessage(source, Target, 'Ein Admin hat einen Spieler gekickt', 'player', {'Message: ' .. msg})
+            xTarget.kick(Locals.Server.ServerKick .. ': ' ..msg)
+            AddWebhookMessage(source, Target, Locals.Server.AdminKickPlayer, 'player', {'Message: ' .. msg})
 
         else 
-            Config.ServerNotify(source, 'Dieser Spieler ist nicht online')
+            Config.ServerNotify(source, Locals.Server.AdminKickPlayerAdmin)
         end
     end
 end)
@@ -117,11 +118,11 @@ AddEventHandler('admin_menu:server:GiveWeaponToPlayer',function(WeaponName, Ammo
 
         if not xTarget.hasWeapon(string.upper(WeaponName)) then
             xTarget.addWeapon(string.upper(WeaponName), Ammo)
-            Config.ServerNotify(Target, 'Ein Admin hat dir eine Waffe gegeben: ' .. ESX.GetWeaponLabel(string.upper(WeaponName)))
+            Config.ServerNotify(Target, Locals.Server.AdminGiveWeaponPlayerTarget ..': ' .. ESX.GetWeaponLabel(string.upper(WeaponName)))
 
-            AddWebhookMessage(source, Target, 'Ein Admin hat einem anderen Spieler eine Waffe gegeben', 'player', {'Weapon: ' .. WeaponName, 'Ammu: ' .. Ammo})
+            AddWebhookMessage(source, Target, Locals.Server.AdminGiveWeaponPlayer, 'player', {'Weapon: ' .. WeaponName, 'Ammu: ' .. Ammo})
         else
-            Config.ServerNotify(source, 'Der Spieler hat diese Waffe schon')
+            Config.ServerNotify(source, Locals.Server.AdminGiveWeaponPlayerAdmin)
         end
 
     end
@@ -145,7 +146,7 @@ AddEventHandler('admin_menu:server:UpdatePlayerAmmo',function(Weapon, Ammo, Basi
         xTarget.removeWeaponAmmo(string.upper(Weapon), BasicAmmo)
         xTarget.addWeaponAmmo(string.upper(Weapon), Ammo)
         
-        AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler seiner Waffe die Munition geupdated', 'player', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
+        AddWebhookMessage(source, Target, Locals.Server.AdminUpdateAmmuPlayer, 'player', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
     end
 end)
 
@@ -156,8 +157,8 @@ AddEventHandler('admin_menu:server:RemovePlayerWeapon',function(Weapon, Target)
 
         
         xTarget.removeWeapon(string.upper(Weapon))
-        Config.ServerNotify(Target, 'Ein Admin hat dir eine Waffe entzogen: ' .. ESX.GetWeaponLabel(Weapon))
-        AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler eine Waffe entfernt', 'player', {'Weapon: ' .. Weapon})
+        Config.ServerNotify(Target, Locals.Server.AdminRemoveWeaponTarget .. ': ' .. ESX.GetWeaponLabel(Weapon))
+        AddWebhookMessage(source, Target, Locals.Server.AdminRemoveWeapon, 'player', {'Weapon: ' .. Weapon})
     end
 end)
 
@@ -166,8 +167,8 @@ AddEventHandler('admin_menu:server:SendPrivateMessage',function(MSG, Target)
     if CheckGroup(source, true) then
 
         Config.ServerNotify(Target, MSG)
-        Config.ServerNotify(source, 'Nachricht wurde geschickt')
-        AddWebhookMessage(source, Target, 'Ein Admin hat einem anderen Spieler eine Nachricht geschickt', 'player', {'Message: ' .. MSG})
+        Config.ServerNotify(source, Locals.Server.AdminPrivateMSGAdmin)
+        AddWebhookMessage(source, Target, Locals.Server.AdminPrivateMSG, 'player', {'Message: ' .. MSG})
     end
 end)
 
@@ -178,10 +179,10 @@ AddEventHandler('admin_menu:server:UpdatePlayerJob',function(JobName, Grade, Tar
 
         if ESX.DoesJobExist(string.lower(JobName), Grade)  then
             xTarget.setJob(JobName, tonumber(Grade))
-            Config.ServerNotify(Target, 'Dein Job wurde zurückgesetzt')
-            AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler den Job geändert', 'player', {'Neuer Job: ' .. JobName, 'Neuer Jobgrade: ' .. Grade})
+            Config.ServerNotify(Target, Locals.Server.AdminUpdateJobPlayerTarget)
+            AddWebhookMessage(source, Target, Locals.Server.AdminUpdateJobPlayer, 'player', {'new Job: ' .. JobName, 'Grade: ' .. Grade})
         else
-            Config.ServerNotify(source, 'Dein angegebener Job existiert nicht')
+            Config.ServerNotify(source, Locals.Server.AdminUpdateJobPlayerAdmin)
         end
     end
 end)
@@ -194,7 +195,7 @@ AddEventHandler('admin_menu:server:RemoveAllPlayerWeapons', function(Target)
         local msg = ''
 
         if #PlayerWeapons == 0 then
-            Config.ServerNotify(source, 'Der Spieler hat keine Waffen')
+            Config.ServerNotify(source, Locals.Server.AdminRemoveAllWeaponAdmin)
             return
         end
         
@@ -203,9 +204,9 @@ AddEventHandler('admin_menu:server:RemoveAllPlayerWeapons', function(Target)
             msg = msg .. v.name .. ', '
         end
 
-        Config.ServerNotify(Target, 'Dir wurden alle deine Waffen entfernt')
+        Config.ServerNotify(Target, Locals.Server.AdminRemoveAllWeaponTarget)
 
-        AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler alle Waffen entfernt', 'player', {'Waffen: ' .. msg})
+        AddWebhookMessage(source, Target, Locals.Server.AdminRemoveAllWeapon, 'player', {'Weapons: ' .. msg})
     end
 end)
 
@@ -217,7 +218,7 @@ AddEventHandler('admin_menu:server:RemoveAllPlayerItems',function(Target)
         local msg = ''
 
         if #TargetInventory == 0 then
-            Config.ServerNotify(source, 'Der Spieler hat keine Items im Inventar')
+            Config.ServerNotify(source, Locals.Server.AdminRemoveAllItemAdmin)
             
             return
         end
@@ -228,7 +229,8 @@ AddEventHandler('admin_menu:server:RemoveAllPlayerItems',function(Target)
             msg = msg .. k .. '(Count: ' .. v ..'), '
         end
 
-        AddWebhookMessage(source, Target, 'Ein Admin hat einem das ganze Inventar entfernt', 'player', {'Items: ' .. msg})
+        Config.ServerNotify(Target, Locals.Server.AdminRemoveAllItemTarget)
+        AddWebhookMessage(source, Target, Locals.Server.AdminRemoveAllItem, 'player', {'Items: ' .. msg})
     end
 end)
 

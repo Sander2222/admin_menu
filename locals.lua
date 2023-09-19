@@ -232,5 +232,41 @@ Locals = {
         DeleteAllVehDesc = 'Are you sure you want to delete all vehicles?',
         AnnounceMSG = 'Announce message',
         AnnounceMSGDesc = 'All players get this message',
+    },
+
+    Server = {
+        NoGroup = 'You were kicked because you triggered an event, which you are not allowed to do.',
+    
+        -- Webhook
+        Data = 'Data',
+        PlayerInfo = ' Player info',
+        AdminInfo = 'Admin info',
+
+        AdminKillPlayer = 'An admin has killed another player via the admin menu',
+        AdminArmorPlayr = 'An admin has given another player Armor',
+        AdminRemoveCompPlayer = 'An admin has removed a weapon component from a player',
+        AdminRemoveCompPlayerNotifyAdmin = 'The player does not have this component',
+        AdminRemoveCompPlayerNotifyTarget = 'An admin has removed one weapons component',
+        AdminKickPlayer = 'An admin has kicked a player',
+        AdminKickPlayerAdmin = 'This player is not online',
+        AdminGiveWeaponPlayer = 'An admin has given a weapon to another player',
+        AdminGiveWeaponPlayerAdmin = 'The player already has this weapon',
+        AdminGiveWeaponPlayerTarget = 'An admin gave you a gun',
+        AdminUpdateAmmuPlayer = 'An admin has updated the ammunition from a player of his weapon',
+        AdminRemoveWeapon = 'An admin has removed a weapon from a player',
+        AdminRemoveWeaponTarget = 'An admin has taken away a weapon from you',
+        AdminPrivateMSG = 'An admin has sent a message to another player',
+        AdminPrivateMSGAdmin = 'Message was sent',
+        AdminUpdateJobPlayer = 'An admin has changed the job of a player',
+        AdminUpdateJobPlayerTarget = 'Your job got reset',
+        AdminUpdateJobPlayerAdmin = 'Your specified job does not exist',
+        AdminRemoveAllWeapon = 'An admin has removed all weapons from a player',
+        AdminRemoveAllWeaponTarget = 'You have all your weapons removed',
+        AdminRemoveAllWeaponAdmin = 'The player has no weapons',
+        AdminRemoveAllItem = 'An admin has removed the whole inventory',
+        AdminRemoveAllItemTarget = 'You have been removed all items',
+        AdminRemoveAllItemAdmin = 'The player has no items in the inventory',
+
+        ServerKick = 'Server kick',
     }
 }
