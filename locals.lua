@@ -224,6 +224,13 @@ Locals = {
     },
 
     Server = {
-        
+        Menu = 'Server Menu',
+        SendAnnounce = 'Send Announce',
+        ReviveAll = 'Revive all',
+        ReviveAllDesc = 'Are you sure you want to revive every player?',
+        DeleteAllVeh = 'Delete all vehicles',
+        DeleteAllVehDesc = 'Are you sure you want to delete all vehicles?',
+        AnnounceMSG = 'Announce message',
+        AnnounceMSGDesc = 'All players get this message',
     }
 }
