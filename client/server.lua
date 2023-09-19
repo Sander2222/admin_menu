@@ -1,11 +1,11 @@
 function OpenServerMenu()
     lib.registerContext({
         id = 'ServMenu',
-        title = Locals.Self.Menu,
+        title = Locals.ServerMenu.Menu,
         options = {
             {
-                title = Locals.Server.SendAnnounce,
-                description = Locals.Self.Menu,
+                title = Locals.ServerMenu.SendAnnounce,
+                description = Locals.ServerMenu.Menu,
                 icon = 'bullhorn',
                 arrow = true,
                 onSelect = function()
@@ -15,8 +15,8 @@ function OpenServerMenu()
                 end,
             },
             {
-                title = Locals.Server.ReviveAll,
-                description = Locals.Self.Menu,
+                title = Locals.ServerMenu.ReviveAll,
+                description = Locals.ServerMenu.Menu,
                 icon = 'laptop-medical',
                 onSelect = function()
                 if CanUseFunction('reviveall') then
@@ -25,8 +25,8 @@ function OpenServerMenu()
                 end,
             },
             {
-                title = Locals.Server.DeleteAllVeh,
-                description = Locals.Self.Menu,
+                title = Locals.ServerMenu.DeleteAllVeh,
+                description = Locals.ServerMenu.Menu,
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
@@ -52,8 +52,8 @@ end
 
 function OpenDelAllVehDialog()
     local alert = lib.alertDialog({
-        header = Locals.Server.DeleteAllVeh,
-        content =  Locals.Server.DeleteAllVehDesc,
+        header = Locals.ServerMenu.DeleteAllVeh,
+        content =  Locals.ServerMenu.DeleteAllVehDesc,
         centered = true,
         cancel = true
     })
@@ -65,8 +65,8 @@ end
 
 function OpenReviveDialog()
     local alert = lib.alertDialog({
-        header = Locals.Server.ReviveAll,
-        content = Locals.Server.ReviveAllDesc,
+        header = Locals.ServerMenu.ReviveAll,
+        content = Locals.ServerMenu.ReviveAllDesc,
         centered = true,
         cancel = true
     })
@@ -77,8 +77,8 @@ function OpenReviveDialog()
 end
 
 function OpenAnnounceDialog()
-    local input = lib.inputDialog(Locals.Self.MoneyAdd, {
-        {type = 'input', label = Locals.Server.AnnounceMSG, description = Locals.Server.AnnounceMSGDesc},
+    local input = lib.inputDialog(Locals.ServerMenu.Menu, {
+        {type = 'input', label = Locals.ServerMenu.AnnounceMSG, description = Locals.ServerMenu.AnnounceMSGDesc},
     })
 
     if not input then return end

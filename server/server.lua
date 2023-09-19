@@ -1,4 +1,6 @@
 --- @usage This function checks if the player is able to use the adminmenu
+--- @param Player integer If from the player
+--- @param DoAction boolean If this is true then the player get kicked when he doenst have a admin role
 function CheckGroup(Player, DoAction)
     local xPlayer = ESX.GetPlayerFromId(Player)
     local PlayerGroup = xPlayer.getGroup()

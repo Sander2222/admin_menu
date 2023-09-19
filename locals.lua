@@ -223,7 +223,7 @@ Locals = {
         Delsuccess  = 'You have deleted the vehicles within %s radius', -- %s is how many vehicles (int)
     },
 
-    Server = {
+    ServerMenu = {
         Menu = 'Server Menu',
         SendAnnounce = 'Send Announce',
         ReviveAll = 'Revive all',
