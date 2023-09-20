@@ -14,6 +14,24 @@ Config.ServerNotify = function(src, msg)
     })
 end
 
+Config.SendAnnounce = function(Player, Message)
+    TriggerClientEvent('ox_lib:notify', -1, {
+        id = 'some_identifier',
+        title = 'Announce',
+        description = Message,
+        position = 'top',
+        style = {
+            backgroundColor = '#141517',
+            color = '#C1C2C5',
+            ['.description'] = {
+              color = '#909296'
+            }
+        },
+        icon = 'ban',
+        iconColor = '#C53030'
+    })
+end
+
 Config.Groups = {
     ['admin'] = {
 
@@ -102,24 +120,6 @@ Config.Groups = {
         ['delallveh'] = true
     },
 }
-
-Config.SendAnnounce = function(Player, Message)
-    TriggerClientEvent('ox_lib:notify', -1, {
-        id = 'some_identifier',
-        title = 'Announce',
-        description = Message,
-        position = 'top',
-        style = {
-            backgroundColor = '#141517',
-            color = '#C1C2C5',
-            ['.description'] = {
-              color = '#909296'
-            }
-        },
-        icon = 'ban',
-        iconColor = '#C53030'
-    })
-end
 
 Config.BasicPlate = 'Test'
 Config.UnemployedJob = 'unemployed'
