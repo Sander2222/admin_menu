@@ -241,12 +241,12 @@ AddEventHandler('admin_menu:server:GiveMoney',function(Money, Type)
 
         if Type == 'Hand' then
             xPlayer.addMoney(Money)
-            Config.ServerNotify(source, 'Du hast dir ' .. tostring(Money).. '$ gegeben')
+            Config.ServerNotify(source, (Locals.Server.AdminGiveMoneyAdmin):format(tostring(Money)))
         elseif Type == 'Bank' then
             xPlayer.addAccountMoney('bank', Money)
-            Config.ServerNotify(source, 'Du hast dir ' .. tostring(Money).. '$ gegeben')
+            Config.ServerNotify(source, (Locals.Server.AdminGiveMoneyAdmin):format(tostring(Money)))
         end
-        AddWebhookMessage(source, nil, 'Ein Admin hat sich Bargeld gegeben', 'self', {'Count: ' .. Money, 'Type: ' ..Type})
+        AddWebhookMessage(source, nil, Locals.Server.AdminGiveMoney, 'self', {'Count: ' .. Money, 'Type: ' ..Type})
     end
 end)
 
@@ -257,13 +257,13 @@ AddEventHandler('admin_menu:server:GiveMoneyToPlayer',function(Money, Type, Targ
 
         if Type == 'Hand' then
             xTarget.addMoney(Money)
-            Config.ServerNotify(Target, 'Dir wurden ' .. tostring(Money).. '$ gegeben')
+            Config.ServerNotify(Target, (Locals.Server.AdminGiveMoneyPlayerTarget):format(tostring(Money)))
         elseif Type == 'Bank' then
             xTarget.addAccountMoney('bank', Money)
-            Config.ServerNotify(Target, 'Dir wurden ' .. tostring(Money).. '$ gegeben')
+            Config.ServerNotify(Target, (Locals.Server.AdminGiveMoneyPlayerTarget):format(tostring(Money)))
         end
 
-        AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler geld gegeben', 'player', {'Count: ' .. Money, 'Type: ' ..Type})
+        AddWebhookMessage(source, Target, Locals.Server.AdminGiveMoneyPlayer, 'player', {'Count: ' .. Money, 'Type: ' ..Type})
     end
 end)
 
@@ -276,18 +276,18 @@ AddEventHandler('admin_menu:server:GiveItem',function(ItemName, Count, Target)
 
             if xPlayer.canCarryItem(ItemName, Count) then
                 xPlayer.addInventoryItem(ItemName, Count)
-                AddWebhookMessage(source, nil, 'Ein Admin hat sich ein Item gegeben', 'self', {'Item: ' .. ItemName, 'Count: ' .. Count})
+                AddWebhookMessage(source, nil, Locals.Server.AdminGiveItem, 'self', {'Item: ' .. ItemName, 'Count: ' .. Count})
             else 
-                Config.ServerNotify(source, 'Du kannst das Item nicht tragen')
+                Config.ServerNotify(source, Locals.Server.CantCarry)
             end
         else
             local xTarget = ESX.GetPlayerFromId(Target)
 
             if xTarget.canCarryItem(ItemName, Count) then
                 xTarget.addInventoryItem(ItemName, Count)
-                AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler ein Item gegeben', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
+                AddWebhookMessage(source, Target, Locals.Server.AdminGiveItem, 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
             else 
-                Config.ServerNotify(source, 'Er kannst das Item nicht tragen')
+                Config.ServerNotify(source, Locals.Server.CantCarry)
             end
         end
     end
@@ -303,8 +303,8 @@ AddEventHandler('admin_menu:server:DelAllVehicles',function()
             DeleteEntity(Vehicle)
         end
 
-        Config.ServerNotify(source, ('Du hast %s Fahrzeuge gelöscht'):format(#Vehicles))
-        AddWebhookMessage(source, nil, 'Ein Admin hat alle Autos ingame gelöscht', 'self', {})
+        Config.ServerNotify(source, (Locals.Server.AdminDelAllVehiclesAdmin):format(tostring(#Vehicles)))
+        AddWebhookMessage(source, nil, Locals.Server.AdminDelAllVehicles, 'self', {})
     end
 end)
 

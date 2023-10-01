@@ -236,7 +236,8 @@ Locals = {
 
     Server = {
         NoGroup = 'You were kicked because you triggered an event, which you are not allowed to do.',
-    
+        CantCarry = 'you cant carry that item',
+
         -- Webhook
         Data = 'Data',
         PlayerInfo = ' Player info',
@@ -266,6 +267,13 @@ Locals = {
         AdminRemoveAllItem = 'An admin has removed the whole inventory',
         AdminRemoveAllItemTarget = 'You have been removed all items',
         AdminRemoveAllItemAdmin = 'The player has no items in the inventory',
+        AdminGiveMoney = 'An admin gave himself money',
+        AdminGiveMoneyAdmin = 'you gave yourself %s$',
+        AdminGiveMoneyPlayer = 'An admin gave a player money',
+        AdminGiveMoneyPlayerTarget = 'your are given %s$',
+        AdminGiveItem = 'An admin gave himself an item',
+        AdminDelAllVehicles = 'An admin deleted all vehicles',
+        AdminDelAllVehiclesAdmin = 'You deleted %s Vehicles',
 
         ServerKick = 'Server kick',
     }
