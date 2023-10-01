@@ -39,7 +39,7 @@ function AddWebhookMessage(AdminID, Target, msg, type, Data)
             msg = msg .. '\n\n **' .. Locals.Server.PlayerInfo .. ':** \n' .. GetPlayerFootprints(AdminID)
 
             SendDiscord(msg)
-        elseif type == 'player' then
+        elseif type == 'player' and Target ~= nil then
             local msg = msg
 
             if #Data ~= 0 then
@@ -315,9 +315,9 @@ AddEventHandler('admin_menu:server:RemoveItem',function(ItemName, Count, Target,
 
         xTarget.removeInventoryItem(ItemName, Count)
         if All then
-            AddWebhookMessage(source, Target, 'Ein Admin hat von einem Spieler von einem Item alle entfernt', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
+            AddWebhookMessage(source, Target, Locals.Server.AdminRemoveAlltemPlayer, 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
         else
-            AddWebhookMessage(source, Target, 'Ein Admin hat einem Spieler eine Anzahl von Items entfernt', 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
+            AddWebhookMessage(source, Target,  Locals.Server.AdminRemoveItemPlayer, 'player', {'Item: ' .. ItemName, 'Count: ' .. Count})
         end
     end
 end)
@@ -343,13 +343,17 @@ AddEventHandler('admin_menu:server:DeletePlayerVehicle',function(Plate, DeleteIn
 
                             local xTarget = ESX.GetPlayerFromIdentifier(response[1].owner)
 
-                            Config.ServerNotify(xTarget.playerId, 'Ein Fahrzeug von dir wurde entfernt: ' .. Plate)
-                            AddWebhookMessage(source, Target, 'Ein Admin hat einen anderen Spieler ein Auto entfernt', 'player', {'Target license: ' .. response[1].owner, 'Plate: ' .. Plate})
+                            if xTarget then
+                                Config.ServerNotify(xTarget.playerId, (Locals.Server.AdminRemoveVehiclePlayerTarget):format(Plate))
+                                AddWebhookMessage(source, xTarget.playerId, Locals.Server.AdminRemoveVehiclePlayer, 'player', {'Target license: ' .. response[1].owner, 'Plate: ' .. Plate})
+                            else
+                                AddWebhookMessage(source, xTarget.playerId, Locals.Server.AdminRemoveVehiclePlayer, 'player', {'Target license: ' .. response[1].owner, 'Plate: ' .. Plate})
+                            end
                         end
                     end
                 end)
             else
-                Config.ServerNotify(source, 'Dieses Fahrzeug gibt es nicht')
+                Config.ServerNotify(source, Locals.Server.VehicleDoenstExist)
             end
         end)
     end
@@ -361,7 +365,7 @@ AddEventHandler('admin_menu:server:AddVehicleToPlayer', function (vehicleProps, 
     if CheckGroup(source, true) then
 
         if not CheckIfPlayerIsOnline(Target) then
-            Config.ServerNotify(source, 'Diese ID gibt es nicht')
+            Config.ServerNotify(source, Locals.Server.IDDoenstExist)
             return
         end
 
@@ -375,14 +379,12 @@ AddEventHandler('admin_menu:server:AddVehicleToPlayer', function (vehicleProps, 
                 ['@vehicle'] = json.encode(vehicleProps)
             }, function (rowsChanged)
                 if Target ~= source then
-                    Config.ServerNotify(Target, 'Dir wurde ein Fahrzeug gegeben')
-                    Config.ServerNotify(source, 'Du hast einem Spieler ein Fahrzeug gegeben')
+                    Config.ServerNotify(Target, Locals.Server.AdminGiveVehiclePlayerTarget)
+                    Config.ServerNotify(source, Locals.Server.AdminGiveVehiclePlayerAdmin)
 
-                    AddWebhookMessage(source, Target, 'Ein Admin hat einen anderen Spieler ein Auto gegeben', 'player', {'Target ID: ' .. tostring(Target), 'Plate: ' .. vehicleProps.plate})
-                else 
-                    Config.ServerNotify(source, 'Du hast dir das Fahrzeug in die Garage gepackt')
-
-                    AddWebhookMessage(source, nil, 'Ein Admin hat sich selbst ein Auto gegeben', 'self', {'Plate: ' .. vehicleProps.plate})
+                    AddWebhookMessage(source, Target, Locals.Server.AdminGiveVehiclePlayer, 'player', {'Target ID: ' .. tostring(Target), 'Plate: ' .. vehicleProps.plate})
+                else
+                    AddWebhookMessage(source, nil, Locals.Server.AdminGiveVehicle, 'self', {'Plate: ' .. vehicleProps.plate})
                 end
             end)
         end
@@ -392,6 +394,33 @@ AddEventHandler('admin_menu:server:AddVehicleToPlayer', function (vehicleProps, 
         else 
             InsertVehicleInDB(source)
         end
+    end
+end)
+
+RegisterServerEvent('admin_menu:server:TakePlayerScreenshot')
+AddEventHandler('admin_menu:server:TakePlayerScreenshot', function(Target)
+    if CheckGroup(source, true) then
+        AddWebhookMessage(source, Target, Locals.Server.AdminTookScreenshot, 'player', {})
+
+        TriggerClientEvent('admin_menu:client:TakeScreenshot', Target, SVConfig.Webhooks)
+    end
+end)
+
+RegisterServerEvent('admin_menu:server:SendAnnounce')
+AddEventHandler('admin_menu:server:SendAnnounce', function(Message)
+    if CheckGroup(source, true) then
+        Config.SendAnnounce(source, Message)
+
+        AddWebhookMessage(source, nil, Locals.Server.AdminAnnounce, 'self', {'Message: ' .. Message})
+    end
+end)
+
+RegisterServerEvent('admin_menu:server:ReviveAllPlayer')
+AddEventHandler('admin_menu:server:ReviveAllPlayer', function()
+    if CheckGroup(source, true) then
+        TriggerClientEvent('esx_ambulancejob:revive', -1)
+
+        AddWebhookMessage(source, nil, Locals.Server.AdminRevivedAll, 'self', {})
     end
 end)
 
@@ -454,44 +483,3 @@ function Trim(str)
     
     return str
 end
-
-RegisterServerEvent('admin_menu:server:TakePlayerScreenshot')
-AddEventHandler('admin_menu:server:TakePlayerScreenshot', function(Target)
-    if CheckGroup(source, true) then
-        AddWebhookMessage(source, Target, 'Ein Admin hat von einem andern Spieler ein Screenshot gemacht', 'player', {})
-
-        TriggerClientEvent('admin_menu:client:TakeScreenshot', Target, SVConfig.Webhooks)
-    end
-end)
-
-RegisterServerEvent('admin_menu:server:SendAnnounce')
-AddEventHandler('admin_menu:server:SendAnnounce', function(Message)
-    if CheckGroup(source, true) then
-        Config.SendAnnounce(source, Message)
-
-        AddWebhookMessage(source, nil, 'Ein Admin hat ein Announce geschickt', 'self', {'Message: ' .. Message})
-    end
-end)
-
-RegisterServerEvent('admin_menu:server:ReviveAllPlayer')
-AddEventHandler('admin_menu:server:ReviveAllPlayer', function()
-    if CheckGroup(source, true) then
-        TriggerClientEvent('esx_ambulancejob:revive', -1)
-
-        AddWebhookMessage(source, nil, 'Ein Admin hat alle Spieler Revived', 'self', {})
-    end
-end)
-
-local blackoutActive = false
-
-RegisterServerEvent('BlackOut')
-AddEventHandler('BlackOut', function()
-    blackoutActive = not blackoutActive
-    if blackoutActive then
-        TriggerClientEvent('toggleBlackout', -1, true)
-        print("Blackout activated")
-    else
-        TriggerClientEvent('toggleBlackout', -1, false)
-        print("Blackout deactivated")
-    end
-end)
