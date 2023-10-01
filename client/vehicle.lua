@@ -136,7 +136,7 @@ function OpenVehSpawnnMenu(PlayerID)
         {type = 'input', label = Locals.Vehicle.Plate, description = Locals.Vehicle.PlateDesc, icon = 'hashtag'},
         {type = 'checkbox', label = Locals.Vehicle.RandomPlate},
         {type = 'color', label = Locals.Vehicle.PrimaryColor, default = '#000000'},
-        {type = 'color', label = Locals.Vehicle.PrimaryColor, default = '#000000'},
+        {type = 'color', label = Locals.Vehicle.SecondaryColor, default = '#000000'},
         {type = 'checkbox', label = Locals.Vehicle.SaveInDB}
     })
 

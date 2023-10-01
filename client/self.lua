@@ -87,16 +87,6 @@ function OpenSelfMenu()
                     end
                 end,
             },
-            -- {
-            --     title = Locals.Self.NoclipMe,
-            --     description = Locals.Self.SelfMenu,
-            --     icon = 'skull',
-            --     onSelect = function()
-            --         if CanUseFunction('noclip') then
-            --             Noclip()
-            --         end
-            --     end,
-            -- },
         }
     })
 
@@ -332,25 +322,3 @@ function GiveGun(GunName, GunLabel)
         TriggerServerEvent('admin_menu:server:GiveWeapon', GunName, Ammo)
     end
 end
-
--- Brauchst seine eigene Notify ESX NOCLIP TRIGGER xPlayer.triggerEvent('esx:noclip')
--- function Noclip()
---     ESX.TriggerServerCallback("esx:isUserAdmin", function(admin)
--- 		if admin then
---     local player = PlayerId()
-
---     local msg = "disabled"
--- 	if(noclip == false)then
--- 		noclip_pos = GetEntityCoords(ESX.PlayerData.ped, false)
--- 	end
-
--- 	noclip = not noclip
-
--- 	if(noclip)then
--- 		msg = "enabled"
--- 	end
-
--- 	TriggerEvent("chatMessage", "Noclip has been ^2^*" .. msg)
--- 	end
--- 	end)
--- end

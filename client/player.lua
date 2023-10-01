@@ -61,6 +61,7 @@ function SearchForPlayers(Search)
             break
         end
 
+        -- Steamname
         if string.match(string.upper(v.steam), UpperSearch) ~= nil then
 
             table.insert(Players, v)
