@@ -293,9 +293,21 @@ Locals = {
 
     Ban = {
         Banned = 'You got banned from the server',
+        BannedPerma = 'You got banned permanent from this server',
         Reason = 'Reason',
         Discord = 'The support discord',
         Date = 'Date',
         Time = 'Time',
+        PlayerCantBeBanned = 'This player cant be banned',
+        BanGetCheckeck = 'The Banlist get checked right now :)',
+        DiscordLink = 'https://discord.gg/123',
+        BanExpired = 'Your ban is expired. You get unbanned',
+        TimeRemaining = 'Time remaining',
+        Year = 'Year',
+        Month = 'Month',
+        Day = 'Day',
+        Hour = 'Hour',
+        Min = 'Minutes',
+        Sec = 'Seconds',
     }
 }
