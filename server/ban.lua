@@ -31,7 +31,7 @@ AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Typ
                 formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
     
                 MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
-                    xTarget.kick((Locals.Ban.Banned ..  '\n ' .. Locals.Ban.Reason .. ': %s\n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason, 'discord.gg/ssio'))
+                    xTarget.kick((Locals.Ban.Banned ..  '\n ' .. Locals.Ban.Reason .. ': %s\n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason, Locals.Ban.DiscordLink))
                 end)
     
                 return
@@ -44,10 +44,10 @@ AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Typ
         MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
             local Date = os.date("%d.%m.%Y", entryDuration)
             local Time = os.date("%H:%M:%S", entryDuration)
-            xTarget.kick((Locals.Ban.Banned .. '\n '.. Locals.Ban.Reason .. ': %s\n\n ' .. Locals.Ban.Date .. ': %s\n ' .. Locals.Ban.Time .. ': %s \n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason,  Date, Time, 'discord.gg/ssio'))
+            xTarget.kick((Locals.Ban.Banned .. '\n '.. Locals.Ban.Reason .. ': %s\n\n ' .. Locals.Ban.Date .. ': %s\n ' .. Locals.Ban.Time .. ': %s \n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason,  Date, Time, Locals.Ban.Locals.Ban.DiscordLink))
         end)
     else 
-        Config.ServerNotify(source, 'Dieser Spieler kann nicht gebannt werden')
+        Config.ServerNotify(source, Locals.Ban.PlayerCantBeBanned)
     end
 end)
 
@@ -56,10 +56,10 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
     local license = GetPlayerIdentifierByType(source, 'license')
     license = string.gsub(license, "license:", "")
 
-    MySQL.query("SELECT bantime, banreason FROM users WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ? LIMIT 1", { license }, function(result)
+    MySQL.query("SELECT bantime, banreason, identifier FROM users WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ? LIMIT 1", { license }, function(result)
         deferrals.defer()
+        deferrals.update(Locals.Ban.BanGetCheckeck)
         Wait(1000)
-        deferrals.update('Ban wird geprüft :)')
         
         if #result == 0 then            
             deferrals.done()
@@ -72,10 +72,9 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
                 -- Check if permanet
                 if Config.Times.per == (DBTime / 1000) then
 
-                    deferrals.done(('\nDu bist permanent von diesem Server gebannt\nGrund: %s\n\nSupport findest du hier: %s'):format(Reason, 'https:/discord.gg/ssio'))
+                    deferrals.done(('\n' .. Locals.Ban.BannedPerma .. '\n ' .. Locals.Ban.Reason .. ': %s\n\n ' .. Locals.Ban.Discord .. ': %s \n (%s)'):format(Reason, Locals.Ban.DiscordLink, result[1].identifier))
                 end
 
-                deferrals.update('Ban wird geprüft')
                 local Time = DBTime / 1000
                 local NowTime = os.time()
                 
@@ -83,7 +82,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
                 local future_time = os.date("%d.%m.%Y %H:%M", NowTime + timedif)
                 
                 if timedif <= 0 then
-                    deferrals.update('Dein Ban ist ausgelaufen und du wurdest entbannt')
+                    deferrals.update(Locals.Ban.BanExpired)
                     Wait(1500)
                     deferrals.done()
                 else
@@ -101,7 +100,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
                 
                     local minutes, seconds = math.floor(timedif / Config.Times.minute), timedif % Config.Times.sec
                 
-                    deferrals.done(('\nDu bist noch gebannt bis: %s\nVerbleibende Zeit: %d Jahre, %d Monate, %d Tage, %d Stunden, %d Minuten, %d Sekunden\n\nGrund: %s'):format(future_time, years, months, days, hours, minutes, seconds, Reason))
+                    deferrals.done(('\n ' .. Locals.Ban.Banned .. ': %s\n' .. Locals.Ban.TimeRemaining .. ': %d ' .. Locals.Ban.Year .. ', %d ' .. Locals.Ban.Month .. ', %d ' .. Locals.Ban.Day .. ', %d ' .. Locals.Ban.Hour', %d ' .. Locals.Ban.Min .. ', %d ' .. Locals.Ban.Sec .. '\n\n ' .. Locals.Ban.Reason .. ': %s \n ()'):format(future_time, years, months, days, hours, minutes, seconds, Reason, result[1].identifier))
                 end
             else
                 deferrals.done()
