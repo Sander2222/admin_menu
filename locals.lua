@@ -289,5 +289,13 @@ Locals = {
         AdminRevivedAll = 'An admin has revived all players',
 
         ServerKick = 'Server kick',
+    },
+
+    Ban = {
+        Banned = 'You got banned from the server',
+        Reason = 'Reason',
+        Discord = 'The support discord',
+        Date = 'Date',
+        Time = 'Time',
     }
 }

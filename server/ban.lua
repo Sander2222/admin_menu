@@ -1,16 +1,16 @@
--- CreateThread(function()
---     MySQL.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'users' AND COLUMN_NAME = 'admin_ban';", {}, function(response)
---         if next(response) == nil then
---             local SQLStatemant = [[
---                 ALTER TABLE users
---                 ADD COLUMN admin_ban TINYINT(1) DEFAULT 0,
---                 ADD COLUMN ban_duration TIMESTAMP NULL DEFAULT NULL;
---             ]]
---             MySQL.query(SQLStatemant, {}, function(response)
---             end)
---         end
---     end)
--- end)
+CreateThread(function()
+    MySQL.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'users' AND COLUMN_NAME = 'banreason';", {}, function(response)
+        if next(response) == nil then
+            local SQLStatemant = [[
+                ALTER TABLE users
+                ADD bantime TIMESTAMP,
+                ADD banreason VARCHAR(500);
+            ]]
+            MySQL.query(SQLStatemant, {}, function(response)
+            end)
+        end
+    end)
+end)
 
 RegisterNetEvent('admin_menu:server:AddPlayerBan')
 AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Type, Target)
@@ -31,7 +31,7 @@ AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Typ
                 formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
     
                 MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
-                    xTarget.kick(('Du wurdest permanent von dem Server gebannt. \n Grund: %s\n\n den Support findest du hier: %s'):format(Reason, 'discord.gg/ssio'))
+                    xTarget.kick((Locals.Ban.Banned ..  '\n ' .. Locals.Ban.Reason .. ': %s\n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason, 'discord.gg/ssio'))
                 end)
     
                 return
@@ -44,7 +44,7 @@ AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Typ
         MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
             local Date = os.date("%d.%m.%Y", entryDuration)
             local Time = os.date("%H:%M:%S", entryDuration)
-            xTarget.kick(('Du wurdest von diesem Server gebannt. \n Grund: %s\n\n Datum: %s\n Zeit: %s \n\n den Support findest du hier: %s'):format(Reason,  Date, Time, 'discord.gg/ssio'))
+            xTarget.kick((Locals.Ban.Banned .. '\n '.. Locals.Ban.Reason .. ': %s\n\n ' .. Locals.Ban.Date .. ': %s\n ' .. Locals.Ban.Time .. ': %s \n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason,  Date, Time, 'discord.gg/ssio'))
         end)
     else 
         Config.ServerNotify(source, 'Dieser Spieler kann nicht gebannt werden')
