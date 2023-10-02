@@ -100,7 +100,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
                 
                     local minutes, seconds = math.floor(timedif / Config.Times.minute), timedif % Config.Times.sec
                 
-                    deferrals.done(('\n ' .. Locals.Ban.Banned .. ': %s\n' .. Locals.Ban.TimeRemaining .. ': %d ' .. Locals.Ban.Year .. ', %d ' .. Locals.Ban.Month .. ', %d ' .. Locals.Ban.Day .. ', %d ' .. Locals.Ban.Hour', %d ' .. Locals.Ban.Min .. ', %d ' .. Locals.Ban.Sec .. '\n\n ' .. Locals.Ban.Reason .. ': %s \n ()'):format(future_time, years, months, days, hours, minutes, seconds, Reason, result[1].identifier))
+                    deferrals.done(('\n ' .. Locals.Ban.Banned .. ': %s\n' .. Locals.Ban.TimeRemaining .. ': %d ' .. Locals.Ban.Year .. ', %d ' .. Locals.Ban.Month .. ', %d ' .. Locals.Ban.Day .. ', %d ' .. Locals.Ban.Hour ..', %d ' .. Locals.Ban.Min .. ', %d ' .. Locals.Ban.Sec .. '\n\n ' .. Locals.Ban.Reason .. ': %s \n (%s)'):format(future_time, years, months, days, hours, minutes, seconds, Reason, result[1].identifier))
                 end
             else
                 deferrals.done()
