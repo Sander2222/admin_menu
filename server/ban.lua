@@ -127,7 +127,7 @@ AddEventHandler('admin_menu:server:UnbanPlayer',function(identifier, PlayerID)
     function UnbanPlayer(identifier)
         MySQL.query("SELECT identifier, bantime, banreason FROM users WHERE SUBSTRING_INDEX(`identifier`, ':', -1) = ? LIMIT 1", { identifier }, function(result)
             if #result == 0 then
-                Notify("Diesen Spieler gibt es nicht")
+                Notify(Locals.Ban.PlayerDoenstExist)
                 return
             end
     
@@ -136,13 +136,13 @@ AddEventHandler('admin_menu:server:UnbanPlayer',function(identifier, PlayerID)
             if char then
                 if result[1].bantime ~= 0 then
                     MySQL.update("UPDATE users SET bantime = NULL, banreason = '' WHERE identifier = ?", { char .. ':' .. identifier }, function(affectedRows)
-                        Notify("Spieler ist entbannt")
+                        Notify(Locals.Ban.PlayerUnbanned)
                     end)
                 else
-                    Notify("Dieser Spieler hat keinen Ban")
+                    Notify(Locals.Ban.PlayerNotBanned)
                 end
             else
-                Notify("Ungültiger Identifier-Format")
+                Notify(Locals.Ban.InvalidIdentifierFormat)
             end
         end)
     end

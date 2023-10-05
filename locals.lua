@@ -309,5 +309,9 @@ Locals = {
         Hour = 'Hour',
         Min = 'Minutes',
         Sec = 'Seconds',
+        PlayerDoenstExist = 'This Player doenst exist',
+        PlayerUnbanned = 'player is unbanned',
+        PlayerNotBanned = 'The player is not banned',
+        InvalidIdentifierFormat = 'Invalid identifier format',
     }
 }
