@@ -1,3 +1,20 @@
+BannedPlayers = {}
+
+CreateThread(function()
+    while true do
+        LoadAllBans()
+        Wait(60000)
+    end
+end)
+
+function LoadAllBans()
+    MySQL.query("SELECT identifier, bantime, banreason, firstname, lastname FROM users WHERE bantime <> 0", {}, function(result)
+        for k, v in ipairs(result) do
+            table.insert(BannedPlayers, v)
+        end
+    end)
+end
+
 CreateThread(function()
     MySQL.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'users' AND COLUMN_NAME = 'banreason';", {}, function(response)
         if next(response) == nil then
@@ -15,39 +32,41 @@ end)
 RegisterNetEvent('admin_menu:server:AddPlayerBan')
 AddEventHandler('admin_menu:server:AddPlayerBan',function(Timestamp, Reason, Type, Target)
     local source = source
-    local xTarget = ESX.GetPlayerFromId(Target)
+    if CheckGroup(source, true) then
+        local xTarget = ESX.GetPlayerFromId(Target)
     
-    local entryDuration
-    local formattedDate
-
-    if CanPlayerGetBanned(source) then
-        if Type == 'normal' then
-            -- Add Day to ban the player to the next day 
-            entryDuration = Timestamp + Config.Times.day
-            formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
-        elseif Type == 'custom' then
-            if Config.Times.per == Timestamp then
-                entryDuration = Timestamp
+        local entryDuration
+        local formattedDate
+    
+        if CanPlayerGetBanned(Target) then
+            if Type == 'normal' then
+                -- Add Day to ban the player to the next day 
+                entryDuration = Timestamp + Config.Times.day
                 formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
-    
-                MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
-                    xTarget.kick((Locals.Ban.Banned ..  '\n ' .. Locals.Ban.Reason .. ': %s\n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason, Locals.Ban.DiscordLink))
-                end)
-    
-                return
-            else 
-                entryDuration = os.time() + Timestamp
-                formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+            elseif Type == 'custom' then
+                if Config.Times.per == Timestamp then
+                    entryDuration = Timestamp
+                    formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+        
+                    MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
+                        xTarget.kick((Locals.Ban.Banned ..  '\n ' .. Locals.Ban.Reason .. ': %s\n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason, Locals.Ban.DiscordLink))
+                    end)
+        
+                    return
+                else
+                    entryDuration = os.time() + Timestamp
+                    formattedDate = os.date("%Y-%m-%d %H:%M:%S", entryDuration)
+                end
             end
+        
+            MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
+                local Date = os.date("%d.%m.%Y", entryDuration)
+                local Time = os.date("%H:%M:%S", entryDuration)
+                xTarget.kick((Locals.Ban.Banned .. '\n '.. Locals.Ban.Reason .. ': %s\n\n ' .. Locals.Ban.Date .. ': %s\n ' .. Locals.Ban.Time .. ': %s \n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason,  Date, Time, Locals.Ban.Locals.Ban.DiscordLink))
+            end)
+        else 
+            Config.ServerNotify(source, Locals.Ban.PlayerCantBeBanned)
         end
-    
-        MySQL.insert('UPDATE users SET bantime = ?, banreason = ? WHERE identifier = ?', { formattedDate, Reason, xTarget.getIdentifier() }, function(id)
-            local Date = os.date("%d.%m.%Y", entryDuration)
-            local Time = os.date("%H:%M:%S", entryDuration)
-            xTarget.kick((Locals.Ban.Banned .. '\n '.. Locals.Ban.Reason .. ': %s\n\n ' .. Locals.Ban.Date .. ': %s\n ' .. Locals.Ban.Time .. ': %s \n\n '.. Locals.Ban.Discord .. ': %s'):format(Reason,  Date, Time, Locals.Ban.Locals.Ban.DiscordLink))
-        end)
-    else 
-        Config.ServerNotify(source, Locals.Ban.PlayerCantBeBanned)
     end
 end)
 
@@ -61,9 +80,9 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
         deferrals.update(Locals.Ban.BanGetCheckeck)
         Wait(1000)
         
-        if #result == 0 then            
+        if #result == 0 then
             deferrals.done()
-        else 
+        else
 
             local DBTime = result[1].bantime
             local Reason = result[1].banreason
@@ -115,12 +134,23 @@ end)
 
 RegisterNetEvent('admin_menu:server:UnbanPlayer')
 AddEventHandler('admin_menu:server:UnbanPlayer',function(identifier, PlayerID)
+    local IngamemenuUnban = false
+    local Player
+
+    if PlayerID == 0 then
+        Player = 0
+    elseif PlayerID == nil then
+        IngamemenuUnban = true
+        Player = source
+    else
+        Player = PlayerID
+    end
 
     function Notify(MSG)
         if PlayerID == 0 then
             print(MSG)
-        else 
-            Config.ServerNotify(PlayerID, MSG)
+        else
+            Config.ServerNotify(Player, MSG)
         end
     end
 
@@ -137,6 +167,9 @@ AddEventHandler('admin_menu:server:UnbanPlayer',function(identifier, PlayerID)
                 if result[1].bantime ~= 0 then
                     MySQL.update("UPDATE users SET bantime = NULL, banreason = '' WHERE identifier = ?", { char .. ':' .. identifier }, function(affectedRows)
                         Notify(Locals.Ban.PlayerUnbanned)
+                        if IngamemenuUnban then
+                            DeletePlayerFromTable(identifier)
+                        end
                     end)
                 else
                     Notify(Locals.Ban.PlayerNotBanned)
@@ -150,11 +183,19 @@ AddEventHandler('admin_menu:server:UnbanPlayer',function(identifier, PlayerID)
     if PlayerID == 0 then
         UnbanPlayer(identifier)
     else 
-        if CheckGroup(PlayerID, true) then
+        if CheckGroup(Player, true) then
             UnbanPlayer(identifier)
         end
     end
 end)
+
+function DeletePlayerFromTable(identifier)
+    for k, v in ipairs(BannedPlayers) do
+        if string.sub(v.identifier, 7) == identifier then
+            table.remove(BannedPlayers, k)
+        end
+    end
+end
 
 function CanPlayerGetBanned(PlayerID)
     local xPlayer = ESX.GetPlayerFromId(PlayerID)

@@ -28,3 +28,10 @@ ESX.RegisterServerCallback('admin_menu:callback:GetAllPlayer', function(src, cb)
         cb(AllPLayers)
     end
 end)
+
+ESX.RegisterServerCallback('admin_menu:callback:GetAllBannedPlayers', function(src, cb)
+
+    if CheckGroup(src, true) then
+        cb(BannedPlayers)
+    end
+end)
