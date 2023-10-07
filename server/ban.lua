@@ -11,6 +11,8 @@ if Config.UseBanMenu then
     function LoadAllBans()
         MySQL.query("SELECT identifier, bantime, banreason, firstname, lastname FROM users WHERE bantime <> 0", {},
             function(result)
+                BannedPlayers = {}
+                
                 for k, v in ipairs(result) do
                     table.insert(BannedPlayers, v)
                 end
