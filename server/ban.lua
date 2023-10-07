@@ -12,8 +12,9 @@ if Config.UseBanMenu then
         MySQL.query("SELECT identifier, bantime, banreason, firstname, lastname FROM users WHERE bantime <> 0", {},
             function(result)
                 BannedPlayers = {}
-                
+
                 for k, v in ipairs(result) do
+                    v.bantime = os.date("%Y-%m-%d %H:%M:%S", v.bantime / 1000)
                     table.insert(BannedPlayers, v)
                 end
             end)
@@ -72,7 +73,7 @@ if Config.UseBanMenu then
                         local Date = os.date("%d.%m.%Y", entryDuration)
                         local Time = os.date("%H:%M:%S", entryDuration)
                         xTarget.kick((Locals.Ban.Banned .. '\n ' .. Locals.Ban.Reason .. ': %s\n\n ' .. Locals.Ban.Date .. ': %s\n ' .. Locals.Ban.Time .. ': %s \n\n ' .. Locals.Ban.Discord .. ': %s')
-                            :format(Reason, Date, Time, Locals.Ban.Locals.Ban.DiscordLink))
+                            :format(Reason, Date, Time, Locals.Ban.DiscordLink))
                     end)
             else
                 Config.ServerNotify(source, Locals.Ban.PlayerCantBeBanned)
@@ -127,8 +128,7 @@ if Config.UseBanMenu then
                             local hours = math.floor(timedif / Config.Times.hour)
                             timedif = timedif % 3600
 
-                            local minutes, seconds = math.floor(timedif / Config.Times.minute),
-                                timedif % Config.Times.sec
+                            local minutes, seconds = math.floor(timedif / Config.Times.minute), timedif % Config.Times.sec
 
                             deferrals.done(('\n ' .. Locals.Ban.Banned .. ': %s\n' .. Locals.Ban.TimeRemaining .. ': %d ' .. Locals.Ban.Year .. ', %d ' .. Locals.Ban.Month .. ', %d ' .. Locals.Ban.Day .. ', %d ' .. Locals.Ban.Hour .. ', %d ' .. Locals.Ban.Min .. ', %d ' .. Locals.Ban.Sec .. '\n\n ' .. Locals.Ban.Reason .. ': %s \n (%s)')
                                 :format(future_time, years, months, days, hours, minutes, seconds, Reason,
