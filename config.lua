@@ -75,7 +75,8 @@ Config.Groups = {
         -- Server 
         ['announce'] = true,
         ['reviveall'] = true,
-        ['delallveh'] = true
+        ['delallveh'] = true,
+        ['banlist'] = true,
     },
 
     ['mod'] = {
