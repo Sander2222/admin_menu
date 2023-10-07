@@ -2,6 +2,7 @@ Config = {}
 
 Config.UseOpenKey = true 
 Config.DefaultOpenKey = 'F5'
+Config.UseBanMenu = true
 
 Config.ClientNotify = function(msg)
     ESX.ShowNotification(msg)
