@@ -87,8 +87,8 @@ function GetBannedPlayers()
                     OpenUnbanPlayerDialog(v.identifier, v.firstname .. v.lastname, v.bantime, v.banreason)
                 end,
                 metadata = {
-                    {label = 'Time bis zum unbann', value = v.bantime},
-                    {label = 'Grund', value = v.banreason}
+                    {label = Locals.ServerMenu.UnbanTime, value = v.bantime},
+                    {label = Locals.ServerMenu.Reason, value = v.banreason}
                 },
             }
 
@@ -106,13 +106,12 @@ end
 function OpenUnbanPlayerDialog(Identifier, Name, BanTime, Reason)
     local alert = lib.alertDialog({
         header = 'Unban player',
-        content =  ('Willst du diesen Spieler entbannen:\n\n Identifier: %s\n\nName: %s\n\nBantime: %s\n\nReason: %s'):format(Identifier, Name, BanTime, Reason),
+        content =  (Locals.ServerMenu.UnbanPlayer .. ':\n\n ' .. Locals.ServerMenu.Identifier .. ': %s\n\n' ..Locals.ServerMenu.Name .. ': %s\n\n' .. Locals.ServerMenu.BanTime .. ': %s\n\n ' .. Locals.ServerMenu.Reason .. ': %s'):format(Identifier, Name, BanTime, Reason),
         size = 'xl',
         centered = true,
         cancel = true
     })
      
-    print(alert)
     if alert == 'confirm' then
         TriggerServerEvent('admin_menu:server:UnbanPlayer', string.sub(Identifier, 7))
     end

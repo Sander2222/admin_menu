@@ -237,6 +237,12 @@ Locals = {
         Banlist = 'Banlist',
         BanlistDesc = 'You see all banned players',
         NoBannedPlayers = 'There are no banned players',
+        Reason = 'Reason',
+        UnbanTime = 'Time till unban',
+        UnbanPlayer = 'Do you want to unban this player',
+        Identifier = 'Identifier',
+        Name = 'Name',
+        BanTime = 'Bantime',
     },
 
     Server = {
