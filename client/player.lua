@@ -161,7 +161,11 @@ function OpenSinglePlayerMenu(PlayerID)
                 arrow = true,
                 onSelect = function()
                     if CanUseFunction('ban') then
-                        OpenPlayerBanMenu(PlayerID)
+                        if Config.UseBanMenu then
+                            OpenPlayerBanMenu(PlayerID)
+                        else
+                            Config.ClientNotify(Locals.Ban.DontActive)
+                        end
                     end
                 end,
             },

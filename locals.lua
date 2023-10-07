@@ -232,6 +232,11 @@ Locals = {
         DeleteAllVehDesc = 'Are you sure you want to delete all vehicles?',
         AnnounceMSG = 'Announce message',
         AnnounceMSGDesc = 'All players get this message',
+
+        -- Banlist menu
+        Banlist = 'Banlist',
+        BanlistDesc = 'You see all banned players',
+        NoBannedPlayers = 'There are no banned players',
     },
 
     Server = {
@@ -313,5 +318,6 @@ Locals = {
         PlayerUnbanned = 'player is unbanned',
         PlayerNotBanned = 'The player is not banned',
         InvalidIdentifierFormat = 'Invalid identifier format',
+        DontActive = 'The ban menu is disabled',
     }
 }

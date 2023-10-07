@@ -36,13 +36,17 @@ function OpenServerMenu()
                 end,
             },
             {
-                title = 'Banlist',
-                description = 'Banlist wo alle gebannten spieler drin sind',
+                title = Locals.ServerMenu.Banlist,
+                description = Locals.ServerMenu.BanlistDesc,
                 icon = 'car-burst',
                 arrow = true,
                 onSelect = function()
-                    if CanUseFunction('delallveh') then
-                        OpenBanList()
+                    if CanUseFunction('banlist') then
+                        if Config.UseBanMenu then
+                            OpenBanList()
+                        else
+                            Config.ClientNotify(Locals.Ban.DontActive)
+                        end
                     end
                 end,
             }
@@ -55,12 +59,12 @@ end
 function OpenBanList()
 
     lib.registerContext({
-        id = 'TEst',
-        title = 'test',
+        id = 'Banlistmenu',
+        title = Locals.ServerMenu.Banlist,
         options = GetBannedPlayers()
     })
 
-    lib.showContext('TEst')
+    lib.showContext('Banlistmenu')
 end
 
 function GetBannedPlayers()
@@ -69,7 +73,7 @@ function GetBannedPlayers()
     ESX.TriggerServerCallback('admin_menu:callback:GetAllBannedPlayers', function(BannedPlayers)
     
         if #BannedPlayers == 0 then
-            Config.ClientNotify('Es gibt keine gebannten Spieler')
+            Config.ClientNotify(Locals.ServerMenu.NoBannedPlayers)
             return
         end
     
