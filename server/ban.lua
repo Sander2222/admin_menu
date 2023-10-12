@@ -1,12 +1,21 @@
 BannedPlayers = {}
 
 if Config.UseBanMenu then
+    
     CreateThread(function()
         while true do
             LoadAllBans()
             Wait(60000)
         end
     end)
+
+    function DeletePlayerFromTable(identifier)
+        for k, v in ipairs(BannedPlayers) do
+            if string.sub(v.identifier, 7) == identifier then
+                table.remove(BannedPlayers, k)
+            end
+        end
+    end
 
     function LoadAllBans()
         MySQL.query("SELECT identifier, bantime, banreason, firstname, lastname FROM users WHERE bantime <> 0", {},
@@ -204,14 +213,6 @@ if Config.UseBanMenu then
             end
         end
     end)
-
-    function DeletePlayerFromTable(identifier)
-        for k, v in ipairs(BannedPlayers) do
-            if string.sub(v.identifier, 7) == identifier then
-                table.remove(BannedPlayers, k)
-            end
-        end
-    end
 
     function CanPlayerGetBanned(PlayerID)
         local xPlayer = ESX.GetPlayerFromId(PlayerID)
