@@ -11,7 +11,7 @@ function CheckGroup(Player, DoAction)
 
     if DoAction then
         xPlayer.kick(Locals.Server.NoGroup)
-        -- Webhook
+        AddWebhookMessage(Player, nil, Locals.Server.PlayerInjection, 'self', {})
     end
 
     return false
@@ -155,7 +155,6 @@ AddEventHandler('admin_menu:server:RemovePlayerWeapon',function(Weapon, Target)
     if CheckGroup(source, true) then
         local xTarget = ESX.GetPlayerFromId(source)
 
-        
         xTarget.removeWeapon(string.upper(Weapon))
         Config.ServerNotify(Target, Locals.Server.AdminRemoveWeaponTarget .. ': ' .. ESX.GetWeaponLabel(Weapon))
         AddWebhookMessage(source, Target, Locals.Server.AdminRemoveWeapon, 'player', {'Weapon: ' .. Weapon})
