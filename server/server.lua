@@ -134,7 +134,7 @@ AddEventHandler('admin_menu:server:GiveWeapon',function(Weapon, Ammo)
         local xPlayer = ESX.GetPlayerFromId(source)
 
         xPlayer.addWeapon(string.upper(Weapon), Ammo)
-        AddWebhookMessage(source, nil, 'Ein Admin hat sich eine Waffe gegeben', 'self', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
+        AddWebhookMessage(source, nil, Locals.Server.AdminGiveWeaponSelf, 'self', {'Weapon: ' .. Weapon, 'Ammu: ' .. Ammo})
     end
 end)
 

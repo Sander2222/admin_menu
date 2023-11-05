@@ -298,6 +298,7 @@ Locals = {
         AdminTookScreenshot = 'An admin has taken a screenshot from another player',
         AdminAnnounce = 'An admin has sent an announce',
         AdminRevivedAll = 'An admin has revived all players',
+        AdminGiveWeaponSelf = 'an admin gave him self a weapon',
         PlayerInjection = 'a player has used an event or function he is not allowed to use (probably trigger injection)',
 
         ServerKick = 'Server kick',
