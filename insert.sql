@@ -1,3 +1,3 @@
 ALTER TABLE users
-ADD bantime TIMESTAMP,
+ADD bantime TIMESTAMP DEFAULT NULL,
 ADD banreason VARCHAR(500);
