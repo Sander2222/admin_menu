@@ -64,15 +64,6 @@ function OpenMenu()
                     end
                 end,
             },
-            -- {
-            --     title = 'Weather',
-            --     description = 'Waether Actions',
-            --     icon = 'circle',
-            --     arrow = true,
-            --     onSelect = function()
-            --         -- lib.showMenu('menu_world_related_options')
-            --     end,
-            -- },
         }
     })
 

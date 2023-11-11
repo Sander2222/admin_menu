@@ -1,8 +1,8 @@
 SVConfig = {}
 
-SVConfig.Webhooks = 'https://canary.discord.com/api/webhooks/1151225500732227684/lSsaVw5YcqIv9sm9R7AdseGJ_C1qjj_SxtrCUK4lZ9dB9ZygIBZyztwWPJYX8nFKuxcW'
+SVConfig.Webhooks = '' -- Add Your Webhook here
 
-SVConfig.NotBannedRoles = {
+SVConfig.NotBannedRoles = { -- If you enter a esx admin role here they cant get banned
     'admin',
     'mod',
     'sup'

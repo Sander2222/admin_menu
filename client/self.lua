@@ -141,7 +141,6 @@ end
 function OpenItemMenu()
     local Items = GetAllItems()
 
-    -- Wait weil die Funktione GetAllItems ist Async
     while #Items == 0 do
         Wait(1)
     end
@@ -314,9 +313,7 @@ function GiveGun(GunName, GunLabel)
         return
     end
 
-    -- Check if gives Weapon with ESX or not
     if WithESX then
-        --  Without ESX
         GiveWeaponToPed(ped, GunName, Ammo, false, false)
     else
         TriggerServerEvent('admin_menu:server:GiveWeapon', GunName, Ammo)
