@@ -300,6 +300,8 @@ Locals = {
         AdminRevivedAll = 'An admin has revived all players',
         AdminGiveWeaponSelf = 'an admin gave him self a weapon',
         PlayerInjection = 'a player has used an event or function he is not allowed to use (probably trigger injection)',
+        PlayerGotBanned = 'A player got banned',
+        PlayerGotUnbanned = 'A player got unbanned',
 
         ServerKick = 'Server kick',
     },

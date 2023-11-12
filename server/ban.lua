@@ -1,7 +1,7 @@
 BannedPlayers = {}
 
 if Config.UseBanMenu then
-    
+
     CreateThread(function()
         while true do
             LoadAllBans()
@@ -70,6 +70,7 @@ if Config.UseBanMenu then
                                     :format(Reason, Locals.Ban.DiscordLink))
                             end)
 
+                            AddWebhookMessage(source, Target, Locals.Server.PlayerGotBanned, 'player', {Locals.Ban.Time .. ': ' .. formattedDate, Locals.Ban.Reason .. ': ' .. Reason})
                         return
                     else
                         entryDuration = os.time() + Timestamp
@@ -83,6 +84,9 @@ if Config.UseBanMenu then
                         local Time = os.date("%H:%M:%S", entryDuration)
                         xTarget.kick((Locals.Ban.Banned .. '\n ' .. Locals.Ban.Reason .. ': %s\n\n ' .. Locals.Ban.Date .. ': %s\n ' .. Locals.Ban.Time .. ': %s \n\n ' .. Locals.Ban.Discord .. ': %s')
                             :format(Reason, Date, Time, Locals.Ban.DiscordLink))
+
+                        AddWebhookMessage(source, Target, Locals.Server.PlayerGotBanned, 'player', {Locals.Ban.Time .. ': ' .. formattedDate, Locals.Ban.Reason .. ': ' .. Reason})
+
                     end)
             else
                 Config.ServerNotify(source, Locals.Ban.PlayerCantBeBanned)
@@ -192,6 +196,9 @@ if Config.UseBanMenu then
                             MySQL.update("UPDATE users SET bantime = NULL, banreason = '' WHERE identifier = ?",
                                 { char .. ':' .. identifier }, function(affectedRows)
                                     Notify(Locals.Ban.PlayerUnbanned)
+
+                                    AddWebhookMessage(Player, nil, Locals.Server.PlayerGotUnbanned, 'self', {Locals.Ban.Time .. ': ' .. formattedDate, Locals.Ban.Reason .. ': ' .. Reason})
+
                                     if IngamemenuUnban then
                                         DeletePlayerFromTable(identifier)
                                     end
