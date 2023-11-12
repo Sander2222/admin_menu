@@ -15,3 +15,8 @@ You need to use this command:
 
 the identifer need to be without the char1:
 you can enter the command ingame or in the server console
+
+
+
+
+Essentially, you go to the player list > find the player > click warn > enter a warning reason > submit. These reports are then logged to Discord and a notification is sent to the player. This could also be done by command /warn [id] [reason]
