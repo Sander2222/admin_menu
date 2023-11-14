@@ -170,6 +170,28 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
+                title = Locals.Player.Kick,
+                description = Locals.Player.PlayerKick,
+                icon = 'message',
+                arrow = true,
+                onSelect = function()
+                    if CanUseFunction('kick') then
+                        KickPlayerDialog(PlayerID)
+                    end
+                end,
+            },
+            {
+                title = Locals.Player.Warning,
+                description = Locals.Player.PlayerWarning,
+                icon = 'message',
+                arrow = true,
+                onSelect = function()
+                    if CanUseFunction('warn') then
+                        OpenWarnmenu(PlayerID)
+                    end
+                end,
+            },
+            {
                 title = Locals.Player.Inventory,
                 description = Locals.Player.PlayerInventory,
                 icon = 'boxes-stacked',
@@ -225,17 +247,6 @@ function OpenSinglePlayerMenu(PlayerID)
                 end,
             },
             {
-                title = Locals.Player.Kick,
-                description = Locals.Player.PlayerKick,
-                icon = 'message',
-                arrow = true,
-                onSelect = function()
-                    if CanUseFunction('kick') then
-                        KickPlayerDialog(PlayerID)
-                    end
-                end,
-            },
-            {
                 title = Locals.Player.Kill,
                 description =  Locals.Player.PlayerKill,
                 icon = 'message',
@@ -271,6 +282,15 @@ function OpenSinglePlayerMenu(PlayerID)
     lib.showContext('SinglePlayerMenu')
 end
 
+function OpenWarnmenu(PlayerID)
+    local input = lib.inputDialog(Locals.Player.Warning, {
+        {type = 'input', label = Locals.Player.Reason, description = Locals.Player.WarningDesc, required = true, min = 3, max = 200},
+      })
+
+      local Reason = input[1]
+
+      TriggerServerEvent('admin_menu:server:SendWarnToPlayer', Reason, PlayerID)
+end
 
 function OpenPlayerBanMenu(PlayerID)
     lib.registerContext({
