@@ -89,6 +89,9 @@ Locals = {
         Group = 'Group',
 
         Ban = 'Ban',
+        Warning ='Warn',
+        PlayerWarning= 'Warn a player',
+        WarningDesc ='Reason for the warining',
         BanPlayer = 'Ban player',
         Inventory = 'Inventory',
         PlayerInventory = 'Player Inventory',
@@ -299,6 +302,7 @@ Locals = {
         AdminAnnounce = 'An admin has sent an announce',
         AdminRevivedAll = 'An admin has revived all players',
         AdminGiveWeaponSelf = 'an admin gave him self a weapon',
+        AdminWarnPlayer = 'An admin warned a player',
         PlayerInjection = 'a player has used an event or function he is not allowed to use (probably trigger injection)',
         PlayerGotBanned = 'A player got banned',
         PlayerGotUnbanned = 'A player got unbanned',
