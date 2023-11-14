@@ -33,6 +33,24 @@ Config.SendAnnounce = function(Player, Message)
     })
 end
 
+Config.WarnNotify = function (Player, Reason)
+    TriggerClientEvent('ox_lib:notify', Player, {
+        id = 'some_identifier',
+        title = 'Warning',
+        description = Reason,
+        position = 'top',
+        style = {
+            backgroundColor = '#141517',
+            color = '#C1C2C5',
+            ['.description'] = {
+              color = '#909296'
+            }
+        },
+        icon = 'ban',
+        iconColor = '#C53030'
+    })
+end
+
 Config.Groups = {
     ['admin'] = {
 
@@ -64,6 +82,7 @@ Config.Groups = {
         ['parmor'] = true,
         ['pmoney'] = true,
         ['screenshot'] = true,
+        ['warn'] = true,
 
         -- Vehicle
         ['delveh'] = true,
@@ -108,6 +127,7 @@ Config.Groups = {
         ['pkill'] = true,
         ['parmor'] = true,
         ['pmoney'] = true,
+        ['warn'] = true,
 
         -- Vehicle
         ['delveh'] = true,
