@@ -405,6 +405,15 @@ AddEventHandler('admin_menu:server:TakePlayerScreenshot', function(Target)
     end
 end)
 
+RegisterServerEvent('admin_menu:server:SendWarnToPlayer')
+AddEventHandler('admin_menu:server:SendWarnToPlayer', function(Reason, Target)
+    if CheckGroup(source, true) then
+        AddWebhookMessage(source, Target, Locals.Server.AdminWarnPlayer, 'player', {'Warn Message: ' .. Reason})
+
+        Config.WarnNotify(Target, Reason)
+    end
+end)
+
 RegisterServerEvent('admin_menu:server:SendAnnounce')
 AddEventHandler('admin_menu:server:SendAnnounce', function(Message)
     if CheckGroup(source, true) then
