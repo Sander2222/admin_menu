@@ -111,6 +111,12 @@ if Config.UseBanMenu then
                 else
                     local DBTime = result[1].bantime
                     local Reason = result[1].banreason
+
+                    if DBTime == nil or Reason == nil then
+                        deferrals.done()
+                        return
+                    end
+
                     if tonumber(DBTime) ~= 0 then
                         -- Check if permanet
                         if Config.Times.per == (DBTime / 1000) then
