@@ -49,6 +49,17 @@ function OpenServerMenu()
                         end
                     end
                 end,
+            },
+            {
+                title = "Zeit/Wetter",
+                description = "Ändere die Zeit und das Wetter",
+                icon = 'cloud',
+                arrow = true,
+                onSelect = function()
+                    if CanUseFunction('timeAweather') then
+                        OpenTimeAWeatherMenu()
+                    end
+                end,
             }
         }
     })
@@ -56,15 +67,77 @@ function OpenServerMenu()
     lib.showContext('ServMenu')
 end
 
+function OpenTimeAWeatherMenu()
+    lib.registerContext({
+        id = 'TimeAWeather',
+        title = Locals.Self.SelfMenu,
+        options = {
+            {
+                title = "Zeit ändern",
+                description = "Ändere die Zeit",
+                icon = 'notes-medical',
+                onSelect = function()
+                    if CanUseFunction('time') then
+
+                    end
+                end,
+            },
+            {
+                title = "Wetter ändern",
+                description = "Ändere das Wetter",
+                icon = 'notes-medical',
+                onSelect = function()
+                    if CanUseFunction('weather') then
+
+                    end
+                end,
+            }
+        }
+    })
+
+    lib.showContext('TimeAWeather')
+end
+
+function OpenTimeMenu()
+    lib.registerContext({
+        id = 'TimeAWeather',
+        title = Locals.Self.SelfMenu,
+        options = {
+            {
+                title = "Zeit ändern",
+                description = "Ändere die Zeit",
+                icon = 'notes-medical',
+                onSelect = function()
+                    if CanUseFunction('time') then
+                        OpenBanList()
+                    end
+                end,
+            },
+            {
+                title = "Wetter ändern",
+                description = "Ändere das Wetter",
+                icon = 'notes-medical',
+                onSelect = function()
+                    if CanUseFunction('weather') then
+
+                    end
+                end,
+            }
+        }
+    })
+
+    lib.showContext('TimeAWeather')
+end
+
 function OpenBanList()
 
     lib.registerContext({
-        id = 'Banlistmenu',
+        id = 'TimeMenu',
         title = Locals.ServerMenu.Banlist,
         options = GetBannedPlayers()
     })
 
-    lib.showContext('Banlistmenu')
+    lib.showContext('TimeMenu')
 end
 
 function GetBannedPlayers()

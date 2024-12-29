@@ -139,7 +139,11 @@ Config.Groups = {
         -- Server 
         ['announce'] = true,
         ['reviveall'] = true,
-        ['delallveh'] = true
+        ['delallveh'] = true,
+
+        ['timeAweather'] =  true,
+        ['time'] = true,
+        ['weather'] = true,
     },
 }
 
