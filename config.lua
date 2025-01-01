@@ -96,6 +96,11 @@ Config.Groups = {
         ['reviveall'] = true,
         ['delallveh'] = true,
         ['banlist'] = true,
+
+        
+        ['timeAweather'] =  true,
+        ['time'] = true,
+        ['weather'] = true,
     },
 
     ['mod'] = {

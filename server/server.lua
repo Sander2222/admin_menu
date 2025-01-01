@@ -1,5 +1,5 @@
 --- @usage This function checks if the player is able to use the adminmenu
---- @param Player integer If from the player
+--- @param Player integer the id from the player
 --- @param DoAction boolean If this is true then the player get kicked when he doenst have a admin role
 function CheckGroup(Player, DoAction)
     local xPlayer = ESX.GetPlayerFromId(Player)
@@ -17,11 +17,24 @@ function CheckGroup(Player, DoAction)
     return false
 end
 
+RegisterNetEvent('admin_menu:server:SetTime')
+AddEventHandler('admin_menu:server:SetTime',function(source, hour, minute)
+    if CheckGroup(source, true) then
+        TriggerClientEvent('admin_menu:client:SetTime', -1, hour, minute)
+    end
+end)
+
 RegisterNetEvent('admin_menu:server:SendWebhook')
 AddEventHandler('admin_menu:server:SendWebhook',function(msg, type, Data)
     AddWebhookMessage(source, nil, type, Data)
 end)
 
+--- @usage This function creates the webhook meesage and it automatic calls the SendDiscord function
+--- @param AdminID integer the id from the player
+--- @param Target integer the id of the target, if there is none you can just pass nil
+--- @param msg string the text/message that should be send via webhook, look at a call of this, there you will see examples
+--- @param type string this can only be 'self' or 'player' that has something todo if you have a target, not ready good idea from me lol
+--- @param Data table all Data that should be in the webhook
 function AddWebhookMessage(AdminID, Target, msg, type, Data)
     if CheckGroup(AdminID, false) then
         if type == 'self' then

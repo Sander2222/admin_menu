@@ -109,7 +109,7 @@ function OpenTimeMenu()
                 icon = 'notes-medical',
                 onSelect = function()
                     if CanUseFunction('time') then
-                        OpenBanList()
+                        OpenTimeInputDialog()
                     end
                 end,
             },
@@ -129,15 +129,30 @@ function OpenTimeMenu()
     lib.showContext('TimeAWeather')
 end
 
-function OpenBanList()
-
-    lib.registerContext({
-        id = 'TimeMenu',
-        title = Locals.ServerMenu.Banlist,
-        options = GetBannedPlayers()
+function OpenTimeInputDialog()
+    local input = lib.inputDialog("\195\132ndere die Zeit", {
+        {type = 'number', label = 'Stunde', description = "Zahlen in folgenden Syntax eintragen [00-23]", required = true},
+        {type = 'number', label = 'Minute', description = "Zahlen in folgenden Syntax eintragen [00-59]", required = true},
     })
-
-    lib.showContext('TimeMenu')
+    
+    if not input then return end
+    
+    -- Validierung der Eingaben
+    local hour = input[1]
+    local minute = input[2]
+    
+    if hour < 0 or hour > 23 or minute < 0 or minute > 59 or minute % 10 ~= 0 then
+        Config.ClientNotify("Stunden müssen zwischen 00 und 23 sein und Minuten zwischen 00 und 59 sein")
+        return
+    end
+    
+    -- Zahlen formatieren
+    hour = string.format("%02d", hour)
+    minute = string.format("%02d", minute)
+    
+    -- Event auslösen, wenn die Eingaben gültig sind
+    TriggerServerEvent('admin_menu:server:SetTime', hour, minute)
+    
 end
 
 function GetBannedPlayers()
